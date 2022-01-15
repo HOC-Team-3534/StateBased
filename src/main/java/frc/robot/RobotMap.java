@@ -1,17 +1,11 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
+
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SPI;
-/*import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;*/
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -129,6 +123,15 @@ public class RobotMap {
 		frontRightRotate.config_kI(0, 0, 0);
 		frontRightRotate.config_kD(0, 80, 0);
 		frontRightRotate.setNeutralMode(NeutralMode.Brake);
+
+		// private final SwerveModule frontLeftModule = new Mk2SwerveModuleBuilder(
+        //     new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))
+        //     .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER), FRONT_LEFT_ANGLE_OFFSET)
+        //     .angleMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        //             Mk2SwerveModuleBuilder.MotorType.NEO)
+        //     .driveMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
+        //             Mk2SwerveModuleBuilder.MotorType.NEO)
+        //     .build();
 
 		navx = new AHRS(SPI.Port.kMXP);
 

@@ -1,4 +1,4 @@
-package org.usfirst.frc3534.RobotBasic;
+package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -6,14 +6,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-
-import com.revrobotics.ColorSensorV3;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+/*import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;*/
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -24,43 +21,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotMap {
 
-	public static WPI_TalonFX frontLeftMotor;		//1
-	public static WPI_TalonFX backLeftMotor;		//2
-	public static WPI_TalonFX backRightMotor;		//3
-	public static WPI_TalonFX frontRightMotor;		//4
-	public static WPI_TalonFX shooter; 				//5
-	public static WPI_TalonFX shooterSlave;			//6
-	//public static WPI_TalonSRX hood;				//7
-	public static WPI_TalonSRX topBelt;				//8
-	public static WPI_TalonSRX indexWheel;			//9
-	public static WPI_TalonSRX intakeArm;			//10
-	public static WPI_TalonSRX intakeRoller;		//11
-	public static WPI_TalonSRX elevator;			//12
-	public static WPI_TalonFX winch;				//13
-	public static WPI_TalonSRX translator;			//14
-	public static WPI_TalonSRX spinner;				//15
+	public static WPI_TalonFX frontLeftDrive;		//1
+	public static WPI_TalonFX frontLeftRotate;      //2
+	public static WPI_TalonFX backLeftDrive;		//3
+	public static WPI_TalonFX backLeftRotate;       //4
+	public static WPI_TalonFX backRightDrive;		//5
+	public static WPI_TalonFX backRightRotate;      //6
+	public static WPI_TalonFX frontRightDrive;		//7
+	public static WPI_TalonFX frontRightRotate;     //8
 
-	public static ColorSensorV3 colorSensor;
-	public static DigitalInput indexBottom;
-	public static DigitalInput indexTop;
-	public static DigitalInput shootCounter;
-
-	public static Spark blinkin;
 
 	/** EXAMPLE public static DoubleSolenoid elevatorCylinderOne;		//first value -> PCM A, CHANNEL 0, 1 */
 
 
 	public static AHRS navx;
 
-	public static final int shooterVelocityDrop = 0;
-
 	public static final double spikeCurrent = 7.0;
-	public static final double rollerSpikeCurrent = 55.0;
-	
-	public static final int elevator_maxHeight = 10000;
-	public static final int elevatorCreepHeight = -500;
-	public static final int winch_maxPosition = 0;
-	public static final int winchLimit = 0;
+
 
 	public static final double maxVelocity = 6.6; //meters per second
 	public static final double maxAngularVelocity = Math.PI * 6; //radians per second
@@ -81,79 +58,66 @@ public class RobotMap {
 
 	public static void init() {
 
-		frontLeftMotor = new WPI_TalonFX(1);
-		frontLeftMotor.config_kF(0, 0.05, 0);
-		frontLeftMotor.config_kP(0, 3, 0);
-		frontLeftMotor.config_kI(0, 0, 0);
-		frontLeftMotor.config_kD(0, 80, 0);
-		frontLeftMotor.setNeutralMode(NeutralMode.Brake);
+		frontLeftDrive = new WPI_TalonFX(1);
+		frontLeftDrive.config_kF(0, 0.05, 0);
+		frontLeftDrive.config_kP(0, 3, 0);
+		frontLeftDrive.config_kI(0, 0, 0);
+		frontLeftDrive.config_kD(0, 80, 0);
+		frontLeftDrive.setNeutralMode(NeutralMode.Brake);
 
-		backLeftMotor = new WPI_TalonFX(2);
-		backLeftMotor.config_kF(0, 0.05, 0);
-		backLeftMotor.config_kP(0, 3, 0);
-		backLeftMotor.config_kI(0, 0, 0);
-		backLeftMotor.config_kD(0, 80, 0);
-		backLeftMotor.setNeutralMode(NeutralMode.Brake);
+		frontLeftRotate = new WPI_TalonFX(2);
+		frontLeftRotate.config_kF(0, 0.05, 0);
+		frontLeftRotate.config_kP(0, 3, 0);
+		frontLeftRotate.config_kI(0, 0, 0);
+		frontLeftRotate.config_kD(0, 80, 0);
+		frontLeftRotate.setNeutralMode(NeutralMode.Brake);
 
-		backRightMotor = new WPI_TalonFX(3);
-		backRightMotor.setInverted(true);
-		backRightMotor.config_kF(0, 0.05, 0);
-		backRightMotor.config_kP(0, 3, 0);
-		backRightMotor.config_kI(0, 0, 0);
-		backRightMotor.config_kD(0, 80, 0);
-		backRightMotor.setNeutralMode(NeutralMode.Brake);
+		backLeftDrive = new WPI_TalonFX(3);
+		backLeftDrive.config_kF(0, 0.05, 0);
+		backLeftDrive.config_kP(0, 3, 0);
+		backLeftDrive.config_kI(0, 0, 0);
+		backLeftDrive.config_kD(0, 80, 0);
+		backLeftDrive.setNeutralMode(NeutralMode.Brake);
 
-		frontRightMotor = new WPI_TalonFX(4);
-		frontRightMotor.setInverted(true);
-		frontRightMotor.config_kF(0, 0.05, 0);
-		frontRightMotor.config_kP(0, 3, 0);
-		frontRightMotor.config_kI(0, 0, 0);
-		frontRightMotor.config_kD(0, 80, 0);
-		frontRightMotor.setNeutralMode(NeutralMode.Brake);
+		backLeftRotate = new WPI_TalonFX(4);
+		backLeftRotate.config_kF(0, 0.05, 0);
+		backLeftRotate.config_kP(0, 3, 0);
+		backLeftRotate.config_kI(0, 0, 0);
+		backLeftRotate.config_kD(0, 80, 0);
+		backLeftRotate.setNeutralMode(NeutralMode.Brake);
 
-		shooter = new WPI_TalonFX(5);
-		shooterSlave = new WPI_TalonFX(6);
-		shooterSlave.follow(shooter);
-		shooter.setInverted(false);
-		shooterSlave.setInverted(true);
+		backRightDrive = new WPI_TalonFX(5);
+		backRightDrive.setInverted(true);
+		backRightDrive.config_kF(0, 0.05, 0);
+		backRightDrive.config_kP(0, 3, 0);
+		backRightDrive.config_kI(0, 0, 0);
+		backRightDrive.config_kD(0, 80, 0);
+		backRightDrive.setNeutralMode(NeutralMode.Brake);
 
-		//hood = new WPI_TalonSRX(7);
+		backRightRotate = new WPI_TalonFX(6);
+		backRightRotate.setInverted(true);
+		backRightRotate.config_kF(0, 0.05, 0);
+		backRightRotate.config_kP(0, 3, 0);
+		backRightRotate.config_kI(0, 0, 0);
+		backRightRotate.config_kD(0, 80, 0);
+		backRightRotate.setNeutralMode(NeutralMode.Brake);
 
-		topBelt = new WPI_TalonSRX(8);
-		topBelt.setInverted(true);
-		topBelt.setNeutralMode(NeutralMode.Brake);
+		frontRightDrive = new WPI_TalonFX(7);
+		frontRightDrive.setInverted(true);
+		frontRightDrive.config_kF(0, 0.05, 0);
+		frontRightDrive.config_kP(0, 3, 0);
+		frontRightDrive.config_kI(0, 0, 0);
+		frontRightDrive.config_kD(0, 80, 0);
+		frontRightDrive.setNeutralMode(NeutralMode.Brake);
 
-		indexWheel = new WPI_TalonSRX(9);
-		indexWheel.setNeutralMode(NeutralMode.Brake);
-		indexWheel.setInverted(true);
-
-		intakeArm = new WPI_TalonSRX(10);
-		intakeArm.setInverted(true);
-
-		intakeRoller = new WPI_TalonSRX(11);
-
-		elevator = new WPI_TalonSRX(12);
-		//elevator.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-		//elevator.setSelectedSensorPosition(0, 0, 0);
-		elevator.setInverted(true);
-		elevator.setNeutralMode(NeutralMode.Brake);
-		//elevator.setSensorPhase(true);
-		//elevator.selectProfileSlot(0, 0);
-
-		winch = new WPI_TalonFX(13);
-
-		translator = new WPI_TalonSRX(14);
-		translator.setNeutralMode(NeutralMode.Brake);
-
-		spinner = new WPI_TalonSRX(15);
 		
-		colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
-		shootCounter = new DigitalInput(4);
-		indexBottom = new DigitalInput(1);
-		indexTop = new DigitalInput(0);
-
-
-		blinkin = new Spark(1);
+		frontRightRotate = new WPI_TalonFX(8);
+		frontRightRotate.setInverted(true);
+		frontRightRotate.config_kF(0, 0.05, 0);
+		frontRightRotate.config_kP(0, 3, 0);
+		frontRightRotate.config_kI(0, 0, 0);
+		frontRightRotate.config_kD(0, 80, 0);
+		frontRightRotate.setNeutralMode(NeutralMode.Brake);
 
 		navx = new AHRS(SPI.Port.kMXP);
 
@@ -214,7 +178,7 @@ public class RobotMap {
 	
 		/** the power output in percentage for the different actions in the functions for the motors
 		  * for example, an intake motor at a constant percentage of power while button pressed
-		  *	below is just an example from 2019 (shooter was updated for RobotBasic)
+		  *	below is just an example from 2020 (shooter was updated for RobotBasic)
 		  */
 
 		shooter_shooter_shootConstant(15500), //17750

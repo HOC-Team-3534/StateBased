@@ -4,9 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,7 +23,11 @@ public class Robot extends TimedRobot {
 
 	public static boolean isAutonomous = false;
 
-	private int logCounter;
+	private int loopCnt = 0;
+	private int loopPeriod = 0;
+	private int logCounter = 0;
+
+	public static double designatedLoopPeriod = 20;
 
 	@Override
 	public void robotInit() {
@@ -57,6 +61,38 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
+		
+		log();
+
+		isAutonomous = this.isAutonomous();
+
+		long prevLoopTime = 0;
+
+		while (this.isTeleop() && this.isEnabled()) {
+
+			log();
+
+			long currentTime = System.currentTimeMillis();
+
+			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+
+				loopPeriod = (int) (currentTime - prevLoopTime);
+				prevLoopTime = currentTime;
+				loopCnt++;
+
+
+				
+				//functionProcessor.process();
+				// run processes
+				
+				/** Run subsystem process methods here */
+
+			}
+
+			Timer.delay(0.001);
+
+		}
+
 	}
 
 	@Override

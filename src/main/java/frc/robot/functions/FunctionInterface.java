@@ -1,6 +1,6 @@
 package frc.robot.functions;
 
-public interface FunctionInterface{
+public interface FunctionInterface {
 
     public void process();
 

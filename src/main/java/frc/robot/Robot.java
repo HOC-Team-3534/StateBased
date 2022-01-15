@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		
+
 		log();
 
 		isAutonomous = this.isAutonomous();
@@ -80,11 +80,9 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-
-				
-				//functionProcessor.process();
+				// functionProcessor.process();
 				// run processes
-				
+
 				/** Run subsystem process methods here */
 
 			}
@@ -107,11 +105,10 @@ public class Robot extends TimedRobot {
 
 		logCounter++;
 
-		if(logCounter > 5){
-
+		if (logCounter > 5) {
 
 			logCounter = 0;
 		}
-		
+
 	}
 }

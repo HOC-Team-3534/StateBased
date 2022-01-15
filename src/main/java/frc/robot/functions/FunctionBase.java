@@ -1,25 +1,25 @@
 package frc.robot.functions;
 
-public class FunctionBase implements FunctionInterface{
+public class FunctionBase implements FunctionInterface {
 
     boolean running;
     boolean finished;
     int state;
 
     @Override
-    public void process(){
-        
+    public void process() {
+
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
 
         return finished;
 
     }
 
     @Override
-    public void reset(){
+    public void reset() {
 
         state = 0;
         running = false;
@@ -28,7 +28,7 @@ public class FunctionBase implements FunctionInterface{
     }
 
     @Override
-    public void completed(){
+    public void completed() {
 
         running = false;
         finished = true;
@@ -36,21 +36,21 @@ public class FunctionBase implements FunctionInterface{
     }
 
     @Override
-    public void started(){
+    public void started() {
 
         running = true;
 
     }
 
     @Override
-    public boolean isRunning(){
+    public boolean isRunning() {
 
         return running;
 
     }
 
     @Override
-    public void setState(int state){
+    public void setState(int state) {
 
         this.state = state;
 

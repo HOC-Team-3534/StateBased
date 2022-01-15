@@ -7,7 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.SwerveDrive;
+import frc.robot.functions.FunctionProcessor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,10 +20,11 @@ import frc.robot.subsystems.Drive;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static Drive drive;
+	public static SwerveDrive swerveDrive;
+	public static FunctionProcessor functionProcessor;
 
 	private Command m_autonomousCommand;
-	private RobotContainer m_robotContainer;
+	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
 
@@ -35,8 +37,13 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 
-		m_robotContainer = new RobotContainer();
+		robotContainer = new RobotContainer();
+
+		functionProcessor = new FunctionProcessor();
+		swerveDrive = new SwerveDrive();
+
 	}
+	
 
 	@Override
 	public void robotPeriodic() {
@@ -83,10 +90,11 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-				// functionProcessor.process();
+				functionProcessor.process();
 				// run processes
 
 				/** Run subsystem process methods here */
+				swerveDrive.process();
 
 			}
 

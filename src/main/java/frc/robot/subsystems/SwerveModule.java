@@ -33,7 +33,7 @@ public class SwerveModule {
     private double turningkD = 0;
     private double turningkF = .025;
 
-    public SwerveModule(WPI_TalonFX driveMotor, WPI_TalonFX turningMotor, int offset) {
+    public SwerveModule(WPI_TalonFX driveMotor, WPI_TalonFX turningMotor) {
         m_driveMotor = driveMotor;
         m_turningMotor = turningMotor;
         m_driveMotor.configFactoryDefault();

@@ -4,9 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.subsystems.ExampleSubsystem;
+import java.util.concurrent.Callable;
+
+import frc.robot.XboxPlusPOV.POV;
+
+import edu.wpi.first.wpilibj.buttons.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -19,24 +21,109 @@ import frc.robot.subsystems.ExampleSubsystem;
  */
 public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
-	private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+	//private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+
+	final static XboxPlusPOV xbox1 = new XboxPlusPOV(0);
+	final static XboxPlusPOV xbox2 = new XboxPlusPOV(1);
+
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
 		// Configure the button bindings
-		configureButtonBindings();
+		
 	}
 
-	/**
-	 * Use this method to define your button->command mappings. Buttons can be
-	 * created by
-	 * instantiating a {@link GenericHID} or one of its subclasses ({@link
-	 * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-	 * it to a {@link
-	 * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-	 */
-	private void configureButtonBindings() {
+	public static XboxPlusPOV getController1() {
+
+		return xbox1;
+
+	}
+
+	public XboxPlusPOV getController2() {
+
+		return xbox2;
+
+	}
+
+	
+	public static enum Buttons {
+
+
+
+
+	}
+
+	Callable<Boolean> callable;
+
+	private void Buttons(Callable<Boolean> callable){
+
+		this.callable = callable;
+
+	}
+
+	public boolean getButton(){
+
+		try{
+
+			return callable.call().booleanValue();
+
+		}catch(Exception ex){
+
+			return false;
+
+		}
+	}
+
+	public static enum Axes {
+		Drive_ForwardBackward(new Callable<Double>(){
+
+			@Override
+			public Double call() throws Exception{
+
+				return RobotContainer.getController1().getLeftY();
+
+			}
+			
+		}),
+		Drive_LeftRight(new Callable<Double>(){
+
+			@Override
+			public Double call() throws Exception{
+
+				return RobotContainer.getController1().getLeftX();
+			}
+		}),
+		Drive_Rotation(new Callable<Double>(){
+			@Override
+			public Double call() throws Exception{
+
+				return RobotContainer.getController1().getRightX();
+			}
+		});
+
+		Callable<Double> callable;
+
+		private Axes(Callable<Double> callable){
+
+			this.callable = callable;
+
+		}
+
+		public double getAxis(){
+
+			try{
+
+				return callable.call().doubleValue();
+
+			}catch(Exception ex){
+
+				return 0.0;
+
+			}
+		}
+
+
 	}
 }

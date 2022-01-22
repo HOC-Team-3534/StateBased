@@ -19,10 +19,10 @@ public class SwerveDrive implements SystemInterface {
     Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
     Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-    private final SwerveModule m_frontLeft = new SwerveModule(RobotMap.frontLeftDrive,RobotMap.frontLeftRotate ); //2,1
-    private final SwerveModule m_frontRight = new SwerveModule(RobotMap.frontRightDrive, RobotMap.frontRightRotate); //8.7
-    private final SwerveModule m_backLeft = new SwerveModule(RobotMap.backLeftDrive, RobotMap.backLeftRotate); //4,3
-    private final SwerveModule m_backRight = new SwerveModule(RobotMap.backRightDrive, RobotMap.backRightRotate); //6,5
+    private final SwerveModule m_frontLeft = new SwerveModule(RobotMap.frontLeftDrive, RobotMap.frontLeftRotate, RobotMap.frontLeftEncoder); //2,1
+    private final SwerveModule m_frontRight = new SwerveModule(RobotMap.frontRightDrive, RobotMap.frontRightRotate, RobotMap.frontRightEncoder); //8.7
+    private final SwerveModule m_backLeft = new SwerveModule(RobotMap.backLeftDrive, RobotMap.backLeftRotate, RobotMap.backLeftEncoder); //4,3
+    private final SwerveModule m_backRight = new SwerveModule(RobotMap.backRightDrive, RobotMap.backRightRotate, RobotMap.backRightEncoder); //6,5
 
     // Creating my kinematics object using the module locations
     SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(

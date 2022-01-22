@@ -82,8 +82,7 @@ public class RobotContainer {
 			@Override
 			public Double call() throws Exception{
 
-				return RobotContainer.getController1().getLeftY();
-
+				return -RobotContainer.getController1().getLeftY();
 			}
 			
 		}),
@@ -99,7 +98,7 @@ public class RobotContainer {
 			@Override
 			public Double call() throws Exception{
 
-				return RobotContainer.getController1().getRightX();
+				return -RobotContainer.getController1().getRightX();
 			}
 		});
 

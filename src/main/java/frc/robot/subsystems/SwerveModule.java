@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
@@ -46,9 +47,13 @@ public class SwerveModule {
         m_turningMotor.configFactoryDefault();
         m_turningEncoder.configFactoryDefault();
         m_driveMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
+        SupplyCurrentLimitConfiguration config = new SupplyCurrentLimitConfiguration();
+        config.currentLimit = 20;
+        m_driveMotor.configSupplyCurrentLimit(config);
         m_turningMotor.configRemoteFeedbackFilter(m_turningEncoder, 0, 20);
         m_turningMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 20);
         m_turningMotor.setSensorPhase(true);
+        m_turningMotor.configSupplyCurrentLimit(config);
         m_turningEncoder.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 20);
 
         m_turningMotor.setNeutralMode(NeutralMode.Brake);
@@ -124,7 +129,7 @@ public class SwerveModule {
         long nearestDegree = Math.round(state.angle.getDegrees());
 
         double setTurnValue = (kTurningEncoderResolution / 360.0) * nearestDegree;
-
+        //unit is encoder counts per 100 ms
         inputVelocity = kDrivingEncoderResolution / (10 * kCircumference) * state.speedMetersPerSecond * kDriveRatio;
         m_driveMotor.set(TalonFXControlMode.Velocity, inputVelocity);
 

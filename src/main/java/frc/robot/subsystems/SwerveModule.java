@@ -15,10 +15,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public class SwerveModule {
     private static final double kWheelRadius = 0.0508;
     private static final double kCircumference = kWheelRadius * 2 * Math.PI;
-    private static final double kDriveRatio = 8.16;
-    private static final double kTurningRatio = 12.8;
-    private static final int kEncoderResolution = 2048;
-    double targetVelocity = 1 * 2048 / 600; // X RPM
+    private static final double kDriveRatio = 6.75;
+    private static final double kTurningRatio = 1;
+    private static final int kTurningEncoderResolution = 360;
+    private static final int kDrivingEncoderResolution = 2048;
+    //double targetVelocity = 1 * kEncoderResolution / 600; // X RPM
 
     private static final double kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed;
     private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
@@ -47,8 +48,8 @@ public class SwerveModule {
         m_driveMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
         m_turningMotor.configRemoteFeedbackFilter(m_turningEncoder, 0, 20);
         m_turningMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 20);
+        m_turningMotor.setSensorPhase(true);
         m_turningEncoder.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 20);
-
 
         m_turningMotor.setNeutralMode(NeutralMode.Brake);
         setDrivePIDF(drivekP, drivekI, drivekD, drivekF);
@@ -82,12 +83,12 @@ public class SwerveModule {
     }
 
     public Rotation2d getAngle() {
-        return new Rotation2d((2 * Math.PI / (2048 * kTurningRatio))
-                * (m_turningMotor.getSelectedSensorPosition() % (2048 * kTurningRatio)));
+        return new Rotation2d((2 * Math.PI / (kTurningEncoderResolution * kTurningRatio))
+                * (m_turningMotor.getSelectedSensorPosition() % (kTurningEncoderResolution * kTurningRatio)));
     }
 
     public double getAngleDegrees() {
-        return 360 * (m_turningMotor.getSelectedSensorPosition() % (2048 * kTurningRatio)) / (2048 * kTurningRatio);
+        return 360 * (m_turningMotor.getSelectedSensorPosition() % (kTurningEncoderResolution * kTurningRatio)) / (kTurningEncoderResolution * kTurningRatio);
     }
 
     private double inputAngle;
@@ -122,9 +123,9 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getAngle());
         long nearestDegree = Math.round(state.angle.getDegrees());
 
-        double setTurnValue = (2048 / 360.0) * nearestDegree;
+        double setTurnValue = (kTurningEncoderResolution / 360.0) * nearestDegree;
 
-        inputVelocity = 2048 / (10 * kCircumference) * state.speedMetersPerSecond * kDriveRatio;
+        inputVelocity = kDrivingEncoderResolution / (10 * kCircumference) * state.speedMetersPerSecond * kDriveRatio;
         m_driveMotor.set(TalonFXControlMode.Velocity, inputVelocity);
 
         inputAngle = nearestDegree;

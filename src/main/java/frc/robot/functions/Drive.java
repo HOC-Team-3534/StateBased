@@ -2,6 +2,7 @@ package frc.robot.functions;
 
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Axes;
+import frc.robot.subsystems.SwerveDrive;
 
 public class Drive extends FunctionBase implements FunctionInterface {
 
@@ -16,9 +17,9 @@ public class Drive extends FunctionBase implements FunctionInterface {
 
     @Override
     public void process() {
-        Robot.swerveDrive.drive(Axes.Drive_ForwardBackward.getAxis(),
-                Axes.Drive_LeftRight.getAxis(),
-                Axes.Drive_Rotation.getAxis(),
+        Robot.swerveDrive.drive(Axes.Drive_LeftRight.getAxis() * SwerveDrive.kMaxSpeed,
+                Axes.Drive_ForwardBackward.getAxis() * SwerveDrive.kMaxSpeed,
+                Axes.Drive_Rotation.getAxis() * SwerveDrive.kMaxAngularSpeed,
                 false);
 
     }

@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -23,6 +24,11 @@ public class RobotMap {
 	public static WPI_TalonFX backRightRotate; // 6
 	public static WPI_TalonFX frontRightDrive; // 7
 	public static WPI_TalonFX frontRightRotate; // 8
+
+	public static WPI_TalonSRX frontRightEncoder; //?
+	public static WPI_TalonSRX frontLeftEncoder; //?
+	public static WPI_TalonSRX backRightEncoder; //?
+	public static WPI_TalonSRX backLeftEncoder; //?
 
 	/**
 	 * EXAMPLE public static DoubleSolenoid elevatorCylinderOne; //first value ->
@@ -123,6 +129,14 @@ public class RobotMap {
 		frontRightRotate.config_kI(0, 0, 0);
 		frontRightRotate.config_kD(0, 80, 0);
 		frontRightRotate.setNeutralMode(NeutralMode.Brake);
+
+		frontLeftEncoder = new WPI_TalonSRX(9);
+
+		frontRightEncoder = new WPI_TalonSRX(10);
+
+		backLeftEncoder = new WPI_TalonSRX(11);
+
+		backRightEncoder = new WPI_TalonSRX(12);
 
 		// private final SwerveModule frontLeftModule = new Mk2SwerveModuleBuilder(
         //     new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))

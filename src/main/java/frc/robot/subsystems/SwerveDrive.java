@@ -10,19 +10,20 @@ import frc.robot.RobotMap;
 
 public class SwerveDrive implements SystemInterface {
 
-    public static final double kMaxSpeed = 3.0; // 3 meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+    public static final double kMaxSpeed = 1.0; // 3 meters per second, ~4.95 actual max
+    public static final double kMaxAngularSpeed = Math.PI/2; // 1/2 rotation per second
 
+    public static final double ksideLength = 0.59719;
     // Locations for the swerve drive modules relative to the robot center.
-    Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-    Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-    Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-    Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+    Translation2d m_frontLeftLocation = new Translation2d(0.2986, 0.2986);
+    Translation2d m_frontRightLocation = new Translation2d(0.2986, -0.2986);
+    Translation2d m_backLeftLocation = new Translation2d(-0.2986, 0.2986);
+    Translation2d m_backRightLocation = new Translation2d(-0.2986, -0.2986);
 
-    private final SwerveModule m_frontLeft = new SwerveModule(RobotMap.frontLeftDrive,RobotMap.frontLeftRotate ); //2,1
-    private final SwerveModule m_frontRight = new SwerveModule(RobotMap.frontRightDrive, RobotMap.frontRightRotate); //8.7
-    private final SwerveModule m_backLeft = new SwerveModule(RobotMap.backLeftDrive, RobotMap.backLeftRotate); //4,3
-    private final SwerveModule m_backRight = new SwerveModule(RobotMap.backRightDrive, RobotMap.backRightRotate); //6,5
+    private final SwerveModule m_frontLeft = new SwerveModule(RobotMap.frontLeftDrive, RobotMap.frontLeftRotate, RobotMap.frontLeftEncoder); //2,1
+    private final SwerveModule m_frontRight = new SwerveModule(RobotMap.frontRightDrive, RobotMap.frontRightRotate, RobotMap.frontRightEncoder); //8.7
+    private final SwerveModule m_backLeft = new SwerveModule(RobotMap.backLeftDrive, RobotMap.backLeftRotate, RobotMap.backLeftEncoder); //4,3
+    private final SwerveModule m_backRight = new SwerveModule(RobotMap.backRightDrive, RobotMap.backRightRotate, RobotMap.backRightEncoder); //6,5
 
     // Creating my kinematics object using the module locations
     SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(

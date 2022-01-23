@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDrive;
@@ -37,6 +40,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 
+		RobotMap.init();
+
 		robotContainer = new RobotContainer();
 
 		functionProcessor = new FunctionProcessor();
@@ -51,6 +56,14 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
+		RobotMap.frontLeftDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.frontLeftRotate.set(ControlMode.PercentOutput, 0);
+		RobotMap.frontRightDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.frontRightRotate.set(ControlMode.PercentOutput, 0);
+		RobotMap.backLeftDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.backLeftRotate.set(ControlMode.PercentOutput, 0);
+		RobotMap.backRightDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.backRightRotate.set(ControlMode.PercentOutput, 0);
 	}
 
 	@Override

@@ -18,17 +18,17 @@ public class RobotMap {
 
 	public static WPI_TalonFX frontLeftDrive; // 1
 	public static WPI_TalonFX frontLeftRotate; // 2
-	public static WPI_TalonFX backLeftDrive; // 3
-	public static WPI_TalonFX backLeftRotate; // 4
-	public static WPI_TalonFX backRightDrive; // 5
-	public static WPI_TalonFX backRightRotate; // 6
-	public static WPI_TalonFX frontRightDrive; // 7
-	public static WPI_TalonFX frontRightRotate; // 8
+	public static WPI_TalonFX frontRightDrive; //3
+	public static WPI_TalonFX frontRightRotate; //4
+	public static WPI_TalonFX backLeftDrive; // 5
+	public static WPI_TalonFX backLeftRotate; // 6
+	public static WPI_TalonFX backRightDrive; // 7
+	public static WPI_TalonFX backRightRotate; // 8
 
-	public static WPI_TalonSRX frontRightEncoder; //?
-	public static WPI_TalonSRX frontLeftEncoder; //?
-	public static WPI_TalonSRX backRightEncoder; //?
-	public static WPI_TalonSRX backLeftEncoder; //?
+	public static WPI_TalonSRX frontLeftEncoder; //9
+	public static WPI_TalonSRX frontRightEncoder; //10
+	public static WPI_TalonSRX backLeftEncoder; //11
+	public static WPI_TalonSRX backRightEncoder; //12
 
 	/**
 	 * EXAMPLE public static DoubleSolenoid elevatorCylinderOne; //first value ->
@@ -71,64 +71,20 @@ public class RobotMap {
 	public static void init() {
 
 		frontLeftDrive = new WPI_TalonFX(1);
-		frontLeftDrive.config_kF(0, 0.05, 0);
-		frontLeftDrive.config_kP(0, 3, 0);
-		frontLeftDrive.config_kI(0, 0, 0);
-		frontLeftDrive.config_kD(0, 80, 0);
-		frontLeftDrive.setNeutralMode(NeutralMode.Brake);
 
 		frontLeftRotate = new WPI_TalonFX(2);
-		frontLeftRotate.config_kF(0, 0.05, 0);
-		frontLeftRotate.config_kP(0, 3, 0);
-		frontLeftRotate.config_kI(0, 0, 0);
-		frontLeftRotate.config_kD(0, 80, 0);
-		frontLeftRotate.setNeutralMode(NeutralMode.Brake);
 
-		backLeftDrive = new WPI_TalonFX(3);
-		backLeftDrive.config_kF(0, 0.05, 0);
-		backLeftDrive.config_kP(0, 3, 0);
-		backLeftDrive.config_kI(0, 0, 0);
-		backLeftDrive.config_kD(0, 80, 0);
-		backLeftDrive.setNeutralMode(NeutralMode.Brake);
+		frontRightDrive = new WPI_TalonFX(3);
 
-		backLeftRotate = new WPI_TalonFX(4);
-		backLeftRotate.config_kF(0, 0.05, 0);
-		backLeftRotate.config_kP(0, 3, 0);
-		backLeftRotate.config_kI(0, 0, 0);
-		backLeftRotate.config_kD(0, 80, 0);
-		backLeftRotate.setNeutralMode(NeutralMode.Brake);
+		frontRightRotate = new WPI_TalonFX(4);
 
-		backRightDrive = new WPI_TalonFX(5);
-		backRightDrive.setInverted(true);
-		backRightDrive.config_kF(0, 0.05, 0);
-		backRightDrive.config_kP(0, 3, 0);
-		backRightDrive.config_kI(0, 0, 0);
-		backRightDrive.config_kD(0, 80, 0);
-		backRightDrive.setNeutralMode(NeutralMode.Brake);
+		backLeftDrive = new WPI_TalonFX(5);
 
-		backRightRotate = new WPI_TalonFX(6);
-		backRightRotate.setInverted(true);
-		backRightRotate.config_kF(0, 0.05, 0);
-		backRightRotate.config_kP(0, 3, 0);
-		backRightRotate.config_kI(0, 0, 0);
-		backRightRotate.config_kD(0, 80, 0);
-		backRightRotate.setNeutralMode(NeutralMode.Brake);
+		backLeftRotate = new WPI_TalonFX(6);
 
-		frontRightDrive = new WPI_TalonFX(7);
-		frontRightDrive.setInverted(true);
-		frontRightDrive.config_kF(0, 0.05, 0);
-		frontRightDrive.config_kP(0, 3, 0);
-		frontRightDrive.config_kI(0, 0, 0);
-		frontRightDrive.config_kD(0, 80, 0);
-		frontRightDrive.setNeutralMode(NeutralMode.Brake);
+		backRightDrive = new WPI_TalonFX(7);
 
-		frontRightRotate = new WPI_TalonFX(8);
-		frontRightRotate.setInverted(true);
-		frontRightRotate.config_kF(0, 0.05, 0);
-		frontRightRotate.config_kP(0, 3, 0);
-		frontRightRotate.config_kI(0, 0, 0);
-		frontRightRotate.config_kD(0, 80, 0);
-		frontRightRotate.setNeutralMode(NeutralMode.Brake);
+		backRightRotate = new WPI_TalonFX(8);
 
 		frontLeftEncoder = new WPI_TalonSRX(9);
 

@@ -1,0 +1,10 @@
+package frc.robot.sequences;
+
+public abstract class BaseAutonSequence<S extends IState> extends BaseSequence<S>{
+
+    public BaseAutonSequence(S neutralState, S startState) {
+        super(neutralState, startState);
+        //TODO Auto-generated constructor stub
+    }
+
+}

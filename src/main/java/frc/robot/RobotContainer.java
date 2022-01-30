@@ -31,7 +31,6 @@ public class RobotContainer {
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-		// Configure the button bindings
 		
 	}
 
@@ -48,33 +47,31 @@ public class RobotContainer {
 	}
 
 	
-	public static enum Buttons {
+	// public static enum Buttons {
 
 
+	// 	Callable<Boolean> callable;
 
+	// 	private void Buttons(Callable<Boolean> callable){
+	
+	// 		this.callable = callable;
+	
+	// 	}
+	
+	// 	public boolean getButton(){
+	
+	// 		try{
+	
+	// 			return callable.call().booleanValue();
+	
+	// 		}catch(Exception ex){
+	
+	// 			return false;
+	
+	// 		}
+	// 	}
 
-	}
-
-	Callable<Boolean> callable;
-
-	private void Buttons(Callable<Boolean> callable){
-
-		this.callable = callable;
-
-	}
-
-	public boolean getButton(){
-
-		try{
-
-			return callable.call().booleanValue();
-
-		}catch(Exception ex){
-
-			return false;
-
-		}
-	}
+	// }
 
 	public static enum Axes {
 		Drive_ForwardBackward(new Callable<Double>(){
@@ -122,7 +119,5 @@ public class RobotContainer {
 
 			}
 		}
-
-
 	}
 }

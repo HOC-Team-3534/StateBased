@@ -18,7 +18,7 @@ public class SwerveModule {
     private static final double kCircumference = kWheelRadius * 2 * Math.PI;
     private static final double kDriveRatio = 6.75;
     private static final double kTurningRatio = 1;
-    private static final int kTurningEncoderResolution = 360;
+    private static final int kTurningEncoderResolution = 1440;
     private static final int kDrivingEncoderResolution = 2048;
     //double targetVelocity = 1 * kEncoderResolution / 600; // X RPM
 
@@ -32,10 +32,10 @@ public class SwerveModule {
     private double drivekF = 0.048;
 
     private WPI_TalonFX m_turningMotor;
-    private double turningkP = 1;
+    private double turningkP = 5;
     private double turningkI = 0;
-    private double turningkD = 0;
-    private double turningkF = 0.048;
+    private double turningkD = 100;
+    private double turningkF = 0;
 
     private WPI_TalonSRX m_turningEncoder;
 
@@ -52,9 +52,10 @@ public class SwerveModule {
         m_driveMotor.configSupplyCurrentLimit(config);
         m_turningMotor.configRemoteFeedbackFilter(m_turningEncoder, 0, 20);
         m_turningMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.RemoteSensor0, 0, 20);
-        m_turningMotor.setSensorPhase(true);
+        m_turningMotor.setSensorPhase(false);
         m_turningMotor.configSupplyCurrentLimit(config);
         m_turningEncoder.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 20);
+        m_turningEncoder.setSelectedSensorPosition(0);
 
         m_turningMotor.setNeutralMode(NeutralMode.Brake);
         setDrivePIDF(drivekP, drivekI, drivekD, drivekF);

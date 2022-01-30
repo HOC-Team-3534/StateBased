@@ -5,10 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.functions.FunctionProcessor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,7 +24,7 @@ import frc.robot.functions.FunctionProcessor;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
-	public static FunctionProcessor functionProcessor;
+	public static SequenceProcessor functionProcessor;
 
 	private Command m_autonomousCommand;
 	public static RobotContainer robotContainer;
@@ -37,9 +40,11 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 
+		RobotMap.init();
+
 		robotContainer = new RobotContainer();
 
-		functionProcessor = new FunctionProcessor();
+		functionProcessor = new SequenceProcessor();
 		swerveDrive = new SwerveDrive();
 
 	}
@@ -51,6 +56,14 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
+		RobotMap.frontLeftDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.frontLeftRotate.set(ControlMode.PercentOutput, 0);
+		RobotMap.frontRightDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.frontRightRotate.set(ControlMode.PercentOutput, 0);
+		RobotMap.backLeftDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.backLeftRotate.set(ControlMode.PercentOutput, 0);
+		RobotMap.backRightDrive.set(ControlMode.PercentOutput, 0);
+		RobotMap.backRightRotate.set(ControlMode.PercentOutput, 0);
 	}
 
 	@Override

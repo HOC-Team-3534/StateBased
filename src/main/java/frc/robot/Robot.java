@@ -10,8 +10,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.functions.FunctionProcessor;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +24,7 @@ import frc.robot.functions.FunctionProcessor;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
-	public static FunctionProcessor functionProcessor;
+	public static SequenceProcessor functionProcessor;
 
 	private Command m_autonomousCommand;
 	public static RobotContainer robotContainer;
@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
 		robotContainer = new RobotContainer();
 
-		functionProcessor = new FunctionProcessor();
+		functionProcessor = new SequenceProcessor();
 		swerveDrive = new SwerveDrive();
 
 	}

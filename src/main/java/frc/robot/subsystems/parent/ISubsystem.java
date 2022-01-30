@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
-public interface SystemInterface {
+public interface ISubsystem {
 
     public void process();
+    
 }

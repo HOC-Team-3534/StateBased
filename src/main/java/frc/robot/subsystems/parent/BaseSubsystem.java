@@ -1,7 +1,7 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.parent;
 
-import frc.robot.sequences.BaseSequence;
-import frc.robot.sequences.IState;
+import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.IState;
 
 public abstract class BaseSubsystem implements ISubsystem {
 

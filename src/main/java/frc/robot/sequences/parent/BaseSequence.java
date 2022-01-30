@@ -1,4 +1,4 @@
-package frc.robot.sequences;
+package frc.robot.sequences.parent;
 
 public abstract class BaseSequence<S extends IState> implements ISequence<S> {
 
@@ -23,7 +23,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         updateSequenceStartTime();
     }
 
-    void start() {
+    public void start() {
         if (getState() == getNeutralState()) {
             init();
             setState(getStartState());
@@ -53,7 +53,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         neutralState = state;
     }
 
-    S getNeutralState(){
+    public S getNeutralState(){
         return neutralState;
     }
 

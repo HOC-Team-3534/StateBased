@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.BaseSubsystem;
+import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Drive extends BaseSequence<DriveState> {
 

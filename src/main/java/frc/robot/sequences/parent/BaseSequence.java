@@ -41,7 +41,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         return this.state;
     }
 
-    void setNextState(S state) {
+    protected void setNextState(S state) {
         nextState = state;
     }
 
@@ -65,7 +65,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
 		return startState;
 	}
 
-    void updateState() {
+    protected void updateState() {
         setState(nextState);
     }
 

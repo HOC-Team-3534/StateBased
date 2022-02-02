@@ -11,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.sequences.SequenceProcessor;
+import frc.robot.sequences.parent.BaseAutonSequence;
+import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.SwerveDrive;
 
 /**
@@ -24,9 +26,9 @@ import frc.robot.subsystems.SwerveDrive;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
-	public static SequenceProcessor functionProcessor;
+	public static SequenceProcessor sequenceProcessor;
 
-	private Command m_autonomousCommand;
+	private BaseAutonSequence<? extends IState> m_autonomousSequence;
 	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
@@ -44,7 +46,7 @@ public class Robot extends TimedRobot {
 
 		robotContainer = new RobotContainer();
 
-		functionProcessor = new SequenceProcessor();
+		sequenceProcessor = new SequenceProcessor();
 		swerveDrive = new SwerveDrive();
 
 	}
@@ -103,7 +105,7 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-				functionProcessor.process();
+				sequenceProcessor.process();
 				// run processes
 
 				/** Run subsystem process methods here */

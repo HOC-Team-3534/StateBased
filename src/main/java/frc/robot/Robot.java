@@ -58,14 +58,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		RobotMap.frontLeftDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.frontLeftRotate.set(ControlMode.PercentOutput, 0);
-		RobotMap.frontRightDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.frontRightRotate.set(ControlMode.PercentOutput, 0);
-		RobotMap.backLeftDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.backLeftRotate.set(ControlMode.PercentOutput, 0);
-		RobotMap.backRightDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.backRightRotate.set(ControlMode.PercentOutput, 0);
+		swerveDrive.drive(0.0, 0.0, 0.0, false);
 	}
 
 	@Override

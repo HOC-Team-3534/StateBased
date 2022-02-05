@@ -1,12 +1,31 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+import static frc.robot.Constants.BACK_LEFT_MODULE_DRIVE_MOTOR;
+import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_ENCODER;
+import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_MOTOR;
+import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_OFFSET;
+import static frc.robot.Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR;
+import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_ENCODER;
+import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_MOTOR;
+import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_OFFSET;
+import static frc.robot.Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR;
+import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_ENCODER;
+import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_MOTOR;
+import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_OFFSET;
+import static frc.robot.Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR;
+import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_ENCODER;
+import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_MOTOR;
+import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_OFFSET;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
+import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
+import com.swervedrivespecialties.swervelib.SwerveModule;
+
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -16,24 +35,20 @@ import edu.wpi.first.wpilibj.SPI;
  */
 public class RobotMap {
 
-	public static WPI_TalonFX frontLeftDrive; // 1
-	public static WPI_TalonFX frontLeftRotate; // 2
-	public static WPI_TalonFX frontRightDrive; //3
-	public static WPI_TalonFX frontRightRotate; //4
-	public static WPI_TalonFX backLeftDrive; // 5
-	public static WPI_TalonFX backLeftRotate; // 6
-	public static WPI_TalonFX backRightDrive; // 7
-	public static WPI_TalonFX backRightRotate; // 8
-
-	public static WPI_TalonSRX frontLeftEncoder; //9
-	public static WPI_TalonSRX frontRightEncoder; //10
-	public static WPI_TalonSRX backLeftEncoder; //11
-	public static WPI_TalonSRX backRightEncoder; //12
-
 	/**
 	 * EXAMPLE public static DoubleSolenoid elevatorCylinderOne; //first value ->
 	 * PCM A, CHANNEL 0, 1
 	 */
+
+	public static SwerveModule m_frontLeftModule;
+	public static SwerveModule m_frontRightModule;
+	public static SwerveModule m_backLeftModule;
+	public static SwerveModule m_backRightModule;
+
+	public static WPI_TalonFX m_frontLeftDrive;
+	public static WPI_TalonFX m_frontRightDrive;
+	public static WPI_TalonFX m_backLeftDrive;
+	public static WPI_TalonFX m_backRightDrive;
 
 	public static AHRS navx;
 
@@ -70,38 +85,86 @@ public class RobotMap {
 
 	public static void init() {
 
-		frontLeftDrive = new WPI_TalonFX(1);
+		ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-		frontLeftRotate = new WPI_TalonFX(2);
+		// There are 4 methods you can call to create your swerve modules.
+		// The method you use depends on what motors you are using.
+		//
+		// Mk3SwerveModuleHelper.createFalcon500(...)
+		// Your module has two Falcon 500s on it. One for steering and one for driving.
+		//
+		// Mk3SwerveModuleHelper.createNeo(...)
+		// Your module has two NEOs on it. One for steering and one for driving.
+		//
+		// Mk3SwerveModuleHelper.createFalcon500Neo(...)
+		// Your module has a Falcon 500 and a NEO on it. The Falcon 500 is for driving
+		// and the NEO is for steering.
+		//
+		// Mk3SwerveModuleHelper.createNeoFalcon500(...)
+		// Your module has a NEO and a Falcon 500 on it. The NEO is for driving and the
+		// Falcon 500 is for steering.
+		//
+		// Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper
+		// class.
 
-		frontRightDrive = new WPI_TalonFX(3);
+		// By default we will use Falcon 500s in standard configuration. But if you use
+		// a different configuration or motors
+		// you MUST change it. If you do not, your code will crash on startup.
+		// FIXME Setup motor configuration
 
-		frontRightRotate = new WPI_TalonFX(4);
+		m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+				// This parameter is optional, but will allow you to see the current state of
+				// the module on the dashboard.
+				tab.getLayout("Front Left Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(0, 0),
+				// This can either be STANDARD or FAST depending on your gear configuration
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				// This is the ID of the drive motor
+				FRONT_LEFT_MODULE_DRIVE_MOTOR,
+				// This is the ID of the steer motor
+				FRONT_LEFT_MODULE_STEER_MOTOR,
+				// This is the ID of the steer encoder
+				FRONT_LEFT_MODULE_STEER_ENCODER,
+				// This is how much the steer encoder is offset from true zero (In our case,
+				// zero is facing straight forward)
+				FRONT_LEFT_MODULE_STEER_OFFSET);
 
-		backLeftDrive = new WPI_TalonFX(5);
+		// We will do the same for the other modules
+		m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
+				tab.getLayout("Front Right Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(2, 0),
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+				FRONT_RIGHT_MODULE_STEER_MOTOR,
+				FRONT_RIGHT_MODULE_STEER_ENCODER,
+				FRONT_RIGHT_MODULE_STEER_OFFSET);
 
-		backLeftRotate = new WPI_TalonFX(6);
+		m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+				tab.getLayout("Back Left Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(4, 0),
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				BACK_LEFT_MODULE_DRIVE_MOTOR,
+				BACK_LEFT_MODULE_STEER_MOTOR,
+				BACK_LEFT_MODULE_STEER_ENCODER,
+				BACK_LEFT_MODULE_STEER_OFFSET);
 
-		backRightDrive = new WPI_TalonFX(7);
+		m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
+				tab.getLayout("Back Right Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(6, 0),
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				BACK_RIGHT_MODULE_DRIVE_MOTOR,
+				BACK_RIGHT_MODULE_STEER_MOTOR,
+				BACK_RIGHT_MODULE_STEER_ENCODER,
+				BACK_RIGHT_MODULE_STEER_OFFSET);
 
-		backRightRotate = new WPI_TalonFX(8);
-
-		frontLeftEncoder = new WPI_TalonSRX(9);
-
-		frontRightEncoder = new WPI_TalonSRX(10);
-
-		backLeftEncoder = new WPI_TalonSRX(11);
-
-		backRightEncoder = new WPI_TalonSRX(12);
-
-		// private final SwerveModule frontLeftModule = new Mk2SwerveModuleBuilder(
-        //     new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))
-        //     .angleEncoder(new AnalogInput(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER), FRONT_LEFT_ANGLE_OFFSET)
-        //     .angleMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        //             Mk2SwerveModuleBuilder.MotorType.NEO)
-        //     .driveMotor(new CANSparkMax(RobotMap.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-        //             Mk2SwerveModuleBuilder.MotorType.NEO)
-        //     .build();
+		m_frontLeftDrive = new WPI_TalonFX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
+		m_frontRightDrive = new WPI_TalonFX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
+		m_backLeftDrive = new WPI_TalonFX(BACK_LEFT_MODULE_DRIVE_MOTOR);
+		m_backRightDrive = new WPI_TalonFX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
 
 		navx = new AHRS(SPI.Port.kMXP);
 

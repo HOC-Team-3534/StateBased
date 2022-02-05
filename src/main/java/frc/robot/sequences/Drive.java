@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.BaseSubsystem;
+import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Drive extends BaseSequence<DriveState> {
 
@@ -17,6 +19,7 @@ public class Drive extends BaseSequence<DriveState> {
 
         switch (getState()) {
             case DRIVE:
+            
                 break;
             case NEUTRAL:
                 break;
@@ -24,6 +27,7 @@ public class Drive extends BaseSequence<DriveState> {
                 break;
 
         }
+        updateState();
     }
 
     @Override
@@ -52,7 +56,7 @@ enum DriveState implements IState {
     @Override
     public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
         for (BaseSubsystem subsystem : requiredSubsystems) {
-            if (subsystem.isRequired()) {
+            if (subsystem.isRequiredByAnother(sequence)) {
                 return false;
             }
         }

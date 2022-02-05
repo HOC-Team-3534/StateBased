@@ -1,8 +1,8 @@
-package frc.robot.sequences;
+package frc.robot.sequences.parent;
 
 import java.util.List;
 
-import frc.robot.subsystems.BaseSubsystem;
+import frc.robot.subsystems.parent.BaseSubsystem;
 
 public interface IState{
     

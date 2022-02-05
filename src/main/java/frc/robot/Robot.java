@@ -11,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.sequences.SequenceProcessor;
+import frc.robot.sequences.parent.BaseAutonSequence;
+import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.SwerveDrive;
 
 /**
@@ -24,9 +26,9 @@ import frc.robot.subsystems.SwerveDrive;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
-	public static SequenceProcessor functionProcessor;
+	public static SequenceProcessor sequenceProcessor;
 
-	private Command m_autonomousCommand;
+	private BaseAutonSequence<? extends IState> m_autonomousSequence;
 	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
@@ -44,8 +46,9 @@ public class Robot extends TimedRobot {
 
 		robotContainer = new RobotContainer();
 
-		functionProcessor = new SequenceProcessor();
 		swerveDrive = new SwerveDrive();
+
+		sequenceProcessor = new SequenceProcessor();
 
 	}
 	
@@ -56,14 +59,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		RobotMap.frontLeftDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.frontLeftRotate.set(ControlMode.PercentOutput, 0);
-		RobotMap.frontRightDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.frontRightRotate.set(ControlMode.PercentOutput, 0);
-		RobotMap.backLeftDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.backLeftRotate.set(ControlMode.PercentOutput, 0);
-		RobotMap.backRightDrive.set(ControlMode.PercentOutput, 0);
-		RobotMap.backRightRotate.set(ControlMode.PercentOutput, 0);
+		swerveDrive.drive(0.0, 0.0, 0.0, false);
 	}
 
 	@Override
@@ -103,7 +99,7 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-				functionProcessor.process();
+				sequenceProcessor.process();
 				// run processes
 
 				/** Run subsystem process methods here */

@@ -1,7 +1,7 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.parent;
 
-import frc.robot.sequences.BaseSequence;
-import frc.robot.sequences.IState;
+import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.IState;
 
 public abstract class BaseSubsystem implements ISubsystem {
 
@@ -9,12 +9,15 @@ public abstract class BaseSubsystem implements ISubsystem {
     BaseSequence<? extends IState> sequenceRequiring;
     IState stateRequiring;
 
-    public boolean isRequired() {
+    public boolean isRequiredByAnother(BaseSequence<? extends IState> sequence) {
+        if(sequenceRequiring == sequence){
+            return false;
+        }  
         return this.required;
     }
 
     public boolean require(BaseSequence<? extends IState> sequence, IState state) {
-        if (!isRequired()) {
+        if (!isRequiredByAnother(sequence)) {
             required = true;
             sequenceRequiring = sequence;
             stateRequiring = state;

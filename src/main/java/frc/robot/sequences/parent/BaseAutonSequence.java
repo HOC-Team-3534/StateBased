@@ -1,4 +1,4 @@
-package frc.robot.sequences;
+package frc.robot.sequences.parent;
 
 public abstract class BaseAutonSequence<S extends IState> extends BaseSequence<S>{
 

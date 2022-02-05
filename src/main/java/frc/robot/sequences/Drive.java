@@ -55,7 +55,7 @@ enum DriveState implements IState {
     @Override
     public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
         for (BaseSubsystem subsystem : requiredSubsystems) {
-            if (subsystem.isRequired()) {
+            if (subsystem.isRequiredByAnother(sequence)) {
                 return false;
             }
         }

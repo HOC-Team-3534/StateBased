@@ -42,7 +42,7 @@ public class SwerveDrive extends BaseSubsystem {
 
     @Override
     public void process() {
-        
+        isStillRequired();
         if (getStateRequiringName() == "DRIVE") {
             drive(Axes.Drive_LeftRight.getAxis() * SwerveDrive.kMaxSpeed,
                     Axes.Drive_ForwardBackward.getAxis() * SwerveDrive.kMaxSpeed,

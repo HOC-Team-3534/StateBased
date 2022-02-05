@@ -57,6 +57,14 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12; // FIXME Set back right steer encoder ID
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(264.2); // FIXME Measure and set back
                                                                                         // right steer offset
+        public static final int SHOOTER_MOTOR = 13;
+
+        public static final double TALONFX_CPR = 2048.0;
+
+        public static final double SHOOT_MOTOR_GEAR_RATIO = 1.3;
+
+        public static final double RPM_TO_COUNTS_PER_100MS = TALONFX_CPR / 600.0 / SHOOT_MOTOR_GEAR_RATIO;
+
 
     public static final double MAX_VOLTAGE = 12.0;
 

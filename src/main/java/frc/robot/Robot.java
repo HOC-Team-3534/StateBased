@@ -5,8 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.sequences.SequenceProcessor;
+import frc.robot.sequences.parent.BaseAutonSequence;
+import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.SwerveDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -18,8 +25,11 @@ import edu.wpi.first.wpilibj2.command.Command;
  * project.
  */
 public class Robot extends TimedRobot {
-	private Command m_autonomousCommand;
-	private RobotContainer m_robotContainer;
+	public static SwerveDrive swerveDrive;
+	public static SequenceProcessor sequenceProcessor;
+
+	private BaseAutonSequence<? extends IState> m_autonomousSequence;
+	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
 
@@ -32,8 +42,16 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 
-		m_robotContainer = new RobotContainer();
+		RobotMap.init();
+
+		robotContainer = new RobotContainer();
+
+		swerveDrive = new SwerveDrive();
+
+		sequenceProcessor = new SequenceProcessor();
+
 	}
+	
 
 	@Override
 	public void robotPeriodic() {
@@ -41,6 +59,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
+		swerveDrive.drive(0.0, 0.0, 0.0, false);
 	}
 
 	@Override
@@ -61,7 +80,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		
+
 		log();
 
 		isAutonomous = this.isAutonomous();
@@ -80,12 +99,11 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-
-				
-				//functionProcessor.process();
+				sequenceProcessor.process();
 				// run processes
-				
+
 				/** Run subsystem process methods here */
+				swerveDrive.process();
 
 			}
 
@@ -107,11 +125,10 @@ public class Robot extends TimedRobot {
 
 		logCounter++;
 
-		if(logCounter > 5){
-
+		if (logCounter > 5) {
 
 			logCounter = 0;
 		}
-		
+
 	}
 }

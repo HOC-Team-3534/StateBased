@@ -45,11 +45,6 @@ public class RobotMap {
 	public static SwerveModule m_backLeftModule;
 	public static SwerveModule m_backRightModule;
 
-	public static WPI_TalonFX m_frontLeftDrive;
-	public static WPI_TalonFX m_frontRightDrive;
-	public static WPI_TalonFX m_backLeftDrive;
-	public static WPI_TalonFX m_backRightDrive;
-
 	public static AHRS navx;
 
 	public static final double spikeCurrent = 7.0;
@@ -84,6 +79,7 @@ public class RobotMap {
 	// inchesPerCountMultiplier * 10;
 
 	public static void init() {
+
 
 		ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -160,11 +156,6 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_MOTOR,
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
-
-		m_frontLeftDrive = new WPI_TalonFX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
-		m_frontRightDrive = new WPI_TalonFX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
-		m_backLeftDrive = new WPI_TalonFX(BACK_LEFT_MODULE_DRIVE_MOTOR);
-		m_backRightDrive = new WPI_TalonFX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
 
 		navx = new AHRS(SPI.Port.kMXP);
 

@@ -46,8 +46,9 @@ public class Robot extends TimedRobot {
 
 		robotContainer = new RobotContainer();
 
-		sequenceProcessor = new SequenceProcessor();
 		swerveDrive = new SwerveDrive();
+
+		sequenceProcessor = new SequenceProcessor();
 
 	}
 	

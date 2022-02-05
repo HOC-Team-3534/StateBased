@@ -10,7 +10,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     long timeAtStartOfSequence = 0;
     long timeAtStartOfState = 0;
 
-    public BaseSequence(S neutralState, S startState){
+    public BaseSequence(S neutralState, S startState) {
         setNeutralState(neutralState);
         setStartState(startState);
         setState(neutralState);
@@ -19,19 +19,20 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     /**
      * must be called at the beginning of the child class start function
      */
-    void init(){
+    void init() {
         updateSequenceStartTime();
     }
 
     public void start() {
         if (getState() == getNeutralState()) {
             init();
+            setNextState(getStartState());
             setState(getStartState());
         }
     }
 
     void setState(S state) {
-        if(state.requireSubsystems(this)){
+        if (state.requireSubsystems(this)) {
             this.state = state;
             updateStateStartTime();
         }
@@ -49,39 +50,41 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         return nextState;
     }
 
-    void setNeutralState(S state){
+    void setNeutralState(S state) {
         neutralState = state;
     }
 
-    public S getNeutralState(){
+    public S getNeutralState() {
         return neutralState;
     }
 
     void setStartState(S state) {
-		startState = state;
-	}
-
-    S getStartState() {
-		return startState;
-	}
-
-    protected void updateState() {
-        setState(nextState);
+        startState = state;
     }
 
-    void updateSequenceStartTime(){
+    S getStartState() {
+        return startState;
+    }
+
+    protected void updateState() {
+        if (getState() != getNextState()) {
+            setState(nextState);
+        }
+    }
+
+    void updateSequenceStartTime() {
         timeAtStartOfSequence = System.currentTimeMillis();
     }
 
-    long getTimeSinceStartOfSequence(){
+    long getTimeSinceStartOfSequence() {
         return System.currentTimeMillis() - timeAtStartOfSequence;
     }
 
-    void updateStateStartTime(){
+    void updateStateStartTime() {
         timeAtStartOfState = System.currentTimeMillis();
     }
 
-    long getTimeSinceStartOfState(){
+    long getTimeSinceStartOfState() {
         return System.currentTimeMillis() - timeAtStartOfState;
     }
 

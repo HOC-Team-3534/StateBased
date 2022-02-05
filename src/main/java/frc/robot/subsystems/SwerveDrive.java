@@ -17,19 +17,25 @@ import frc.robot.Constants;
 
 public class SwerveDrive extends BaseSubsystem {
 
-	public static final double kMaxSpeed = 1.0; // 3 meters per second, ~4.95 actual max
-	public static final double kMaxAngularSpeed = Math.PI / 2; // 1/2 rotation per second
+	private double frontLeft_stateAngle = 0.0,
+			frontRight_stateAngle = 0.0,
+			backLeft_stateAngle = 0.0,
+			backRight_stateAngle = 0.0;
 
-	public static final double ksideLength = 0.59719;
 	// Locations for the swerve drive modules relative to the robot center.
-	Translation2d m_frontLeftLocation = new Translation2d(0.2986, 0.2986);
-	Translation2d m_frontRightLocation = new Translation2d(0.2986, -0.2986);
-	Translation2d m_backLeftLocation = new Translation2d(-0.2986, 0.2986);
-	Translation2d m_backRightLocation = new Translation2d(-0.2986, -0.2986);
-
-	// Creating my kinematics object using the module locations
-	SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-			m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+	private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+			// Front left
+			new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+					Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+			// Front right
+			new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+					-Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+			// Back left
+			new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+					Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
+			// Back right
+			new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+					-Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
 	// Creating my odometry object from the kinematics object. Here,
 	// our starting pose is 5 meters along the long end of the field and in the
 	// center of the field along the short end, facing forward.
@@ -40,10 +46,10 @@ public class SwerveDrive extends BaseSubsystem {
 	public void process() {
 		isStillRequired();
 		if (getStateRequiringName() == "DRIVE") {
-			drive(Axes.Drive_LeftRight.getAxis() * SwerveDrive.kMaxSpeed,
-					Axes.Drive_ForwardBackward.getAxis() * SwerveDrive.kMaxSpeed,
-					Axes.Drive_Rotation.getAxis() * SwerveDrive.kMaxAngularSpeed,
-					false);
+			drive(Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+					Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+					true);
 		}
 	}
 
@@ -54,29 +60,29 @@ public class SwerveDrive extends BaseSubsystem {
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 		var swerveModuleStates = m_kinematics.toSwerveModuleStates(
 				fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-						xSpeed, ySpeed, rot, getGyroHeading())
-						: new ChassisSpeeds(xSpeed, ySpeed, rot));
-		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-		if (swerveModuleStates[0].speedMetersPerSecond + swerveModuleStates[1].speedMetersPerSecond
-				+ swerveModuleStates[2].speedMetersPerSecond + swerveModuleStates[3].speedMetersPerSecond < .03) {
-			RobotMap.m_frontLeftDrive.set(ControlMode.Velocity, 0);
-			RobotMap.m_frontRightDrive.set(ControlMode.Velocity, 0);
-			RobotMap.m_backLeftDrive.set(ControlMode.Velocity, 0);
-			RobotMap.m_backRightDrive.set(ControlMode.Velocity, 0);
-		} else {
-			RobotMap.m_frontLeftModule.set(swerveModuleStates[0].speedMetersPerSecond
-					/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
-					swerveModuleStates[0].angle.getRadians());
-			RobotMap.m_frontRightModule.set(swerveModuleStates[1].speedMetersPerSecond
-					/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
-					swerveModuleStates[1].angle.getRadians());
-			RobotMap.m_backLeftModule.set(swerveModuleStates[2].speedMetersPerSecond
-					/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
-					swerveModuleStates[2].angle.getRadians());
-			RobotMap.m_backRightModule.set(swerveModuleStates[3].speedMetersPerSecond
-					/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
-					swerveModuleStates[3].angle.getRadians());
+						ySpeed, xSpeed, rot, getGyroHeading())
+						: new ChassisSpeeds(ySpeed, xSpeed, rot));
+		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY_METERS_PER_SECOND);
+		if (Math.abs(swerveModuleStates[0].speedMetersPerSecond + swerveModuleStates[1].speedMetersPerSecond
+				+ swerveModuleStates[2].speedMetersPerSecond + swerveModuleStates[3].speedMetersPerSecond) > .001) {
+			frontLeft_stateAngle = swerveModuleStates[0].angle.getRadians();
+			frontRight_stateAngle = swerveModuleStates[1].angle.getRadians();
+			backLeft_stateAngle = swerveModuleStates[2].angle.getRadians();
+			backRight_stateAngle = swerveModuleStates[3].angle.getRadians();
 		}
+		RobotMap.m_frontLeftModule.set(swerveModuleStates[0].speedMetersPerSecond
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
+				frontLeft_stateAngle);
+		RobotMap.m_frontRightModule.set(swerveModuleStates[1].speedMetersPerSecond
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
+				frontRight_stateAngle);
+		RobotMap.m_backLeftModule.set(swerveModuleStates[2].speedMetersPerSecond
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
+				backLeft_stateAngle);
+		RobotMap.m_backRightModule.set(swerveModuleStates[3].speedMetersPerSecond
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
+				backRight_stateAngle);
+
 	}
 
 	public void updateOdometry() {

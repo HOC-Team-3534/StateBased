@@ -26,6 +26,7 @@ public class Drive extends BaseSequence<DriveState> {
                 break;
 
         }
+        updateState();
     }
 
     @Override

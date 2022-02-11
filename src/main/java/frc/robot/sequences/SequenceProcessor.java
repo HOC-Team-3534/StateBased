@@ -1,5 +1,7 @@
 package frc.robot.sequences;
 
+import frc.robot.RobotContainer.Buttons;
+
 public class SequenceProcessor{
 
     /**
@@ -7,6 +9,8 @@ public class SequenceProcessor{
      */
     
     public Drive drive;
+
+    public IntakeSeq intake;
 
     public SequenceProcessor(){
 
@@ -23,8 +27,11 @@ public class SequenceProcessor{
         if(drive.getState() == drive.getNeutralState()){
             drive.start();
         }
+        if(intake.getState() == intake.getNeutralState() && Buttons.Intake.getButton()) {
+            intake.start();
+        }
 
         drive.process();
-
+        intake.process();
     }
 }

@@ -5,15 +5,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.sequences.IntakeSeq;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,6 +29,7 @@ import frc.robot.subsystems.SwerveDrive;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
+	public static Intake intake;
 	public static SequenceProcessor sequenceProcessor;
 
 	private BaseAutonSequence<? extends IState> m_autonomousSequence;
@@ -48,6 +52,8 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
+		intake = new Intake();
+
 		sequenceProcessor = new SequenceProcessor();
 
 	}
@@ -60,6 +66,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		swerveDrive.drive(0.0, 0.0, 0.0, false);
+		intake.retract();
 	}
 
 	@Override
@@ -104,6 +111,7 @@ public class Robot extends TimedRobot {
 
 				/** Run subsystem process methods here */
 				swerveDrive.process();
+				intake.process();
 
 			}
 

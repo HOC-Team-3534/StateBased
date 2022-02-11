@@ -57,6 +57,10 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12; // FIXME Set back right steer encoder ID
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(264.2); // FIXME Measure and set back
                                                                                         // right steer offset
+                public static final int MAIN_PCM = 2; // PCM for other cylinders
+                
+                public static final int INTAKE_ROLLER = 1;
+
 
     public static final double MAX_VOLTAGE = 12.0;
 

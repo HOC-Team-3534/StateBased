@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.SwerveDrive;
 
 /**
@@ -26,6 +27,7 @@ import frc.robot.subsystems.SwerveDrive;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
+	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
 
 	private BaseAutonSequence<? extends IState> m_autonomousSequence;
@@ -48,7 +50,11 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
+		climber = new Climber();
+
 		sequenceProcessor = new SequenceProcessor();
+
+		
 
 	}
 	

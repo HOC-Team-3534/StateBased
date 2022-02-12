@@ -7,6 +7,8 @@ public class SequenceProcessor{
      */
     
     public Drive drive;
+    public ClimbPrep climbPrep;
+    public Climb climb;
 
     public SequenceProcessor(){
 
@@ -15,6 +17,8 @@ public class SequenceProcessor{
         */
 
         drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
+        climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
+        climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
 
     }
 
@@ -23,8 +27,16 @@ public class SequenceProcessor{
         if(drive.getState() == drive.getNeutralState()){
             drive.start();
         }
+        if(climbPrep.getState() == climbPrep.getNeutralState()){
+            climbPrep.start();
+        }
+        if(climb.getState() == climb.getNeutralState() && climbPrep.getTimeSinceStartOfSequence() > 7000){
+            climb.start();
+        }
 
         drive.process();
+        climbPrep.process();
+        climb.start();
 
     }
 }

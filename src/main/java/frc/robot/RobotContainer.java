@@ -6,10 +6,6 @@ package frc.robot;
 
 import java.util.concurrent.Callable;
 
-import frc.robot.XboxPlusPOV.POV;
-
-import edu.wpi.first.wpilibj.buttons.POVButton;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -40,7 +36,7 @@ public class RobotContainer {
 
 	}
 
-	public XboxPlusPOV getController2() {
+	public static XboxPlusPOV getController2() {
 
 		return xbox2;
 
@@ -69,31 +65,40 @@ public class RobotContainer {
 	  }
 
 	
-	// public static enum Buttons {
+	public static enum Buttons {
 
+		Climb(new Callable<Boolean>(){
 
-	// 	Callable<Boolean> callable;
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getAButtonPressed();
+			}
+			
+		});
 
-	// 	private void Buttons(Callable<Boolean> callable){
-	
-	// 		this.callable = callable;
-	
-	// 	}
-	
-	// 	public boolean getButton(){
-	
-	// 		try{
-	
-	// 			return callable.call().booleanValue();
-	
-	// 		}catch(Exception ex){
-	
-	// 			return false;
-	
-	// 		}
-	// 	}
+		Callable<Boolean> callable;
 
-	// }
+		private Buttons(Callable<Boolean> callable){
+	
+			this.callable = callable;
+	
+		}
+	
+		public boolean getButton(){
+	
+			try{
+	
+				return callable.call().booleanValue();
+	
+			}catch(Exception ex){
+	
+				return false;
+	
+			}
+		}
+
+	}
 
 	public static enum Axes {
 		Drive_ForwardBackward(new Callable<Double>(){

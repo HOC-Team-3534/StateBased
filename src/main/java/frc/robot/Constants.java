@@ -59,17 +59,17 @@ public final class Constants {
                                                                                         // right steer offset
                 public static final int CLIMB_PCM = 1;
 
-                public static final int ARM_FRONT_UP_FORWARD = 0;
-                public static final int ARM_FRONT_UP_REVERSE = 1;
+                public static final int ARM_FRONT_FOLLOW_FORWARD = 0;
+                public static final int ARM_FRONT_FOLLOW_REVERSE = 1;
                 
-                public static final int ARM_FRONT_DOWN_FORWARD = 2;
-                public static final int ARM_FRONT_DOWN_REVERSE = 3;
+                public static final int ARM_FRONT_LEAD_FORWARD = 2;
+                public static final int ARM_FRONT_LEAD_REVERSE = 3;
 
-                public static final int ARM_BACK_UP_FORWARD = 4;
-                public static final int ARM_BACK_UP_REVERSE = 5;
+                public static final int ARM_BACK_LEAD_FORWARD = 4;
+                public static final int ARM_BACK_LEAD_REVERSE = 5;
 
-                public static final int ARM_BACK_DOWN_FORWARD = 6;
-                public static final int ARM_BACK_DOWN_REVERSE = 7;
+                public static final int ARM_BACK_FOLLOW_FORWARD = 6;
+                public static final int ARM_BACK_FOLLOW_REVERSE = 7;
 
                 public static final int ARM_FRONT_UP_SWITCH = 0;
                 public static final int ARM_FRONT_DOWN_SWITCH = 1;
@@ -77,7 +77,8 @@ public final class Constants {
                 public static final int ARM_BACK_DOWN_SWITCH = 3;
 
                 public static final int CLIMB_ARM_MOTOR = 14;
-                //ADD ENCODER
+                public static final int CLIMB_ARM_ENCODER = 15;
+                
 
     public static final double MAX_VOLTAGE = 12.0;
 

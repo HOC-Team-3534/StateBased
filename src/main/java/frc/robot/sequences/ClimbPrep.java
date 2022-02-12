@@ -5,14 +5,15 @@ import java.util.List;
 
 import frc.robot.subsystems.Climber;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class ClimbPrep extends BaseSequence<ClimbState> {
+public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
-    public ClimbPrep(ClimbState neutralState, ClimbState startState) {
+    public ClimbPrep(ClimbPrepState neutralState, ClimbPrepState startState) {
         super(neutralState, startState);
     }
 
@@ -22,17 +23,17 @@ public class ClimbPrep extends BaseSequence<ClimbState> {
         switch (getState()) {
             case PREPCLAW:
             if(getTimeSinceStartOfState() > 1000){
-                setNextState(ClimbState.SWINGARM);
+                setNextState(ClimbPrepState.SWINGARM);
             }
                 break;
             case SWINGARM:
             if(Climber.isPrepped){
-                setNextState(ClimbState.PREPPEDFORCLIMB);
+                setNextState(ClimbPrepState.PREPPEDFORCLIMB);
             }
                 break;
             case PREPPEDFORCLIMB:
-            if(getTimeSinceStartOfState() > 500){
-                setNextState(ClimbState.NEUTRAL);
+            if(getTimeSinceStartOfState() > 500 && RobotContainer.Buttons.Climb.getButton()){
+                setNextState(ClimbPrepState.NEUTRAL);
             }
                 break;
             case NEUTRAL:
@@ -52,7 +53,7 @@ public class ClimbPrep extends BaseSequence<ClimbState> {
 
 }
 
-enum ClimbState implements IState {
+enum ClimbPrepState implements IState {
     NEUTRAL,
     PREPCLAW,
     SWINGARM,
@@ -60,7 +61,7 @@ enum ClimbState implements IState {
 
     List<BaseSubsystem> requiredSubsystems;
 
-    ClimbState(BaseSubsystem... subsystems) {
+    ClimbPrepState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

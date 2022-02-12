@@ -17,6 +17,10 @@ import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_ENCODER;
 import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_MOTOR;
 import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_OFFSET;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
@@ -51,10 +55,10 @@ public class RobotMap {
 
 	public static PneumaticsControlModule m_climbPCM;
 	
-	public static DoubleSolenoid m_topFrontClaw;
-	public static DoubleSolenoid m_bottomFrontClaw;
-	public static DoubleSolenoid m_topBackClaw;
-	public static DoubleSolenoid m_bottomBackClaw;
+	public static DoubleSolenoid m_followFrontClaw;
+	public static DoubleSolenoid m_leadFrontClaw;
+	public static DoubleSolenoid m_leadBackClaw;
+	public static DoubleSolenoid m_followBackClaw;
 
 	public static DigitalInput m_topFrontSwitch;
 	public static DigitalInput m_bottomFrontSwitch;
@@ -182,12 +186,15 @@ public class RobotMap {
 		m_topBackSwitch = new DigitalInput(2);
 		m_bottomBackSwitch = new DigitalInput(3);
 
-		m_topFrontClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_FRONT_UP_FORWARD, Constants.ARM_FRONT_UP_REVERSE);
-		m_bottomFrontClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_FRONT_DOWN_FORWARD, Constants.ARM_FRONT_DOWN_REVERSE);
-		m_topBackClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_BACK_UP_FORWARD, Constants.ARM_BACK_UP_REVERSE);
-		m_bottomBackClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_BACK_DOWN_FORWARD, Constants.ARM_BACK_DOWN_REVERSE);
+		m_followFrontClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_FRONT_FOLLOW_FORWARD, Constants.ARM_FRONT_FOLLOW_REVERSE);
+		m_leadFrontClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_FRONT_LEAD_FORWARD, Constants.ARM_FRONT_LEAD_REVERSE);
+		m_leadBackClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_BACK_LEAD_FORWARD, Constants.ARM_BACK_LEAD_REVERSE);
+		m_followBackClaw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_BACK_FOLLOW_FORWARD, Constants.ARM_BACK_FOLLOW_REVERSE);
 
 		m_climbMotor = new WPI_TalonFX(Constants.CLIMB_ARM_MOTOR);
+		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0);
+		m_climbMotor.configRemoteFeedbackFilter(Constants.CLIMB_ARM_ENCODER, RemoteSensorSource.TalonFX_SelectedSensor, 0);
+		m_climbMotor.setNeutralMode(NeutralMode.Brake);
 
 	}
 

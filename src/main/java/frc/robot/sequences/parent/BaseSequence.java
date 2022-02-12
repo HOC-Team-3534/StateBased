@@ -84,7 +84,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         timeAtStartOfState = System.currentTimeMillis();
     }
 
-    long getTimeSinceStartOfState() {
+    protected long getTimeSinceStartOfState() {
         return System.currentTimeMillis() - timeAtStartOfState;
     }
 

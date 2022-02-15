@@ -61,6 +61,12 @@ public final class Constants {
 
         public static final double TALONFX_CPR = 2048.0;
 
+        public static final double MAIN_PCM = 1;
+
+        public static final double PUSHER_FORWARD = 0;
+        
+        public static final double PUSHER_REVERSE = 1;
+
         public static final double SHOOT_MOTOR_GEAR_RATIO = 1.3;
 
         public static final double RPM_TO_COUNTS_PER_100MS = TALONFX_CPR / 600.0 / SHOOT_MOTOR_GEAR_RATIO;

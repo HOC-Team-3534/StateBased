@@ -55,9 +55,9 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
 enum ClimbPrepState implements IState {
     NEUTRAL,
-    PREPCLAW,
-    SWINGARM,
-    PREPPEDFORCLIMB;
+    PREPCLAW(Robot.climber),
+    SWINGARM(Robot.climber),
+    PREPPEDFORCLIMB(Robot.climber);
 
     List<BaseSubsystem> requiredSubsystems;
 

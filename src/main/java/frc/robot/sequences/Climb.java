@@ -88,14 +88,14 @@ public class Climb extends BaseSequence<ClimbState> {
 
 enum ClimbState implements IState {
     NEUTRAL,
-    GRIPMIDBAR,
-    SWINGMIDHIGH,
-    GRIPHIGHBAR,
-    RELEASEMIDBAR,
-    SWINGHIGHTRAVERSAL,
-    GRIPTRAVERSALBAR,
-    RELEASEHIGHBAR,
-    SWINGTOREST;
+    GRIPMIDBAR(Robot.climber),
+    SWINGMIDHIGH(Robot.climber),
+    GRIPHIGHBAR(Robot.climber),
+    RELEASEMIDBAR(Robot.climber),
+    SWINGHIGHTRAVERSAL(Robot.climber),
+    GRIPTRAVERSALBAR(Robot.climber),
+    RELEASEHIGHBAR(Robot.climber),
+    SWINGTOREST(Robot.climber);
 
     List<BaseSubsystem> requiredSubsystems;
 

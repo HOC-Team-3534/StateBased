@@ -14,7 +14,9 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Climber extends BaseSubsystem {
 
-    public static boolean isPrepped = false;
+    public static boolean lowIsPrepped = false;
+    public static boolean midIsPrepped = false;
+    public static boolean HighIsPrepped = false;
 
     public Climber(){
         //makes the graphical number to enter text - have to do a 
@@ -48,10 +50,10 @@ public class Climber extends BaseSubsystem {
         }else if(getStateRequiringName() == "SWINGTOREST"){
             swingToRest();
         }else{
-            RobotMap.m_leadFrontClaw.set(Value.kOff);
-            RobotMap.m_followFrontClaw.set(Value.kOff);
-            RobotMap.m_leadBackClaw.set(Value.kOff);
-            RobotMap.m_followBackClaw.set(Value.kOff);
+            RobotMap.m_l1Claw.set(Value.kOff);
+            RobotMap.m_h2Claw.set(Value.kOff);
+            RobotMap.m_l3Claw.set(Value.kOff);
+            RobotMap.m_h4Claw.set(Value.kOff);
 
         }
 
@@ -68,19 +70,19 @@ public class Climber extends BaseSubsystem {
         // double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
         // RobotMap.shooter.set(ControMlMode.Velocity, countsPer100MS);
         // System.out.println("Speed is " + countsPer100S);
-        RobotMap.m_leadFrontClaw.set(Value.kForward);
+        RobotMap.m_l1Claw.set(Value.kForward);
 
     }
 
     public void swingArm() {
         double waitTime;
         
-        RobotMap.m_leadFrontClaw.set(Value.kOff);
+        RobotMap.m_l1Claw.set(Value.kOff);
         RobotMap.m_climbMotor.set(ControlMode.Position, 90);
-        if(RobotMap.m_bottomFrontSwitch.get() || RobotMap.m_topFrontSwitch.get()){
+        if(RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get()){
             waitTime = System.currentTimeMillis();
             if(System.currentTimeMillis() - waitTime > 40){
-                isPrepped = true;
+                lowIsPrepped = true;
                 
             }
         }
@@ -93,48 +95,48 @@ public class Climber extends BaseSubsystem {
 
 
     public void gripMidBar(){
-       RobotMap.m_followFrontClaw.set(Value.kForward);
+       RobotMap.m_h2Claw.set(Value.kForward);
     }
 
     public void swingMidHigh(){
-        RobotMap.m_followFrontClaw.set(Value.kOff);
-        RobotMap.m_leadBackClaw.set(Value.kForward);
+        RobotMap.m_h2Claw.set(Value.kOff);
+        RobotMap.m_l3Claw.set(Value.kForward);
         RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 100);
 
     }
 
     public void gripHighBar(){
-       RobotMap.m_leadBackClaw.set(Value.kOff);
-       RobotMap.m_followBackClaw.set(Value.kForward);
+       RobotMap.m_l3Claw.set(Value.kOff);
+       RobotMap.m_h4Claw.set(Value.kForward);
        RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0);
 
     }
 
     public void releaseMidBar(){
-       RobotMap.m_followBackClaw.set(Value.kOff);
-       RobotMap.m_leadFrontClaw.set(Value.kReverse);
-       RobotMap.m_followFrontClaw.set(Value.kReverse);
+       RobotMap.m_h4Claw.set(Value.kOff);
+       RobotMap.m_l1Claw.set(Value.kReverse);
+       RobotMap.m_h2Claw.set(Value.kReverse);
 
     }
 
     public void swingHighTraversal(){
-        RobotMap.m_leadFrontClaw.set(Value.kForward);
-        RobotMap.m_followFrontClaw.set(Value.kOff);
+        RobotMap.m_l1Claw.set(Value.kForward);
+        RobotMap.m_h2Claw.set(Value.kOff);
         RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 100);
 
     }
 
 
     public void gripTraversalBar(){
-        RobotMap.m_leadFrontClaw.set(Value.kOff);
-        RobotMap.m_followFrontClaw.set(Value.kForward);
+        RobotMap.m_l1Claw.set(Value.kOff);
+        RobotMap.m_h2Claw.set(Value.kForward);
         RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0);
     }
 
     public void releaseHighBar(){
-        RobotMap.m_followFrontClaw.set(Value.kOff);
-        RobotMap.m_leadBackClaw.set(Value.kReverse);
-        RobotMap.m_followBackClaw.set(Value.kReverse);
+        RobotMap.m_h2Claw.set(Value.kOff);
+        RobotMap.m_l3Claw.set(Value.kReverse);
+        RobotMap.m_h4Claw.set(Value.kReverse);
     }
 
     public void swingToRest(){

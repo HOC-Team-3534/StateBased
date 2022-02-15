@@ -28,10 +28,10 @@ public class Climb extends BaseSequence<ClimbState> {
             }
                 break;
             case SWINGMIDHIGH:
-            if(RobotMap.m_climbMotor.getSelectedSensorPosition() > 180 && !(RobotMap.m_topBackSwitch.get() || RobotMap.m_bottomBackSwitch.get())){
+            if(RobotMap.m_climbMotor.getSelectedSensorPosition() > 180 && !(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
                 abort();
             }
-            if(Buttons.Climb.getButton() && (RobotMap.m_topBackSwitch.get() || RobotMap.m_bottomBackSwitch.get())){
+            if(Buttons.Climb.getButton() && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
                 setNextState(ClimbState.GRIPHIGHBAR);
             }
                 break;
@@ -46,10 +46,10 @@ public class Climb extends BaseSequence<ClimbState> {
             }
                 break;
             case SWINGHIGHTRAVERSAL:
-            if(RobotMap.m_climbMotor.getSelectedSensorPosition() > 270 && !(RobotMap.m_topBackSwitch.get() || RobotMap.m_bottomBackSwitch.get())){
+            if(RobotMap.m_climbMotor.getSelectedSensorPosition() > 270 && !(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
                 abort();
             }
-            if(Buttons.Climb.getButton() && (RobotMap.m_topFrontSwitch.get() || RobotMap.m_bottomFrontSwitch.get())){
+            if(Buttons.Climb.getButton() && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
                 setNextState(ClimbState.GRIPTRAVERSALBAR);
             }
                 break;

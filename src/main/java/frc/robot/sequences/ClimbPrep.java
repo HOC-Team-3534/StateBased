@@ -27,7 +27,7 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
             }
                 break;
             case SWINGARM:
-            if(Climber.isPrepped){
+            if(Climber.lowIsPrepped){
                 setNextState(ClimbPrepState.PREPPEDFORCLIMB);
             }
                 break;

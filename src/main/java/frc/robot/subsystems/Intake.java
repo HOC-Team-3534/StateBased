@@ -57,5 +57,6 @@ public class Intake extends BaseSubsystem {
             RobotMap.m_intakeKickers.set(Value.kReverse);
         }else if(this.getSequenceRequiring().getTimeSinceStartOfSequence() > 1000){
             RobotMap.m_intakeKickers.set(Value.kOff);
+        }
     }
 }

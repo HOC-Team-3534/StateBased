@@ -1,33 +1,14 @@
 package frc.robot;
 
-import static frc.robot.Constants.BACK_LEFT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_OFFSET;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_OFFSET;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_OFFSET;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_OFFSET;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
@@ -54,6 +35,8 @@ public class RobotMap {
 	public static WPI_TalonSRX m_intakeRoller;
 
 	public static DoubleSolenoid m_intakeKickers;
+
+	public static Compressor m_compressor;
 
 	public static AHRS navx;
 
@@ -169,8 +152,10 @@ public class RobotMap {
 
 		m_intakeRoller = new WPI_TalonSRX(Constants.INTAKE_ROLLER);
 		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
-		m_intakeKickers = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
+		m_intakeKickers = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKE_EXTEND, Constants.INTAKE_RETRACT);
 
+		m_compressor = new Compressor(Constants.AIR_COMPRESSOR, PneumaticsModuleType.CTREPCM);
+		
 		navx = new AHRS(SPI.Port.kMXP);
 
 	}

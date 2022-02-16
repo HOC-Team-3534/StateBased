@@ -20,7 +20,7 @@ public class Intake extends BaseSubsystem {
     @Override
     public void process() {
         isStillRequired();
-        if(getStateRequiringName() == "KICKOUT"){
+        if(getStateRequiringName() == "EXTEND"){
             kickOut();
         }else if(getStateRequiringName() == "RETRACT"){
             retract();

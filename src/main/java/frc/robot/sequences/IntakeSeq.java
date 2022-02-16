@@ -19,7 +19,7 @@ public class IntakeSeq extends BaseSequence<IntakeState> {
     @Override
     public void process() {
         switch (getState()) {
-            case KICKOUT:
+            case EXTEND:
                 if (!Buttons.Intake.getButton()) {
                     setNextState(IntakeState.RETRACT);
                 }
@@ -49,7 +49,7 @@ public class IntakeSeq extends BaseSequence<IntakeState> {
 
 enum IntakeState implements IState {
     NEUTRAL,
-    KICKOUT(Robot.intake),
+    EXTEND(Robot.intake),
     RETRACT(Robot.intake);
 
     List<BaseSubsystem> requiredSubsystems;

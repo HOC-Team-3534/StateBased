@@ -59,17 +59,17 @@ public final class Constants {
                                                                                         // right steer offset
                 public static final int CLIMB_PCM = 16;
 
-                public static final int L1_FORWARD = 0;
-                public static final int L1_REVERSE = 1;
+                public static final int L1_EXTEND = 0;
+                public static final int L1_RETRACT = 1;
                 
-                public static final int H2_FORWARD = 2;
-                public static final int H2_REVERSE = 3;
+                public static final int H2_EXTEND = 2;
+                public static final int H2_RETRACT = 3;
 
-                public static final int L3_FORWARD = 4;
-                public static final int L3_REVERSE = 5;
+                public static final int L3_EXTEND = 4;
+                public static final int L3_RETRACT = 5;
 
-                public static final int H4_FORWARD = 6;
-                public static final int H4_REVERSE = 7;
+                public static final int H4_EXTEND = 6;
+                public static final int H4_RETRACT = 7;
 
                 public static final int L1_SWITCH = 0;
                 public static final int H2_SWITCH = 1;

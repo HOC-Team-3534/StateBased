@@ -186,10 +186,10 @@ public class RobotMap {
 		m_l3Switch = new DigitalInput(Constants.L3_SWITCH);
 		m_h4Switch = new DigitalInput(Constants.H4_SWITCH);
 
-		m_l1Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.L1_FORWARD, Constants.L1_REVERSE);
-		m_h2Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.H2_FORWARD, Constants.H2_REVERSE);
-		m_l3Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.L3_FORWARD, Constants.L3_REVERSE);
-		m_h4Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.H4_FORWARD, Constants.H4_REVERSE);
+		m_l1Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.L1_EXTEND, Constants.L1_RETRACT);
+		m_h2Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.H2_EXTEND, Constants.H2_RETRACT);
+		m_l3Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.L3_EXTEND, Constants.L3_RETRACT);
+		m_h4Claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.H4_EXTEND, Constants.H4_RETRACT);
 
 		m_climbMotor = new WPI_TalonFX(Constants.CLIMB_ARM_MOTOR);
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0);

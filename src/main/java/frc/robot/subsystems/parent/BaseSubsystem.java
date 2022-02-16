@@ -21,11 +21,11 @@ public abstract class BaseSubsystem implements ISubsystem {
     public boolean require(BaseSequence<? extends IState> sequence, IState state) {
         if (!isRequiredByAnother(sequence)) {
             required = true;
-            sequenceRequiring = sequence;
-            stateRequiring = state;
+            setSequenceRequiring(sequence);
+            setStateRequiring(state);
             return true;
         } else if (sequenceRequiring == sequence) {
-            stateRequiring = state;
+            setStateRequiring(state);
             return true;
         } else {
             return false;
@@ -37,7 +37,7 @@ public abstract class BaseSubsystem implements ISubsystem {
         checkStateChanged();
     }
 
-    private void setRequiringSequence(BaseSequence<? extends IState> sequence){
+    private void setSequenceRequiring(BaseSequence<? extends IState> sequence){
         this.sequenceRequiring = sequence;
     }
 

@@ -44,13 +44,18 @@ public class SwerveDrive extends BaseSubsystem {
 
 	@Override
 	public void process() {
-		isStillRequired();
+		super.process();
 		if (getStateRequiringName() == "DRIVE") {
 			drive(Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
 					Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
 					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 					true);
 		}
+	}
+
+	@Override
+	public void neutral() {
+		drive(0.0, 0.0, 0.0, false);
 	}
 
 	public Rotation2d getGyroHeading() {

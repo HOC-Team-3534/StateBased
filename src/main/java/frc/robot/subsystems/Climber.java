@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.sequences.ClimbPrep;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Climber extends BaseSubsystem {
@@ -17,6 +18,7 @@ public class Climber extends BaseSubsystem {
     public static boolean lowIsPrepped = false;
     public static boolean midIsPrepped = false;
     public static boolean HighIsPrepped = false;
+    double waitTime;
 
     public Climber(){
         //makes the graphical number to enter text - have to do a 
@@ -71,13 +73,15 @@ public class Climber extends BaseSubsystem {
         // RobotMap.shooter.set(ControMlMode.Velocity, countsPer100MS);
         // System.out.println("Speed is " + countsPer100S);
         RobotMap.m_l1Claw.set(Value.kForward);
-
+        waitTime = System.currentTimeMillis();
+        if(System.currentTimeMillis() - waitTime > 50){
+            RobotMap.m_l1Claw.set(Value.kOff);
+        }
+        
     }
 
     public void swingArm() {
-        double waitTime;
-        
-        RobotMap.m_l1Claw.set(Value.kOff);
+
         RobotMap.m_climbMotor.set(ControlMode.Position, 90);
         if(RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get()){
             waitTime = System.currentTimeMillis();
@@ -96,47 +100,71 @@ public class Climber extends BaseSubsystem {
 
     public void gripMidBar(){
        RobotMap.m_h2Claw.set(Value.kForward);
+       waitTime = System.currentTimeMillis();
+       if(System.currentTimeMillis() - waitTime > 50){
+           RobotMap.m_h2Claw.set(Value.kOff);
+       }
     }
 
     public void swingMidHigh(){
-        RobotMap.m_h2Claw.set(Value.kOff);
         RobotMap.m_l3Claw.set(Value.kForward);
+        waitTime = System.currentTimeMillis();
+        if(System.currentTimeMillis() - waitTime > 50){
+            RobotMap.m_l3Claw.set(Value.kOff);
+        }
         RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 100);
 
     }
 
     public void gripHighBar(){
-       RobotMap.m_l3Claw.set(Value.kOff);
        RobotMap.m_h4Claw.set(Value.kForward);
        RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0);
+       waitTime = System.currentTimeMillis();
+       if(System.currentTimeMillis() - waitTime > 50){
+           RobotMap.m_h4Claw.set(Value.kOff);
+       }
 
     }
 
     public void releaseMidBar(){
-       RobotMap.m_h4Claw.set(Value.kOff);
        RobotMap.m_l1Claw.set(Value.kReverse);
        RobotMap.m_h2Claw.set(Value.kReverse);
+       waitTime = System.currentTimeMillis();
+       if(System.currentTimeMillis() - waitTime > 50){
+           RobotMap.m_l1Claw.set(Value.kOff);
+           RobotMap.m_h2Claw.set(Value.kOff);
+       }
 
     }
 
     public void swingHighTraversal(){
         RobotMap.m_l1Claw.set(Value.kForward);
-        RobotMap.m_h2Claw.set(Value.kOff);
         RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 100);
+        waitTime = System.currentTimeMillis();
+        if(System.currentTimeMillis() - waitTime > 50){
+            RobotMap.m_l1Claw.set(Value.kOff);
+        }
 
     }
 
 
     public void gripTraversalBar(){
-        RobotMap.m_l1Claw.set(Value.kOff);
         RobotMap.m_h2Claw.set(Value.kForward);
         RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0);
+        waitTime = System.currentTimeMillis();
+        if(System.currentTimeMillis() - waitTime > 50){
+            RobotMap.m_h2Claw.set(Value.kOff);
+        }
     }
 
     public void releaseHighBar(){
-        RobotMap.m_h2Claw.set(Value.kOff);
         RobotMap.m_l3Claw.set(Value.kReverse);
         RobotMap.m_h4Claw.set(Value.kReverse);
+        waitTime = System.currentTimeMillis();
+        if(System.currentTimeMillis() - waitTime > 50){
+            RobotMap.m_l3Claw.set(Value.kOff);
+            RobotMap.m_h4Claw.set(Value.kOff);
+        }
     }
 
     public void swingToRest(){

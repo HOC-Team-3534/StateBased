@@ -40,23 +40,24 @@ public class Intake extends BaseSubsystem {
     @Override
     public void neutral() {
         RobotMap.m_intakeKickers.set(Value.kOff);
-        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0);
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.0);
     }
 
     public void kickOut() {
-        // double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
-        // RobotMap.shooter.set(ControMlMode.Velocity, countsPer100MS);
-        // System.out.println("Speed is " + countsPer100S);
-        RobotMap.m_intakeKickers.set(Value.kForward);
-        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 40);
-        
-
+        if(this.getStateFirstRunThrough()) {
+            RobotMap.m_intakeKickers.set(Value.kForward);
+        }else if(this.getSequenceRequiring().getTimeSinceStartOfSequence() > 1000){
+            RobotMap.m_intakeKickers.set(Value.kOff);
+        }
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.40);
     }
 
     public void retract() {
-        RobotMap.m_intakeKickers.set(Value.kReverse);
-        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0);
+        if(this.getStateFirstRunThrough()) {
+            RobotMap.m_intakeKickers.set(Value.kReverse);
+        }else if(this.getSequenceRequiring().getTimeSinceStartOfSequence() > 1000){
+            RobotMap.m_intakeKickers.set(Value.kOff);
+        }
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.0);
     }
-
-
 }

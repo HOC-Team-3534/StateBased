@@ -36,7 +36,7 @@ public class RobotMap {
 
 	public static DoubleSolenoid m_intakeKickers;
 
-	public static Compressor m_compressor;
+	//public static Compressor m_compressor; - not needed - new WPILIB update auto initializes
 
 	public static AHRS navx;
 
@@ -154,7 +154,7 @@ public class RobotMap {
 		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
 		m_intakeKickers = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKE_EXTEND, Constants.INTAKE_RETRACT);
 
-		m_compressor = new Compressor(Constants.AIR_COMPRESSOR, PneumaticsModuleType.CTREPCM);
+		//m_compressor = new Compressor(Constants.AIR_COMPRESSOR, PneumaticsModuleType.CTREPCM);
 		
 		navx = new AHRS(SPI.Port.kMXP);
 

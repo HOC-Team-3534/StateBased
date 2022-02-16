@@ -19,14 +19,13 @@ public class Intake extends BaseSubsystem {
 
     @Override
     public void process() {
-        isStillRequired();
+        super.process();
         if(getStateRequiringName() == "EXTEND"){
             kickOut();
         }else if(getStateRequiringName() == "RETRACT"){
             retract();
         }else{
-            RobotMap.m_intakeKickers.set(Value.kOff);
-            RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0);
+            neutral();
         }
 
         // if (getStateRequiringName() == "SHOOT") {
@@ -37,7 +36,13 @@ public class Intake extends BaseSubsystem {
         // }
         
     }
-    
+
+    @Override
+    public void neutral() {
+        RobotMap.m_intakeKickers.set(Value.kOff);
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0);
+    }
+
     public void kickOut() {
         // double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
         // RobotMap.shooter.set(ControMlMode.Velocity, countsPer100MS);

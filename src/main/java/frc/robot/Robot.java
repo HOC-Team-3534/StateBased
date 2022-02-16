@@ -65,8 +65,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		swerveDrive.drive(0.0, 0.0, 0.0, false);
-		intake.retract();
+		swerveDrive.neutral();
+		intake.neutral();
 	}
 
 	@Override

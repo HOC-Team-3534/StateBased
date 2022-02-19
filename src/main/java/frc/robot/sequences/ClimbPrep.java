@@ -27,14 +27,11 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
             }
                 break;
             case SWINGARM:
-            if(Climber.lowIsPrepped){
+            if((RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get()) && getTimeSinceStartOfState() > 500){
                 setNextState(ClimbPrepState.PREPPEDFORCLIMB);
             }
                 break;
             case PREPPEDFORCLIMB:
-            if(getTimeSinceStartOfState() > 500 && RobotContainer.Buttons.Climb.getButton()){
-                setNextState(ClimbPrepState.NEUTRAL);
-            }
                 break;
             case NEUTRAL:
                 break;

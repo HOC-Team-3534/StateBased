@@ -80,8 +80,8 @@ public class Climb extends BaseSequence<ClimbState> {
 
     @Override
     public boolean abort() {
-        // TODO Auto-generated method stub
-        return false;
+        setNextState(getNeutralState());
+        return updateState();
     }
 
 }

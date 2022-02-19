@@ -15,11 +15,6 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Climber extends BaseSubsystem {
 
-    public static boolean lowIsPrepped = false;
-    public static boolean midIsPrepped = false;
-    public static boolean HighIsPrepped = false;
-    double waitTime;
-
     public Climber(){
         //makes the graphical number to enter text - have to do a 
         //put to do a get
@@ -28,7 +23,7 @@ public class Climber extends BaseSubsystem {
 
     @Override
     public void process() {
-        isStillRequired();
+        super.process();
         if(getStateRequiringName() == "PREPCLAW"){
             prepClaw();
         }else if(getStateRequiringName() == "SWINGARM"){
@@ -81,15 +76,7 @@ public class Climber extends BaseSubsystem {
     }
 
     public void swingArm() {
-
         RobotMap.m_climbMotor.set(ControlMode.Position, 90);
-        if(RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get()){
-            waitTime = System.currentTimeMillis();
-            if(System.currentTimeMillis() - waitTime > 40){
-                lowIsPrepped = true;
-                
-            }
-        }
     }
 
     public void preppedForClimb(){
@@ -170,5 +157,17 @@ public class Climber extends BaseSubsystem {
     public void swingToRest(){
        RobotMap.m_climbMotor.set(ControlMode.Position, 450);
 
+    }
+
+    @Override
+    public void neutral() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean abort() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

@@ -31,11 +31,13 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         }
     }
 
-    void setState(S state) {
+    boolean setState(S state) {
         if (state.requireSubsystems(this)) {
             this.state = state;
             updateStateStartTime();
+            return true;
         }
+        return false;
     }
 
     public S getState() {
@@ -66,10 +68,11 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         return startState;
     }
 
-    protected void updateState() {
+    protected boolean updateState() {
         if (getState() != getNextState()) {
-            setState(nextState);
+            return setState(nextState);
         }
+        return false;
     }
 
     void updateSequenceStartTime() {

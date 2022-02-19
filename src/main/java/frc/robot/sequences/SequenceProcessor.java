@@ -1,5 +1,8 @@
 package frc.robot.sequences;
 
+import frc.robot.Robot;
+import frc.robot.RobotContainer.Buttons;
+
 public class SequenceProcessor{
 
     /**
@@ -27,16 +30,16 @@ public class SequenceProcessor{
         if(drive.getState() == drive.getNeutralState()){
             drive.start();
         }
-        if(climbPrep.getState() == climbPrep.getNeutralState()){
+        if(climbPrep.getState() == climbPrep.getNeutralState() && Buttons.ClimbPrep.getButton()){
             climbPrep.start();
         }
-        if(climb.getState() == climb.getNeutralState() && climbPrep.getTimeSinceStartOfSequence() > 7000){
+        if(climb.getState() == climb.getNeutralState() && Robot.climber.getSequenceRequiring().getState().getName() == "PREPPEDFORCLIMB" && Buttons.Climb.getButton()){
             climb.start();
         }
 
         drive.process();
         climbPrep.process();
-        climb.start();
+        climb.process();
 
     }
 }

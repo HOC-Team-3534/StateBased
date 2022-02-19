@@ -54,7 +54,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGHIGHTRAVERSAL:
-                if (RobotMap.m_climbMotor.getSelectedSensorPosition() > 270
+                if (RobotMap.m_climbMotor.getSelectedSensorPosition() > 360
                         && !(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
                     abort();
                 }
@@ -80,7 +80,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGTOREST:
-                if (Buttons.Climb.getButton()) {
+                if(RobotMap.m_climbMotor.getSelectedSensorPosition() == 450){                
                     System.out.println("Hooray!");
                     setNextState(ClimbState.NEUTRAL);
                 }

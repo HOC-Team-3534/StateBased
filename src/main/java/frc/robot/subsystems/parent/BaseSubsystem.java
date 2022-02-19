@@ -8,6 +8,8 @@ public abstract class BaseSubsystem implements ISubsystem {
     boolean required;
     BaseSequence<? extends IState> sequenceRequiring;
     IState stateRequiring;
+    boolean stateChanged;
+    boolean stateFirstRunThrough;
 
     public boolean isRequiredByAnother(BaseSequence<? extends IState> sequence) {
         if(sequenceRequiring == sequence){
@@ -19,18 +21,32 @@ public abstract class BaseSubsystem implements ISubsystem {
     public boolean require(BaseSequence<? extends IState> sequence, IState state) {
         if (!isRequiredByAnother(sequence)) {
             required = true;
-            sequenceRequiring = sequence;
-            stateRequiring = state;
+            setSequenceRequiring(sequence);
+            setStateRequiring(state);
             return true;
         } else if (sequenceRequiring == sequence) {
-            stateRequiring = state;
+            setStateRequiring(state);
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean isStillRequired() {
+    public void process(){
+        isStillRequired();
+        checkStateChanged();
+    }
+
+    private void setSequenceRequiring(BaseSequence<? extends IState> sequence){
+        this.sequenceRequiring = sequence;
+    }
+
+    private void setStateRequiring(IState state){
+        this.stateRequiring = state;
+        stateChanged = true;
+    }
+
+    private boolean isStillRequired() {
         if (!required) {
             return false;
         } else if (!sequenceRequiring.getState().getRequiredSubsystems().contains(this)) {
@@ -39,6 +55,15 @@ public abstract class BaseSubsystem implements ISubsystem {
         } else {
             return true;
         }
+    }
+
+    private void checkStateChanged(){
+        stateFirstRunThrough = stateChanged;
+        stateChanged = false;
+    }
+
+    public boolean getStateFirstRunThrough(){
+        return this.stateFirstRunThrough;
     }
 
     void release() {

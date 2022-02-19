@@ -71,6 +71,10 @@ public abstract class BaseSubsystem implements ISubsystem {
         sequenceRequiring = null;
         stateRequiring = null;
     }
+    
+    public void forceRelease() {
+        release();
+    }
 
     public BaseSequence<? extends IState> getSequenceRequiring() {
         return sequenceRequiring;

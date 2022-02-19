@@ -23,52 +23,55 @@ public class Climb extends BaseSequence<ClimbState> {
 
         switch (getState()) {
             case GRIPMIDBAR:
-            if(Buttons.Climb.getButton() && getTimeSinceStartOfState() > 30){
-                setNextState(ClimbState.SWINGMIDHIGH);
-            }
+                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 2000) {
+                    setNextState(ClimbState.SWINGMIDHIGH);
+                }
                 break;
             case SWINGMIDHIGH:
-            if(RobotMap.m_climbMotor.getSelectedSensorPosition() > 180 && !(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
-                abort();
-            }
-            if(Buttons.Climb.getButton() && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
-                setNextState(ClimbState.GRIPHIGHBAR);
-            }
+                if (RobotMap.m_climbMotor.getSelectedSensorPosition() > 180
+                        && !(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
+                    abort();
+                }
+                if (Buttons.Climb.getButton() && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
+                    setNextState(ClimbState.GRIPHIGHBAR);
+                }
                 break;
             case GRIPHIGHBAR:
-            if(Buttons.Climb.getButton() && getTimeSinceStartOfState() > 40){
-                setNextState(ClimbState.RELEASEMIDBAR);
-            }
+                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 2000) {
+                    setNextState(ClimbState.RELEASEMIDBAR);
+                }
                 break;
             case RELEASEMIDBAR:
-            if(Buttons.Climb.getButton() && getTimeSinceStartOfState() > 500){
-                setNextState(ClimbState.SWINGHIGHTRAVERSAL);
-            }
+                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 500) {
+                    setNextState(ClimbState.SWINGHIGHTRAVERSAL);
+                }
                 break;
             case SWINGHIGHTRAVERSAL:
-            if(RobotMap.m_climbMotor.getSelectedSensorPosition() > 270 && !(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
-                abort();
-            }
-            if(Buttons.Climb.getButton() && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
-                setNextState(ClimbState.GRIPTRAVERSALBAR);
-            }
+                if (RobotMap.m_climbMotor.getSelectedSensorPosition() > 270
+                        && !(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
+                    abort();
+                }
+                if (Buttons.Climb.getButton() && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
+                    setNextState(ClimbState.GRIPTRAVERSALBAR);
+                }
                 break;
             case GRIPTRAVERSALBAR:
-            if(Buttons.Climb.getButton()){
-                setNextState(ClimbState.RELEASEHIGHBAR);
-            }
+                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 2000) {
+                    setNextState(ClimbState.RELEASEHIGHBAR);
+                }
                 break;
             case RELEASEHIGHBAR:
-            if(Buttons.Climb.getButton() && getTimeSinceStartOfState() > 500){
-                setNextState(ClimbState.SWINGTOREST);
-            }
+                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 500) {
+                    setNextState(ClimbState.SWINGTOREST);
+                }
                 break;
             case SWINGTOREST:
-            if(Buttons.Climb.getButton()){
-                setNextState(ClimbState.NEUTRAL);
-            }
+                if (Buttons.Climb.getButton()) {
+                    System.out.println("Hooray!");
+                    setNextState(ClimbState.NEUTRAL);
+                }
                 break;
-            
+
             case NEUTRAL:
                 break;
             default:
@@ -88,14 +91,14 @@ public class Climb extends BaseSequence<ClimbState> {
 
 enum ClimbState implements IState {
     NEUTRAL,
-    GRIPMIDBAR(Robot.climber),
-    SWINGMIDHIGH(Robot.climber),
-    GRIPHIGHBAR(Robot.climber),
-    RELEASEMIDBAR(Robot.climber),
-    SWINGHIGHTRAVERSAL(Robot.climber),
-    GRIPTRAVERSALBAR(Robot.climber),
-    RELEASEHIGHBAR(Robot.climber),
-    SWINGTOREST(Robot.climber);
+    GRIPMIDBAR(Robot.climber, Robot.swerveDrive),
+    SWINGMIDHIGH(Robot.climber, Robot.swerveDrive),
+    GRIPHIGHBAR(Robot.climber, Robot.swerveDrive),
+    RELEASEMIDBAR(Robot.climber, Robot.swerveDrive),
+    SWINGHIGHTRAVERSAL(Robot.climber, Robot.swerveDrive),
+    GRIPTRAVERSALBAR(Robot.climber, Robot.swerveDrive),
+    RELEASEHIGHBAR(Robot.climber, Robot.swerveDrive),
+    SWINGTOREST(Robot.climber, Robot.swerveDrive);
 
     List<BaseSubsystem> requiredSubsystems;
 

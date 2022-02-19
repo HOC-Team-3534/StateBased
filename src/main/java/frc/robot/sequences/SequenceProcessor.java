@@ -27,14 +27,14 @@ public class SequenceProcessor{
 
     public void process(){
 
-        if(drive.getState() == drive.getNeutralState()){
-            drive.start();
+        if(climb.getState().getName() == "NEUTRAL"){
+            drive.start(Robot.swerveDrive);
         }
-        if(climbPrep.getState() == climbPrep.getNeutralState() && Buttons.ClimbPrep.getButton()){
+        if(Buttons.ClimbPrep.getButton()){
             climbPrep.start();
         }
-        if(climb.getState() == climb.getNeutralState() && Robot.climber.getSequenceRequiring().getState().getName() == "PREPPEDFORCLIMB" && Buttons.Climb.getButton()){
-            climb.start();
+        if(Robot.climber.getSequenceRequiring().getState().getName() == "PREPPEDFORCLIMB" && Buttons.Climb.getButton()){
+            climb.start(Robot.climber, Robot.swerveDrive);
         }
 
         drive.process();

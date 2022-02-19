@@ -1,5 +1,7 @@
 package frc.robot.sequences.parent;
 
+import frc.robot.subsystems.parent.BaseSubsystem;
+
 public abstract class BaseSequence<S extends IState> implements ISequence<S> {
 
     S state = null;
@@ -27,6 +29,17 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         if (getState() == getNeutralState()) {
             init();
             setNextState(getStartState());
+            setState(getStartState());
+        }
+    }
+
+    public void start(BaseSubsystem ...subsystems) {
+        if (getState() == getNeutralState()) {
+            init();
+            setNextState(getStartState());
+            for(BaseSubsystem subsystem : subsystems){
+                subsystem.forceRelease();
+            }
             setState(getStartState());
         }
     }

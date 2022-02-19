@@ -77,7 +77,7 @@ public final class Constants {
                 public static final int H4_SWITCH = 3;
 
                 public static final int CLIMB_ARM_MOTOR = 14;
-                public static final int CLIMB_ARM_ENCODER = 15;
+                public static final int INTAKE_ROLLER = 15;
                 
 
     public static final double MAX_VOLTAGE = 12.0;

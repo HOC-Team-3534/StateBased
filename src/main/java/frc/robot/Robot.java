@@ -82,12 +82,13 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		RobotMap.m_climbMotor.setSelectedSensorPosition(0.0);
 	}
 
 	@Override
 	public void teleopPeriodic() {
 
-		log();
+		//log();
 
 		isAutonomous = this.isAutonomous();
 
@@ -95,7 +96,7 @@ public class Robot extends TimedRobot {
 
 		while (this.isTeleop() && this.isEnabled()) {
 
-			log();
+			//log();
 
 			long currentTime = System.currentTimeMillis();
 
@@ -110,6 +111,8 @@ public class Robot extends TimedRobot {
 
 				/** Run subsystem process methods here */
 				swerveDrive.process();
+				climber.process();
+
 
 			}
 
@@ -127,14 +130,14 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 	}
 
-	public void log() {
+	// public void log() {
 
-		logCounter++;
+	// 	logCounter++;
 
-		if (logCounter > 5) {
+	// 	if (logCounter > 5) {
 
-			logCounter = 0;
-		}
+	// 		logCounter = 0;
+	// 	}
 
-	}
+	// }
 }

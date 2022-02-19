@@ -22,14 +22,15 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
         switch (getState()) {
             case PREPCLAW:
-            if(getTimeSinceStartOfState() > 1000){
-                setNextState(ClimbPrepState.SWINGARM);
-            }
+                if (getTimeSinceStartOfState() > 500) {
+                    setNextState(ClimbPrepState.SWINGARM);
+                }
                 break;
             case SWINGARM:
-            if((RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get()) && getTimeSinceStartOfState() > 500){
-                setNextState(ClimbPrepState.PREPPEDFORCLIMB);
-            }
+                if (getTimeSinceStartOfState() > 500
+                        && (RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get())) {
+                    setNextState(ClimbPrepState.PREPPEDFORCLIMB);
+                }
                 break;
             case PREPPEDFORCLIMB:
                 break;
@@ -44,8 +45,8 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
     @Override
     public boolean abort() {
-        // TODO Auto-generated method stub
-        return false;
+        setNextState(getNeutralState());
+        return updateState();
     }
 
 }

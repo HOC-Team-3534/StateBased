@@ -23,7 +23,7 @@ public class Climb extends BaseSequence<ClimbState> {
 
         switch (getState()) {
             case GRIPMIDBAR:
-                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 2000) {
+                if (getTimeSinceStartOfState() > 1000) {
                     setNextState(ClimbState.SWINGMIDHIGH);
                 }
                 break;
@@ -32,17 +32,24 @@ public class Climb extends BaseSequence<ClimbState> {
                         && !(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
                     abort();
                 }
-                if (Buttons.Climb.getButton() && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
+                if ((RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
                     setNextState(ClimbState.GRIPHIGHBAR);
                 }
                 break;
             case GRIPHIGHBAR:
-                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 2000) {
+                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
                     setNextState(ClimbState.RELEASEMIDBAR);
+                }else if(!(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
+                    setNextState(ClimbState.RETRYHIGHBAR);
+                }
+                break;
+            case RETRYHIGHBAR:
+                if(getTimeSinceStartOfState() > 500){
+                    setNextState(ClimbState.SWINGMIDHIGH);
                 }
                 break;
             case RELEASEMIDBAR:
-                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 500) {
+                if (getTimeSinceStartOfState() > 500) {
                     setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
                 break;
@@ -51,17 +58,24 @@ public class Climb extends BaseSequence<ClimbState> {
                         && !(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
                     abort();
                 }
-                if (Buttons.Climb.getButton() && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
+                if ((RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
                     setNextState(ClimbState.GRIPTRAVERSALBAR);
                 }
                 break;
             case GRIPTRAVERSALBAR:
-                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 2000) {
+                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
                     setNextState(ClimbState.RELEASEHIGHBAR);
+                }else if(!(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
+                    setNextState(ClimbState.RETRYTRAVERSALBAR);
+                }
+                break;
+            case RETRYTRAVERSALBAR:
+                if(getTimeSinceStartOfState() > 500){
+                    setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
                 break;
             case RELEASEHIGHBAR:
-                if (Buttons.Climb.getButton() && getTimeSinceStartOfState() > 500) {
+                if (getTimeSinceStartOfState() > 500) {
                     setNextState(ClimbState.SWINGTOREST);
                 }
                 break;
@@ -71,20 +85,21 @@ public class Climb extends BaseSequence<ClimbState> {
                     setNextState(ClimbState.NEUTRAL);
                 }
                 break;
-
             case NEUTRAL:
                 break;
             default:
                 break;
-
         }
         updateState();
     }
 
     @Override
     public boolean abort() {
-        setNextState(getNeutralState());
-        return updateState();
+        if (Robot.climber.abort()) {
+            setNextState(getNeutralState());
+            return updateState();
+        }
+        return false;
     }
 
 }
@@ -94,9 +109,11 @@ enum ClimbState implements IState {
     GRIPMIDBAR(Robot.climber, Robot.swerveDrive),
     SWINGMIDHIGH(Robot.climber, Robot.swerveDrive),
     GRIPHIGHBAR(Robot.climber, Robot.swerveDrive),
+    RETRYHIGHBAR(Robot.climber, Robot.swerveDrive),
     RELEASEMIDBAR(Robot.climber, Robot.swerveDrive),
     SWINGHIGHTRAVERSAL(Robot.climber, Robot.swerveDrive),
     GRIPTRAVERSALBAR(Robot.climber, Robot.swerveDrive),
+    RETRYTRAVERSALBAR(Robot.climber, Robot.swerveDrive),
     RELEASEHIGHBAR(Robot.climber, Robot.swerveDrive),
     SWINGTOREST(Robot.climber, Robot.swerveDrive);
 

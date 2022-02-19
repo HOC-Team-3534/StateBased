@@ -26,7 +26,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     }
 
     public void start() {
-        if (getState() == getNeutralState()) {
+        if (isNeutral()) {
             init();
             setNextState(getStartState());
             setState(getStartState());
@@ -34,14 +34,20 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     }
 
     public void start(BaseSubsystem ...subsystems) {
-        if (getState() == getNeutralState()) {
+        if (isNeutral()) {
             init();
-            setNextState(getStartState());
             for(BaseSubsystem subsystem : subsystems){
-                subsystem.forceRelease();
+                if(!subsystem.forceRelease()){
+                    return;
+                }
             }
+            setNextState(getStartState());
             setState(getStartState());
         }
+    }
+
+    public boolean isNeutral(){
+        return getState() == getNeutralState();
     }
 
     boolean setState(S state) {

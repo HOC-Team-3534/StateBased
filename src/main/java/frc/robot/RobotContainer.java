@@ -72,7 +72,7 @@ public class RobotContainer {
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getAButtonPressed();
+				return RobotContainer.getController2().getAButton();
 			}
 			
 		}),

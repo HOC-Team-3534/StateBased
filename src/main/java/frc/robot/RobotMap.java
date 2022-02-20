@@ -152,7 +152,8 @@ public class RobotMap {
 
 		m_intakeRoller = new WPI_TalonSRX(Constants.INTAKE_ROLLER);
 		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
-		m_intakeKickers = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKE_EXTEND, Constants.INTAKE_RETRACT);
+
+		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(Constants.INTAKE_EXTEND, Constants.INTAKE_RETRACT);
 
 		//m_compressor = new Compressor(Constants.AIR_COMPRESSOR, PneumaticsModuleType.CTREPCM);
 		

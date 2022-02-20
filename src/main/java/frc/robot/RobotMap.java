@@ -170,7 +170,7 @@ public class RobotMap {
 		shooter.config_kP(0, 0.2);
 		shooter.config_kD(0, 3.5);
 
-		pusher = new DoubleSolenoid(17, PneumaticsModuleType.CTREPCM, 0, 1);
+		pusher = new DoubleSolenoid(Constants.MAIN_PCM, PneumaticsModuleType.CTREPCM, Constants.PUSHER_FORWARD, Constants.PUSHER_REVERSE);
 
 		navx = new AHRS(SPI.Port.kMXP);
 

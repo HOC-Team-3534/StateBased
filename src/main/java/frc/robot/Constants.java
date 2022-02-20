@@ -65,11 +65,11 @@ public final class Constants {
 
         public static final double TALONFX_CPR = 2048.0;
 
-        public static final double MAIN_PCM = 17;
+        public static final int MAIN_PCM = 17;
 
-        public static final double PUSHER_FORWARD = 0;
+        public static final int PUSHER_FORWARD = 0;
 
-        public static final double PUSHER_REVERSE = 1;
+        public static final int PUSHER_REVERSE = 1;
 
         public static final double SHOOT_MOTOR_GEAR_RATIO = 1.3;
 

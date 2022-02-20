@@ -104,11 +104,6 @@ public class SwerveDrive extends BaseSubsystem {
 						new Rotation2d(RobotMap.m_backRightModule.getSteerAngle())));
 	}
 
-	@Override
-	public void neutral() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean abort() {

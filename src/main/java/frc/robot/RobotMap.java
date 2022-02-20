@@ -24,6 +24,7 @@ import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -49,6 +50,8 @@ public class RobotMap {
 	public static SwerveModule m_backRightModule;
 
 	public static WPI_TalonFX shooter;
+
+	public static PneumaticsControlModule m_mainPCM;
 
 	public static DoubleSolenoid pusher;
 
@@ -170,7 +173,9 @@ public class RobotMap {
 		shooter.config_kP(0, 0.2);
 		shooter.config_kD(0, 3.5);
 
-		pusher = new DoubleSolenoid(Constants.MAIN_PCM, PneumaticsModuleType.CTREPCM, Constants.PUSHER_FORWARD, Constants.PUSHER_REVERSE);
+		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
+
+		pusher = m_mainPCM.makeDoubleSolenoid(Constants.PUSHER_FORWARD, Constants.PUSHER_REVERSE);
 
 		navx = new AHRS(SPI.Port.kMXP);
 

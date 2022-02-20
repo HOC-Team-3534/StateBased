@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		//swerveDrive.drive(0.0, 0.0, 0.0, false);
+		swerveDrive.drive(0.0, 0.0, 0.0, false);
 		shooter.shoot(0);
 	}
 

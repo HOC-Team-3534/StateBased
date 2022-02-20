@@ -18,7 +18,7 @@ public class SequenceProcessor{
         */
 
         drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
-        shoot = new Shoot(ShootState.NEUTRAL, ShootState.SHOOT);
+        shoot = new Shoot(ShootState.NEUTRAL, ShootState.WAITNSPIN);
 
     }
 

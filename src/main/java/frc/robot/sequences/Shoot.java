@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
@@ -13,15 +14,28 @@ public class Shoot extends BaseSequence<ShootState> {
 
     public Shoot(ShootState neutralState, ShootState startState) {
         super(neutralState, startState);
-        //TODO Auto-generated constructor stub
+        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
         switch (getState()) {
-            case SHOOT:
+            case WAITNSPIN:
                 if (!Buttons.Shoot.getButton()) {
                     setNextState(ShootState.NEUTRAL);
+                }
+                if (this.getTimeSinceStartOfState() > 1500 && RobotMap.shooter.getClosedLoopError() < 100) {
+                    setNextState(ShootState.PUNCH);
+                }
+                break;
+            case PUNCH:
+                if (this.getTimeSinceStartOfState() > 250) {
+                    setNextState(ShootState.RETRACT);
+                }
+                break;
+            case RETRACT:
+                if (this.getTimeSinceStartOfState() > 250) {
+                    setNextState(ShootState.WAITNSPIN);
                 }
                 break;
             case NEUTRAL:
@@ -31,7 +45,7 @@ public class Shoot extends BaseSequence<ShootState> {
 
         }
         updateState();
-        
+
     }
 
     @Override
@@ -39,12 +53,14 @@ public class Shoot extends BaseSequence<ShootState> {
         // TODO Auto-generated method stub
         return false;
     }
-    
+
 }
 
 enum ShootState implements IState {
     NEUTRAL,
-    SHOOT(Robot.shooter);
+    WAITNSPIN(Robot.shooter),
+    PUNCH(Robot.shooter),
+    RETRACT(Robot.shooter);
 
     List<BaseSubsystem> requiredSubsystems;
 
@@ -75,4 +91,3 @@ enum ShootState implements IState {
         return this.name();
     }
 }
-

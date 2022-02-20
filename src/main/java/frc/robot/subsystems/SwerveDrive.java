@@ -44,13 +44,13 @@ public class SwerveDrive extends BaseSubsystem {
 
 	@Override
 	public void process() {
-		isStillRequired();
-		// if (getStateRequiringName() == "DRIVE") {
-		// 	drive(Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-		// 			Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-		// 			Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-		// 			true);
-		// }
+		super.process();
+		if (getStateRequiringName() == "DRIVE") {
+			drive(Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+					Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+					true);
+		}
 	}
 
 	public Rotation2d getGyroHeading() {
@@ -97,5 +97,17 @@ public class SwerveDrive extends BaseSubsystem {
 						new Rotation2d(RobotMap.m_backLeftModule.getSteerAngle())),
 				new SwerveModuleState(RobotMap.m_backRightModule.getDriveVelocity(),
 						new Rotation2d(RobotMap.m_backRightModule.getSteerAngle())));
+	}
+
+	@Override
+	public void neutral() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean abort() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

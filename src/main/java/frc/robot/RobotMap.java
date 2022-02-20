@@ -170,10 +170,12 @@ public class RobotMap {
 		m_l3Switch = new DigitalInput(Constants.L3_SWITCH);
 		m_h4Switch = new DigitalInput(Constants.H4_SWITCH);
 
-		m_l1Claw = new DoubleSolenoid(Constants.CLIMB_PCM, PneumaticsModuleType.CTREPCM, Constants.L1_EXTEND, Constants.L1_RETRACT);
-		m_h2Claw = new DoubleSolenoid(Constants.CLIMB_PCM, PneumaticsModuleType.CTREPCM, Constants.H2_EXTEND, Constants.H2_RETRACT);
-		m_l3Claw = new DoubleSolenoid(Constants.CLIMB_PCM, PneumaticsModuleType.CTREPCM, Constants.L3_EXTEND, Constants.L3_RETRACT);
-		m_h4Claw = new DoubleSolenoid(Constants.CLIMB_PCM, PneumaticsModuleType.CTREPCM, Constants.H4_EXTEND, Constants.H4_RETRACT);
+		m_climbPCM = new PneumaticsControlModule(Constants.CLIMB_PCM);
+
+		m_l1Claw = m_climbPCM.makeDoubleSolenoid(Constants.L1_EXTEND, Constants.L1_RETRACT);
+		m_h2Claw = m_climbPCM.makeDoubleSolenoid(Constants.H2_EXTEND, Constants.H2_RETRACT);
+		m_l3Claw = m_climbPCM.makeDoubleSolenoid(Constants.L3_EXTEND, Constants.L3_RETRACT);
+		m_h4Claw = m_climbPCM.makeDoubleSolenoid(Constants.H4_EXTEND, Constants.H4_RETRACT);
 
 		m_intakeRoller = new WPI_TalonSRX(Constants.INTAKE_ROLLER);
 		m_intakeRoller.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 20);

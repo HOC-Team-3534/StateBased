@@ -15,6 +15,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     public BaseSequence(S neutralState, S startState) {
         setNeutralState(neutralState);
         setStartState(startState);
+        setNextState(neutralState);
         setState(neutralState);
     }
 

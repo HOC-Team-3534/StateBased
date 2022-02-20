@@ -53,6 +53,11 @@ public class SwerveDrive extends BaseSubsystem {
 		}
 	}
 
+	@Override
+	public void neutral() {
+		drive(0.0, 0.0, 0.0, false);
+	}
+
 	public Rotation2d getGyroHeading() {
 		return RobotMap.navx.getRotation2d();
 	}
@@ -63,8 +68,8 @@ public class SwerveDrive extends BaseSubsystem {
 						ySpeed, xSpeed, rot, getGyroHeading())
 						: new ChassisSpeeds(ySpeed, xSpeed, rot));
 		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY_METERS_PER_SECOND);
-		if (Math.abs(swerveModuleStates[0].speedMetersPerSecond + swerveModuleStates[1].speedMetersPerSecond
-				+ swerveModuleStates[2].speedMetersPerSecond + swerveModuleStates[3].speedMetersPerSecond) > .001) {
+		if (Math.abs(swerveModuleStates[0].speedMetersPerSecond) + Math.abs(swerveModuleStates[1].speedMetersPerSecond)
+				+ Math.abs(swerveModuleStates[2].speedMetersPerSecond) + Math.abs(swerveModuleStates[3].speedMetersPerSecond) > 0.001) {
 			frontLeft_stateAngle = swerveModuleStates[0].angle.getRadians();
 			frontRight_stateAngle = swerveModuleStates[1].angle.getRadians();
 			backLeft_stateAngle = swerveModuleStates[2].angle.getRadians();

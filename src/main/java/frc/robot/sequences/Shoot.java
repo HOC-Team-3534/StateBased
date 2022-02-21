@@ -25,6 +25,7 @@ public class Shoot extends BaseSequence<ShootState> {
                     setNextState(ShootState.NEUTRAL);
                 }
                 if (this.getTimeSinceStartOfState() > 1500 && RobotMap.shooter.getClosedLoopError() < 100) {
+                    System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }
                 break;
@@ -34,7 +35,7 @@ public class Shoot extends BaseSequence<ShootState> {
                 }
                 break;
             case RETRACT:
-                if (this.getTimeSinceStartOfState() > 250) {
+                if (this.getTimeSinceStartOfState() > 500) {
                     setNextState(ShootState.WAITNSPIN);
                 }
                 break;

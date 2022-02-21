@@ -23,6 +23,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -52,6 +53,8 @@ public class RobotMap {
 	public static WPI_TalonFX shooter;
 
 	public static PneumaticsControlModule m_mainPCM;
+	public static PneumaticsControlModule m_climbPCM;
+	//public static Compressor m_airCompressor;
 
 	public static DoubleSolenoid pusher;
 
@@ -174,6 +177,10 @@ public class RobotMap {
 		shooter.config_kD(0, 3.5);
 
 		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
+		m_climbPCM = new PneumaticsControlModule(Constants.CLIMB_PCM);
+		//m_airCompressor = new Compressor(16, PneumaticsModuleType.CTREPCM);
+		
+		
 
 		pusher = m_mainPCM.makeDoubleSolenoid(Constants.PUSHER_FORWARD, Constants.PUSHER_REVERSE);
 

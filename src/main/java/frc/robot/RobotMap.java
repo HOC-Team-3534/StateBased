@@ -1,18 +1,16 @@
 package frc.robot;
 
-import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -49,7 +47,8 @@ public class RobotMap {
 	public static DigitalInput m_h4Switch;
 
 	public static WPI_TalonFX m_climbMotor;
-	public static WPI_TalonSRX m_intakeRoller;
+	
+	public static AnalogInput m_climbEncoder;
 
 	public static AHRS navx;
 
@@ -177,15 +176,11 @@ public class RobotMap {
 		m_l3Claw = m_climbPCM.makeDoubleSolenoid(Constants.L3_EXTEND, Constants.L3_RETRACT);
 		m_h4Claw = m_climbPCM.makeDoubleSolenoid(Constants.H4_EXTEND, Constants.H4_RETRACT);
 
-		m_intakeRoller = new WPI_TalonSRX(Constants.INTAKE_ROLLER);
-		m_intakeRoller.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 20);
+		m_climbEncoder = new AnalogInput(Constants.CLIMB_ENCODER);
 
 		m_climbMotor = new WPI_TalonFX(Constants.CLIMB_ARM_MOTOR);
-		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0);
-		m_climbMotor.configRemoteFeedbackFilter(Constants.INTAKE_ROLLER, RemoteSensorSource.TalonFX_SelectedSensor, 0);
-		
-
-
+		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
 	}
 
 	public enum DelayToOff {

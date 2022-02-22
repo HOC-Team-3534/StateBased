@@ -152,6 +152,8 @@ public class RobotMap {
 		// 		BACK_RIGHT_MODULE_STEER_OFFSET);
 
 		m_intakeRoller = new WPI_TalonSRX(Constants.INTAKE_ROLLER);
+		m_intakeRoller.setInverted(true);
+		
 		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
 		m_climbPCM = new PneumaticsControlModule(Constants.CLIMB_PCM);
 

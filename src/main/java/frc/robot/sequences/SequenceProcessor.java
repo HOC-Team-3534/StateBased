@@ -19,6 +19,7 @@ public class SequenceProcessor{
         */
 
         drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
+        intake = new IntakeSeq(IntakeState.NEUTRAL, IntakeState.EXTEND);
 
     }
 
@@ -27,11 +28,11 @@ public class SequenceProcessor{
         if(drive.getState() == drive.getNeutralState()){
             drive.start();
         }
-        if(intake.getState() == intake.getNeutralState() && Buttons.Intake.getButton()) {
+        if(Buttons.Intake.getButton()) {
             intake.start();
         }
 
-        drive.process();
+        //drive.process();
         intake.process();
     }
 }

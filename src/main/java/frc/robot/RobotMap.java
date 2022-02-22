@@ -179,6 +179,7 @@ public class RobotMap {
 		m_climbEncoder = new AnalogInput(Constants.CLIMB_ENCODER);
 
 		m_climbMotor = new WPI_TalonFX(Constants.CLIMB_ARM_MOTOR);
+		m_climbMotor.setInverted(true);
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
 	}

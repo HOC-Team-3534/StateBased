@@ -71,6 +71,14 @@ public abstract class BaseSubsystem implements ISubsystem {
         sequenceRequiring = null;
         stateRequiring = null;
     }
+    
+    public boolean forceRelease() {
+        if(this.getSequenceRequiring().abort()){
+            release();
+            return true;
+        }
+        return false;
+    }
 
     public BaseSequence<? extends IState> getSequenceRequiring() {
         return sequenceRequiring;

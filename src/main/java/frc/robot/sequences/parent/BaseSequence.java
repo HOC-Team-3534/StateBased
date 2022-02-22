@@ -1,5 +1,7 @@
 package frc.robot.sequences.parent;
 
+import frc.robot.subsystems.parent.BaseSubsystem;
+
 public abstract class BaseSequence<S extends IState> implements ISequence<S> {
 
     S state = null;
@@ -13,6 +15,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     public BaseSequence(S neutralState, S startState) {
         setNeutralState(neutralState);
         setStartState(startState);
+        setNextState(neutralState);
         setState(neutralState);
     }
 
@@ -24,18 +27,37 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     }
 
     public void start() {
-        if (getState() == getNeutralState()) {
+        if (isNeutral()) {
             init();
             setNextState(getStartState());
             setState(getStartState());
         }
     }
 
-    void setState(S state) {
+    public void start(BaseSubsystem ...subsystems) {
+        if (isNeutral()) {
+            init();
+            for(BaseSubsystem subsystem : subsystems){
+                if(!subsystem.forceRelease()){
+                    return;
+                }
+            }
+            setNextState(getStartState());
+            setState(getStartState());
+        }
+    }
+
+    public boolean isNeutral(){
+        return getState() == getNeutralState();
+    }
+
+    boolean setState(S state) {
         if (state.requireSubsystems(this)) {
             this.state = state;
             updateStateStartTime();
+            return true;
         }
+        return false;
     }
 
     public S getState() {
@@ -66,17 +88,18 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         return startState;
     }
 
-    protected void updateState() {
+    protected boolean updateState() {
         if (getState() != getNextState()) {
-            setState(nextState);
+            return setState(nextState);
         }
+        return false;
     }
 
     void updateSequenceStartTime() {
         timeAtStartOfSequence = System.currentTimeMillis();
     }
 
-    long getTimeSinceStartOfSequence() {
+    public long getTimeSinceStartOfSequence() {
         return System.currentTimeMillis() - timeAtStartOfSequence;
     }
 
@@ -84,7 +107,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         timeAtStartOfState = System.currentTimeMillis();
     }
 
-    long getTimeSinceStartOfState() {
+    public long getTimeSinceStartOfState() {
         return System.currentTimeMillis() - timeAtStartOfState;
     }
 

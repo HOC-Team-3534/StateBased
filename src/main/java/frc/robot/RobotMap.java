@@ -16,12 +16,17 @@ import static frc.robot.Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR;
 import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_ENCODER;
 import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_MOTOR;
 import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_OFFSET;
+import static frc.robot.Constants.SHOOTER_MOTOR;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -44,6 +49,14 @@ public class RobotMap {
 	public static SwerveModule m_frontRightModule;
 	public static SwerveModule m_backLeftModule;
 	public static SwerveModule m_backRightModule;
+
+	public static WPI_TalonFX shooter;
+
+	public static PneumaticsControlModule m_mainPCM;
+	public static PneumaticsControlModule m_climbPCM;
+	//public static Compressor m_airCompressor;
+
+	public static DoubleSolenoid pusher;
 
 	public static AHRS navx;
 
@@ -156,6 +169,20 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_MOTOR,
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
+
+		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
+		shooter.setInverted(true);
+		shooter.config_kF(0, 0.05);
+		shooter.config_kP(0, 0.2);
+		shooter.config_kD(0, 3.5);
+
+		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
+		m_climbPCM = new PneumaticsControlModule(Constants.CLIMB_PCM);
+		//m_airCompressor = new Compressor(16, PneumaticsModuleType.CTREPCM);
+		
+		
+
+		pusher = m_mainPCM.makeDoubleSolenoid(Constants.PUSHER_FORWARD, Constants.PUSHER_REVERSE);
 
 		navx = new AHRS(SPI.Port.kMXP);
 

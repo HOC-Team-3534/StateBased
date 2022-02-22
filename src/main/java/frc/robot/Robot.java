@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 
 /**
@@ -26,6 +27,7 @@ import frc.robot.subsystems.SwerveDrive;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
+	public static Shooter shooter;
 	public static SequenceProcessor sequenceProcessor;
 
 	private BaseAutonSequence<? extends IState> m_autonomousSequence;
@@ -48,6 +50,8 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
+		shooter = new Shooter();
+
 		sequenceProcessor = new SequenceProcessor();
 
 	}
@@ -60,6 +64,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		swerveDrive.drive(0.0, 0.0, 0.0, false);
+		shooter.shoot(0);
 	}
 
 	@Override
@@ -104,6 +109,7 @@ public class Robot extends TimedRobot {
 
 				/** Run subsystem process methods here */
 				swerveDrive.process();
+				shooter.process();
 
 			}
 

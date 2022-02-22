@@ -103,4 +103,11 @@ public class SwerveDrive extends BaseSubsystem {
 				new SwerveModuleState(RobotMap.m_backRightModule.getDriveVelocity(),
 						new Rotation2d(RobotMap.m_backRightModule.getSteerAngle())));
 	}
+
+
+	@Override
+	public boolean abort() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

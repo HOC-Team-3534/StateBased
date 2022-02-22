@@ -69,31 +69,41 @@ public class RobotContainer {
 	  }
 
 	
-	// public static enum Buttons {
+	public static enum Buttons {
+
+		Shoot(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getAButton();
+			}
+			
+		});
 
 
-	// 	Callable<Boolean> callable;
+		Callable<Boolean> callable;
 
-	// 	private void Buttons(Callable<Boolean> callable){
+		private Buttons(Callable<Boolean> callable){
 	
-	// 		this.callable = callable;
+			this.callable = callable;
 	
-	// 	}
+		}
 	
-	// 	public boolean getButton(){
+		public boolean getButton(){
 	
-	// 		try{
+			try{
 	
-	// 			return callable.call().booleanValue();
+				return callable.call().booleanValue();
 	
-	// 		}catch(Exception ex){
+			}catch(Exception ex){
 	
-	// 			return false;
+				return false;
 	
-	// 		}
-	// 	}
+			}
+		}
 
-	// }
+	}
 
 	public static enum Axes {
 		Drive_ForwardBackward(new Callable<Double>(){

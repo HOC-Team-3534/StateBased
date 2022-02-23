@@ -37,7 +37,7 @@ public class Intake extends BaseSubsystem {
     public void kickOut() {
         if(this.getStateFirstRunThrough()) {
             RobotMap.m_intakeKickers.set(Value.kForward);
-        }else if(this.getSequenceRequiring().getTimeSinceStartOfSequence() > 500){
+        }else if(this.getSequenceRequiring().getTimeSinceStartOfState() > 1500){
             RobotMap.m_intakeKickers.set(Value.kOff);
         }
         RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.40);
@@ -47,7 +47,7 @@ public class Intake extends BaseSubsystem {
 
         if(this.getStateFirstRunThrough()) {
             RobotMap.m_intakeKickers.set(Value.kReverse);
-        }else if(this.getSequenceRequiring().getTimeSinceStartOfSequence() > 1000){
+        }else if(this.getSequenceRequiring().getTimeSinceStartOfState() > 1500){
             RobotMap.m_intakeKickers.set(Value.kOff);
         }
     }

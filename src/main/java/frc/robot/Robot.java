@@ -5,16 +5,20 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.sequences.IntakeSeq;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,6 +31,8 @@ import frc.robot.subsystems.SwerveDrive;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
+	public static Shooter shooter;
+	public static Intake intake;
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
 
@@ -50,12 +56,13 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
+		shooter = new Shooter();
+
+		intake = new Intake();
+
 		climber = new Climber();
 
 		sequenceProcessor = new SequenceProcessor();
-
-		
-
 	}
 	
 
@@ -65,7 +72,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		swerveDrive.drive(0.0, 0.0, 0.0, false);
+		swerveDrive.neutral();
+		shooter.neutral();
+		intake.neutral();
+		climber.neutral();
 	}
 
 	@Override
@@ -82,13 +92,12 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		RobotMap.m_climbMotor.setSelectedSensorPosition(0.0);
 	}
 
 	@Override
 	public void teleopPeriodic() {
 
-		//log();
+		log();
 
 		isAutonomous = this.isAutonomous();
 
@@ -96,7 +105,7 @@ public class Robot extends TimedRobot {
 
 		while (this.isTeleop() && this.isEnabled()) {
 
-			//log();
+			log();
 
 			long currentTime = System.currentTimeMillis();
 
@@ -111,15 +120,13 @@ public class Robot extends TimedRobot {
 
 				/** Run subsystem process methods here */
 				swerveDrive.process();
+				shooter.process();
+				intake.process();
 				climber.process();
-
-
 			}
 
 			Timer.delay(0.001);
-
 		}
-
 	}
 
 	@Override
@@ -130,14 +137,14 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 	}
 
-	// public void log() {
+	public void log() {
 
-	// 	logCounter++;
+		logCounter++;
 
-	// 	if (logCounter > 5) {
+		if (logCounter > 5) {
 
-	// 		logCounter = 0;
-	// 	}
+			logCounter = 0;
+		}
 
-	// }
+	}
 }

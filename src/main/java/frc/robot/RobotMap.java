@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
@@ -15,6 +16,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
+import static frc.robot.Constants.*;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -34,21 +37,28 @@ public class RobotMap {
 	public static SwerveModule m_backLeftModule;
 	public static SwerveModule m_backRightModule;
 
+	public static PneumaticsControlModule m_mainPCM;
 	public static PneumaticsControlModule m_climbPCM;
 
-	public static DoubleSolenoid m_l1Claw;
-	public static DoubleSolenoid m_h2Claw;
-	public static DoubleSolenoid m_l3Claw;
-	public static DoubleSolenoid m_h4Claw;
+	public static WPI_TalonFX shooter;
+	public static DoubleSolenoid pusher;
+
+	public static WPI_TalonSRX m_intakeRoller;
+	public static DoubleSolenoid m_intakeKickers;
 
 	public static DigitalInput m_l1Switch;
 	public static DigitalInput m_h2Switch;
 	public static DigitalInput m_l3Switch;
 	public static DigitalInput m_h4Switch;
 
-	public static WPI_TalonFX m_climbMotor;
-
 	public static AnalogInput m_climbEncoder;
+
+	public static DoubleSolenoid m_l1Claw;
+	public static DoubleSolenoid m_h2Claw;
+	public static DoubleSolenoid m_l3Claw;
+	public static DoubleSolenoid m_h4Claw;
+
+	public static WPI_TalonFX m_climbMotor;
 
 	public static AHRS navx;
 
@@ -111,7 +121,7 @@ public class RobotMap {
 		// a different configuration or motors
 		// you MUST change it. If you do not, your code will crash on startup.
 		// FIXME Setup motor configuration
-
+		
 		m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
 				// This parameter is optional, but will allow you to see the current state of
 				// the module on the dashboard.
@@ -121,14 +131,14 @@ public class RobotMap {
 				// This can either be STANDARD or FAST depending on your gear configuration
 				Mk4SwerveModuleHelper.GearRatio.L2,
 				// This is the ID of the drive motor
-				Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+				FRONT_LEFT_MODULE_DRIVE_MOTOR,
 				// This is the ID of the steer motor
-				Constants.FRONT_LEFT_MODULE_STEER_MOTOR,
+				FRONT_LEFT_MODULE_STEER_MOTOR,
 				// This is the ID of the steer encoder
-				Constants.FRONT_LEFT_MODULE_STEER_ENCODER,
+				FRONT_LEFT_MODULE_STEER_ENCODER,
 				// This is how much the steer encoder is offset from true zero (In our case,
 				// zero is facing straight forward)
-				Constants.FRONT_LEFT_MODULE_STEER_OFFSET);
+				FRONT_LEFT_MODULE_STEER_OFFSET);
 
 		// We will do the same for the other modules
 		m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
@@ -136,53 +146,69 @@ public class RobotMap {
 						.withSize(2, 4)
 						.withPosition(2, 0),
 				Mk4SwerveModuleHelper.GearRatio.L2,
-				Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
-				Constants.FRONT_RIGHT_MODULE_STEER_MOTOR,
-				Constants.FRONT_RIGHT_MODULE_STEER_ENCODER,
-				Constants.FRONT_RIGHT_MODULE_STEER_OFFSET);
+				FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+				FRONT_RIGHT_MODULE_STEER_MOTOR,
+				FRONT_RIGHT_MODULE_STEER_ENCODER,
+				FRONT_RIGHT_MODULE_STEER_OFFSET);
 
 		m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
 				tab.getLayout("Back Left Module", BuiltInLayouts.kList)
 						.withSize(2, 4)
 						.withPosition(4, 0),
 				Mk4SwerveModuleHelper.GearRatio.L2,
-				Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
-				Constants.BACK_LEFT_MODULE_STEER_MOTOR,
-				Constants.BACK_LEFT_MODULE_STEER_ENCODER,
-				Constants.BACK_LEFT_MODULE_STEER_OFFSET);
+				BACK_LEFT_MODULE_DRIVE_MOTOR,
+				BACK_LEFT_MODULE_STEER_MOTOR,
+				BACK_LEFT_MODULE_STEER_ENCODER,
+				BACK_LEFT_MODULE_STEER_OFFSET);
 
 		m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
 				tab.getLayout("Back Right Module", BuiltInLayouts.kList)
 						.withSize(2, 4)
 						.withPosition(6, 0),
 				Mk4SwerveModuleHelper.GearRatio.L2,
-				Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR,
-				Constants.BACK_RIGHT_MODULE_STEER_MOTOR,
-				Constants.BACK_RIGHT_MODULE_STEER_ENCODER,
-				Constants.BACK_RIGHT_MODULE_STEER_OFFSET);
+				BACK_RIGHT_MODULE_DRIVE_MOTOR,
+				BACK_RIGHT_MODULE_STEER_MOTOR,
+				BACK_RIGHT_MODULE_STEER_ENCODER,
+				BACK_RIGHT_MODULE_STEER_OFFSET);
 
-		navx = new AHRS(SPI.Port.kMXP);
+		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
+		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
 
-		m_l1Switch = new DigitalInput(Constants.L1_SWITCH);
-		m_h2Switch = new DigitalInput(Constants.H2_SWITCH);
-		m_l3Switch = new DigitalInput(Constants.L3_SWITCH);
-		m_h4Switch = new DigitalInput(Constants.H4_SWITCH);
+		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
+		shooter.setInverted(true);
+		shooter.config_kF(0, 0.05);
+		shooter.config_kP(0, 0.2);
+		shooter.config_kD(0, 3.5);
 
-		m_climbPCM = new PneumaticsControlModule(Constants.CLIMB_PCM);
+		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 
-		m_l1Claw = m_climbPCM.makeDoubleSolenoid(Constants.L1_EXTEND, Constants.L1_RETRACT);
-		m_h2Claw = m_climbPCM.makeDoubleSolenoid(Constants.H2_EXTEND, Constants.H2_RETRACT);
-		m_l3Claw = m_climbPCM.makeDoubleSolenoid(Constants.L3_EXTEND, Constants.L3_RETRACT);
-		m_h4Claw = m_climbPCM.makeDoubleSolenoid(Constants.H4_EXTEND, Constants.H4_RETRACT);
+		m_intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
+		m_intakeRoller.setInverted(true);
 
-		m_climbEncoder = new AnalogInput(Constants.CLIMB_ENCODER);
+		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
 
-		m_climbMotor = new WPI_TalonFX(Constants.CLIMB_ARM_MOTOR);
+		m_l1Switch = new DigitalInput(L1_SWITCH);
+		m_h2Switch = new DigitalInput(H2_SWITCH);
+		m_l3Switch = new DigitalInput(L3_SWITCH);
+		m_h4Switch = new DigitalInput(H4_SWITCH);
+
+		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
+
+		m_l1Claw = m_climbPCM.makeDoubleSolenoid(L1_EXTEND, L1_RETRACT);
+		m_h2Claw = m_climbPCM.makeDoubleSolenoid(H2_EXTEND, H2_RETRACT);
+		m_l3Claw = m_climbPCM.makeDoubleSolenoid(L3_EXTEND, L3_RETRACT);
+		m_h4Claw = m_climbPCM.makeDoubleSolenoid(H4_EXTEND, H4_RETRACT);
+
+		m_climbEncoder = new AnalogInput(CLIMB_ENCODER);
+
+		m_climbMotor = new WPI_TalonFX(CLIMB_ARM_MOTOR);
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
-				.valueOf((int) ((m_climbEncoder.getVoltage() - Constants.CLIMB_ANALOG_VOLTAGE_OFFSET)
-						/ Constants.MAX_ANALOG_VOLTAGE * Constants.CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
-		m_climbMotor.configMotionCruiseVelocity(Constants.MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
-		m_climbMotor.configMotionAcceleration(Constants.MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+				.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
+						/ MAX_ANALOG_VOLTAGE * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+
+		navx = new AHRS(SPI.Port.kMXP);
 	}
 }

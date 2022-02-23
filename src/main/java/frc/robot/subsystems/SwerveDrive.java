@@ -44,7 +44,9 @@ public class SwerveDrive extends BaseSubsystem {
 
 	@Override
 	public void process() {
+
 		super.process();
+
 		if (getStateRequiringName() == "DRIVE") {
 			drive(Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
 					Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
@@ -68,8 +70,9 @@ public class SwerveDrive extends BaseSubsystem {
 						ySpeed, xSpeed, rot, getGyroHeading())
 						: new ChassisSpeeds(ySpeed, xSpeed, rot));
 		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY_METERS_PER_SECOND);
-		if (Math.abs(swerveModuleStates[0].speedMetersPerSecond + swerveModuleStates[1].speedMetersPerSecond
-				+ swerveModuleStates[2].speedMetersPerSecond + swerveModuleStates[3].speedMetersPerSecond) > .001) {
+		if (Math.abs(swerveModuleStates[0].speedMetersPerSecond) + Math.abs(swerveModuleStates[1].speedMetersPerSecond)
+				+ Math.abs(swerveModuleStates[2].speedMetersPerSecond)
+				+ Math.abs(swerveModuleStates[3].speedMetersPerSecond) > 0.001) {
 			frontLeft_stateAngle = swerveModuleStates[0].angle.getRadians();
 			frontRight_stateAngle = swerveModuleStates[1].angle.getRadians();
 			backLeft_stateAngle = swerveModuleStates[2].angle.getRadians();
@@ -87,7 +90,6 @@ public class SwerveDrive extends BaseSubsystem {
 		RobotMap.m_backRightModule.set(swerveModuleStates[3].speedMetersPerSecond
 				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
 				backRight_stateAngle);
-
 	}
 
 	public void updateOdometry() {
@@ -106,7 +108,8 @@ public class SwerveDrive extends BaseSubsystem {
 
 	@Override
 	public boolean abort() {
-		// TODO Auto-generated method stub
-		return false;
+		drive(0.0, 0.0, 0.0, false);
+		forceRelease();
+		return true;
 	}
 }

@@ -178,6 +178,7 @@ public class Climber extends BaseSubsystem {
         RobotMap.m_l3Claw.set(Value.kOff);
         RobotMap.m_h4Claw.set(Value.kOff);
         RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
+        forceRelease();
         return true;
     }
 }

@@ -4,21 +4,30 @@ import java.util.Arrays;
 import java.util.List;
 
 import frc.robot.Robot;
+import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class Drive extends BaseSequence<DriveState> {
+public class IntakeSeq extends BaseSequence<IntakeState> {
 
-    public Drive(DriveState neutralState, DriveState startState) {
+    public IntakeSeq (IntakeState neutralState, IntakeState startState) {
         super(neutralState, startState);
+        //TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-
         switch (getState()) {
-            case DRIVE:
+            case EXTEND:
+                if (!Buttons.Intake.getButton()) {
+                    setNextState(IntakeState.RETRACT);
+                }
+                break;
+            case RETRACT:
+                if(getTimeSinceStartOfState() > 2000){
+                    setNextState(IntakeState.NEUTRAL);
+                }
                 break;
             case NEUTRAL:
                 break;
@@ -27,6 +36,7 @@ public class Drive extends BaseSequence<DriveState> {
 
         }
         updateState();
+        
     }
 
     @Override
@@ -34,16 +44,17 @@ public class Drive extends BaseSequence<DriveState> {
         // TODO Auto-generated method stub
         return false;
     }
-
+    
 }
 
-enum DriveState implements IState {
+enum IntakeState implements IState {
     NEUTRAL,
-    DRIVE(Robot.swerveDrive);
+    EXTEND(Robot.intake),
+    RETRACT(Robot.intake);
 
     List<BaseSubsystem> requiredSubsystems;
 
-    DriveState(BaseSubsystem... subsystems) {
+    IntakeState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

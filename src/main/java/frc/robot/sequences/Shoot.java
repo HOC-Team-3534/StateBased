@@ -4,21 +4,40 @@ import java.util.Arrays;
 import java.util.List;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
+import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class Drive extends BaseSequence<DriveState> {
+public class Shoot extends BaseSequence<ShootState> {
 
-    public Drive(DriveState neutralState, DriveState startState) {
+    public Shoot(ShootState neutralState, ShootState startState) {
         super(neutralState, startState);
+        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-
         switch (getState()) {
-            case DRIVE:
+            case WAITNSPIN:
+                if (!Buttons.Shoot.getButton()) {
+                    setNextState(ShootState.NEUTRAL);
+                }
+                if (this.getTimeSinceStartOfState() > 1500 && RobotMap.shooter.getClosedLoopError() < 100) {
+                    System.out.println("In state");
+                    setNextState(ShootState.PUNCH);
+                }
+                break;
+            case PUNCH:
+                if (this.getTimeSinceStartOfState() > 250) {
+                    setNextState(ShootState.RETRACT);
+                }
+                break;
+            case RETRACT:
+                if (this.getTimeSinceStartOfState() > 500) {
+                    setNextState(ShootState.WAITNSPIN);
+                }
                 break;
             case NEUTRAL:
                 break;
@@ -27,6 +46,7 @@ public class Drive extends BaseSequence<DriveState> {
 
         }
         updateState();
+
     }
 
     @Override
@@ -37,13 +57,15 @@ public class Drive extends BaseSequence<DriveState> {
 
 }
 
-enum DriveState implements IState {
+enum ShootState implements IState {
     NEUTRAL,
-    DRIVE(Robot.swerveDrive);
+    WAITNSPIN(Robot.shooter),
+    PUNCH(Robot.shooter),
+    RETRACT(Robot.shooter);
 
     List<BaseSubsystem> requiredSubsystems;
 
-    DriveState(BaseSubsystem... subsystems) {
+    ShootState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

@@ -10,6 +10,7 @@ public class SequenceProcessor{
     
     public Drive drive;
     public Shoot shoot;
+    public IntakeSeq intake;
 
     public SequenceProcessor(){
 
@@ -19,20 +20,25 @@ public class SequenceProcessor{
 
         drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
         shoot = new Shoot(ShootState.NEUTRAL, ShootState.WAITNSPIN);
+        intake = new IntakeSeq(IntakeState.NEUTRAL, IntakeState.EXTEND);
 
     }
 
     public void process(){
 
-        if(drive.getState() == drive.getNeutralState()){
-            drive.start();
-        }
-        if(shoot.getState() == shoot.getNeutralState() && Buttons.Shoot.getButton()) {
+        drive.start();
+
+        if(Buttons.Shoot.getButton()) {
             shoot.start();
+        }
+
+        if(Buttons.Intake.getButton()) {
+            intake.start();
         }
 
         drive.process();
         shoot.process();
+        intake.process();
 
     }
 }

@@ -18,7 +18,9 @@ public class Shooter extends BaseSubsystem {
 
     @Override
     public void process() {
+
         super.process();
+
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
             waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
@@ -29,7 +31,6 @@ public class Shooter extends BaseSubsystem {
         } else {
             neutral();
         }
-
     }
 
     public void shoot(double rpm) {
@@ -63,12 +64,12 @@ public class Shooter extends BaseSubsystem {
     @Override
     public void neutral() {
         shoot(0);
-
     }
 
     @Override
     public boolean abort() {
-        // TODO Auto-generated method stub
+        shoot(0);
+        forceRelease();
         return false;
     }
 

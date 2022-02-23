@@ -63,6 +63,12 @@ public final class Constants {
                                                                                             // right steer offset
         public static final int SHOOTER_MOTOR = 13;
 
+        public static final int INTAKE_ROLLER = 15;
+
+        public static final int INTAKE_EXTEND = 2;
+        
+        public static final int INTAKE_RETRACT = 3;
+
         public static final double TALONFX_CPR = 2048.0;
 
         public static final int MAIN_PCM = 17;

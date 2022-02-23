@@ -21,54 +21,48 @@ import edu.wpi.first.wpilibj.buttons.POVButton;
  */
 public class RobotContainer {
 	// The robot's subsystems and commands are defined here...
-	//private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+	// private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
 	final static XboxPlusPOV xbox1 = new XboxPlusPOV(0);
 	final static XboxPlusPOV xbox2 = new XboxPlusPOV(1);
-
 
 	/**
 	 * The container for the robot. Contains subsystems, OI devices, and commands.
 	 */
 	public RobotContainer() {
-		
+
 	}
 
 	public static XboxPlusPOV getController1() {
-
 		return xbox1;
-
 	}
 
-	public XboxPlusPOV getController2() {
-
+	public static XboxPlusPOV getController2() {
 		return xbox2;
-
 	}
 
 	private static double deadband(double value, double deadband) {
 		if (Math.abs(value) > deadband) {
-		  if (value > 0.0) {
-			return (value - deadband) / (1.0 - deadband);
-		  } else {
-			return (value + deadband) / (1.0 - deadband);
-		  }
+			if (value > 0.0) {
+				return (value - deadband) / (1.0 - deadband);
+			} else {
+				return (value + deadband) / (1.0 - deadband);
+			}
 		} else {
-		  return 0;
+			return 0;
 		}
-	  }
-	
-	  private static double modifyAxis(double value) {
+	}
+
+	private static double modifyAxis(double value) {
 		// Deadband
 		value = deadband(value, 0.1);
-	
+
 		// Square the axis
 		value = Math.copySign(value * value, value);
-	
-		return value;
-	  }
 
-	
+		return value;
+	}
+
 	public static enum Buttons {
 
 		Shoot(new Callable<Boolean>(){
@@ -79,6 +73,15 @@ public class RobotContainer {
 				return RobotContainer.getController1().getAButton();
 			}
 			
+		}),
+		Intake(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getYButton();
+			}
+
 		});
 
 
@@ -108,44 +111,35 @@ public class RobotContainer {
 	public static enum Axes {
 		Drive_ForwardBackward(new Callable<Double>(){
 
-			@Override
-			public Double call() throws Exception{
+		@Override public Double call()throws Exception{
 
-				return -modifyAxis(RobotContainer.getController1().getLeftY());
-			}
-			
+		return -modifyAxis(RobotContainer.getController1().getLeftY());}
+
 		}),
 		Drive_LeftRight(new Callable<Double>(){
 
-			@Override
-			public Double call() throws Exception{
+		@Override public Double call()throws Exception{
 
-				return -modifyAxis(RobotContainer.getController1().getLeftX());
-			}
-		}),
-		Drive_Rotation(new Callable<Double>(){
-			@Override
-			public Double call() throws Exception{
+		return -modifyAxis(RobotContainer.getController1().getLeftX());}}),
+		Drive_Rotation(new Callable<Double>(){@Override public Double call()throws Exception{
 
-				return -modifyAxis(RobotContainer.getController1().getRightX());
-			}
-		});
+		return -modifyAxis(RobotContainer.getController1().getRightX());}});
 
 		Callable<Double> callable;
 
-		private Axes(Callable<Double> callable){
+		private Axes(Callable<Double> callable) {
 
 			this.callable = callable;
 
 		}
 
-		public double getAxis(){
+		public double getAxis() {
 
-			try{
+			try {
 
 				return callable.call().doubleValue();
 
-			}catch(Exception ex){
+			} catch (Exception ex) {
 
 				return 0.0;
 

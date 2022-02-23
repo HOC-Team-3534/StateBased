@@ -192,8 +192,6 @@ public class RobotMap {
 		m_l3Switch = new DigitalInput(L3_SWITCH);
 		m_h4Switch = new DigitalInput(H4_SWITCH);
 
-		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
-
 		m_l1Claw = m_climbPCM.makeDoubleSolenoid(L1_EXTEND, L1_RETRACT);
 		m_h2Claw = m_climbPCM.makeDoubleSolenoid(H2_EXTEND, H2_RETRACT);
 		m_l3Claw = m_climbPCM.makeDoubleSolenoid(L3_EXTEND, L3_RETRACT);
@@ -208,6 +206,10 @@ public class RobotMap {
 						/ MAX_ANALOG_VOLTAGE * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
 		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
 		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+		m_climbMotor.config_kP(0, 0.025);
+		m_climbMotor.config_kI(0, 0.0);
+		m_climbMotor.config_kD(0, 0.0);
+		m_climbMotor.config_kF(0, 0.0);
 
 		navx = new AHRS(SPI.Port.kMXP);
 	}

@@ -85,7 +85,7 @@ public final class Constants {
         public static final int TALONFX_CPR = 2048;
 
         public static final double MAX_ANALOG_VOLTAGE = 5.0;
-        public static final double CLIMB_ARM_GEAR_RATIO = 800.0;
+        public static final double CLIMB_ARM_GEAR_RATIO = 716.8;
         public static final double CLIMB_ANALOG_VOLTAGE_OFFSET = 0.0;
         public static final double CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR;
         public static final double ARM_DEGREES_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR / 360.0;

@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -80,6 +82,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
+		log();
 	}
 
 	@Override
@@ -142,6 +145,13 @@ public class Robot extends TimedRobot {
 		logCounter++;
 
 		if (logCounter > 5) {
+
+			SmartDashboard.putNumber("Encoder Voltage", RobotMap.m_climbEncoder.getVoltage());
+			SmartDashboard.putBoolean("L1 switch 1", RobotMap.m_l1Switch.get());
+			SmartDashboard.putBoolean("L1 switch 2", RobotMap.m_h2Switch.get());
+			SmartDashboard.putBoolean("L3 switch 1", RobotMap.m_l3Switch.get());
+			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
+
 
 			logCounter = 0;
 		}

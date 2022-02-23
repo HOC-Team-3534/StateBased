@@ -15,6 +15,7 @@ import frc.robot.sequences.IntakeSeq;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Intake;
 
@@ -29,6 +30,7 @@ import frc.robot.subsystems.Intake;
  */
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
+	public static Shooter shooter;
 	public static Intake intake;
 	public static SequenceProcessor sequenceProcessor;
 
@@ -52,6 +54,8 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
+		shooter = new Shooter();
+
 		intake = new Intake();
 
 		sequenceProcessor = new SequenceProcessor();
@@ -66,6 +70,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledInit() {
 		swerveDrive.neutral();
+		shooter.neutral();
 		intake.neutral();
 	}
 
@@ -111,14 +116,13 @@ public class Robot extends TimedRobot {
 
 				/** Run subsystem process methods here */
 				swerveDrive.process();
+				shooter.process();
 				intake.process();
-
 			}
 
 			Timer.delay(0.001);
 
 		}
-
 	}
 
 	@Override

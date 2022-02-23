@@ -34,15 +34,11 @@ public class RobotContainer {
 	}
 
 	public static XboxPlusPOV getController1() {
-
 		return xbox1;
-
 	}
 
 	public static XboxPlusPOV getController2() {
-
 		return xbox2;
-
 	}
 
 	private static double deadband(double value, double deadband) {
@@ -59,7 +55,7 @@ public class RobotContainer {
 
 	private static double modifyAxis(double value) {
 		// Deadband
-		value = deadband(value, 0.15);
+		value = deadband(value, 0.1);
 
 		// Square the axis
 		value = Math.copySign(value * value, value);
@@ -69,6 +65,15 @@ public class RobotContainer {
 
 	public static enum Buttons {
 
+		Shoot(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getAButton();
+			}
+			
+		}),
 		Intake(new Callable<Boolean>(){
 
 			@Override
@@ -76,7 +81,7 @@ public class RobotContainer {
 				// TODO Auto-generated method stub
 				return RobotContainer.getController2().getYButton();
 			}
-			
+
 		});
 
 
@@ -103,23 +108,22 @@ public class RobotContainer {
 
 	}
 
-
 	public static enum Axes {
 		Drive_ForwardBackward(new Callable<Double>(){
 
 		@Override public Double call()throws Exception{
 
-		return-modifyAxis(RobotContainer.getController1().getLeftY());}
+		return -modifyAxis(RobotContainer.getController1().getLeftY());}
 
 		}),
 		Drive_LeftRight(new Callable<Double>(){
 
 		@Override public Double call()throws Exception{
 
-		return-modifyAxis(RobotContainer.getController1().getLeftX());}}),
+		return -modifyAxis(RobotContainer.getController1().getLeftX());}}),
 		Drive_Rotation(new Callable<Double>(){@Override public Double call()throws Exception{
 
-		return-modifyAxis(RobotContainer.getController1().getRightX());}});
+		return -modifyAxis(RobotContainer.getController1().getRightX());}});
 
 		Callable<Double> callable;
 

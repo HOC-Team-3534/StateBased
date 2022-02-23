@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
@@ -19,7 +16,9 @@ public class Intake extends BaseSubsystem {
 
     @Override
     public void process() {
+
         super.process();
+
         if(getStateRequiringName() == "EXTEND"){
             kickOut();
         }else if(getStateRequiringName() == "RETRACT"){
@@ -27,14 +26,6 @@ public class Intake extends BaseSubsystem {
         }else{
             neutral();
         }
-
-        // if (getStateRequiringName() == "SHOOT") {
-        //     //grabs the number from SmartDashboard
-        //     shoot(SmartDashboard.getNumber("RPM: ", 0.0));
-        // } else {
-        //     shoot(0);
-        // }
-        
     }
 
     @Override
@@ -53,10 +44,19 @@ public class Intake extends BaseSubsystem {
     }
 
     public void retract() {
+
         if(this.getStateFirstRunThrough()) {
             RobotMap.m_intakeKickers.set(Value.kReverse);
         }else if(this.getSequenceRequiring().getTimeSinceStartOfSequence() > 1000){
             RobotMap.m_intakeKickers.set(Value.kOff);
         }
+    }
+
+    @Override
+    public boolean abort() {
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.0);
+        RobotMap.m_intakeKickers.set(Value.kOff);
+        forceRelease();
+        return false;
     }
 }

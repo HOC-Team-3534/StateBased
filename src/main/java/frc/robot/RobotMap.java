@@ -35,7 +35,7 @@ public class RobotMap {
 	public static SwerveModule m_backRightModule;
 
 	public static PneumaticsControlModule m_climbPCM;
-	
+
 	public static DoubleSolenoid m_l1Claw;
 	public static DoubleSolenoid m_h2Claw;
 	public static DoubleSolenoid m_l3Claw;
@@ -47,7 +47,7 @@ public class RobotMap {
 	public static DigitalInput m_h4Switch;
 
 	public static WPI_TalonFX m_climbMotor;
-	
+
 	public static AnalogInput m_climbEncoder;
 
 	public static AHRS navx;
@@ -84,7 +84,6 @@ public class RobotMap {
 	// inchesPerCountMultiplier * 10;
 
 	public static void init() {
-
 
 		ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -179,105 +178,11 @@ public class RobotMap {
 		m_climbEncoder = new AnalogInput(Constants.CLIMB_ENCODER);
 
 		m_climbMotor = new WPI_TalonFX(Constants.CLIMB_ARM_MOTOR);
-		m_climbMotor.setInverted(true);
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
-	}
-
-	public enum DelayToOff {
-
-		/**
-		 * the delay in seconds until the solenoids for certain ports turn off
-		 * below is just an example from 2019
-		 */
-
-		elevator_stage1a(3.0),
-		elevator_stage1b(3.0),
-		elevator_stage2(3.0),
-		elevator_floor(3.0),
-		hatchPanelApparatus_collapsed(2.0),
-		hatchIntake_hold(2.0),
-		armExtend_extended(3.0),
-		armLift_collapsed(2.0),
-		armLift_mid(2.0),
-		armLift_up(2.0);
-
-		public double time;
-
-		private DelayToOff(double time) {
-
-			this.time = time * 1000;
-
-		}
-	}
-
-	public enum FunctionStateDelay {
-
-		/**
-		 * the delay in seconds between different states in the function switch
-		 * statements
-		 * creates the wait time between cases in other words
-		 * below is just an example from 2019 (the examples should probably be removed
-		 * when the next years copy of the code is made)
-		 */
-
-		cargoIntakeFloor_elevatorStage1A_to_armExtendExtended_rollerIntake(1.0),
-		cargoShoot_shooterShoot_to_shooterStop(0.2),
-		hatchPlace_hatchIntakeRelease_to_hatchPanelApparatusExtended(0.05),
-		hatchPlace_hatchPanelApparatusExtended_to_hatchPanelApparatusCollapsed(0.25),
-		hatchPlace_hatchPanelApparatusCollapsed_to_hatchPlaceCompleted(3.0),
-		xButtonReset_armLiftMid_to_armExtendCollapsed(1.0),
-		intakeRoller_burpDelay(0.15);
-
-		public double time;
-
-		private FunctionStateDelay(double time) {
-
-			this.time = time * 1000;
-
-		}
-	}
-
-	public enum PowerOutput {
-
-		/**
-		 * the power output in percentage for the different actions in the functions for
-		 * the motors
-		 * for example, an intake motor at a constant percentage of power while button
-		 * pressed
-		 * below is just an example from 2020 (shooter was updated for RobotBasic)
-		 */
-
-		shooter_shooter_shootConstant(15500), // 17750
-		// shooter_shooter_shootInner(0.1127 * Math.pow((Robot.drive.getDistance()), 2)
-		// - (42.1417 * Robot.drive.getDistance()) + 17746.7581),
-		shooter_topBelt_feed(0.80),
-		shooter_indexWheel_feed(0.40),
-		shooter_indexWheel_index(0.45),
-		shooter_indexWheel_reverseIndex(1.0),
-		shooter_indexWheel_manualIndex(-1.0),
-		shooter_hood_far(0.5),
-		shooter_hood_close(-0.5),
-		intake_intakeRoller_intake(.75),
-		intake_intakeRoller_burp(-0.5),
-		intake_intakeArm_armUp(0.80),
-		intake_intakeArm_armDown(-0.80),
-		elevator_elevator_maxup(0.9),
-		elevator_elevator_maxdown(0.5),
-		elevator_elevator_stop(0.1),
-		elevator_elevator_colorWheel(0.5),
-		elevator_elevator_removeResistance(0.0),
-		elevator_winch_winch(1.0),
-		elevator_translator_maxOutput(1.0),
-		spinner_spinner_spin(1.0);
-
-		public double power;
-
-		private PowerOutput(double power) {
-
-			this.power = power;
-
-		}
-
+		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
+				.valueOf((int) ((m_climbEncoder.getVoltage() - Constants.CLIMB_ANALOG_VOLTAGE_OFFSET)
+						/ Constants.MAX_ANALOG_VOLTAGE * Constants.CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		m_climbMotor.configMotionCruiseVelocity(Constants.MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+		m_climbMotor.configMotionAcceleration(Constants.MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
 	}
 }

@@ -3,16 +3,15 @@ package frc.robot.sequences;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import frc.robot.subsystems.Climber;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Climb extends BaseSequence<ClimbState> {
+
+    int limitSwitchLoopCounter = 0;
 
     public Climb(ClimbState neutralState, ClimbState startState) {
         super(neutralState, startState);
@@ -28,19 +27,21 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGMIDHIGH:
-                if (RobotMap.m_climbMotor.getSelectedSensorPosition() > 180
-                        && !(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
-                    abort();
-                }
                 if ((RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
                     setNextState(ClimbState.GRIPHIGHBAR);
                 }
                 break;
             case GRIPHIGHBAR:
-                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
+                if (getTimeSinceStartOfState() > 500 && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
                     setNextState(ClimbState.RELEASEMIDBAR);
                 }else if(!(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
-                    setNextState(ClimbState.RETRYHIGHBAR);
+                    limitSwitchLoopCounter++;
+                    if(limitSwitchLoopCounter >= 5) {
+                        limitSwitchLoopCounter = 0;
+                        setNextState(ClimbState.RETRYHIGHBAR);
+                    }
+                }else{
+                    limitSwitchLoopCounter = 0;
                 }
                 break;
             case RETRYHIGHBAR:
@@ -54,19 +55,21 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGHIGHTRAVERSAL:
-                if (RobotMap.m_climbMotor.getSelectedSensorPosition() > 360
-                        && !(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
-                    abort();
-                }
                 if ((RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
                     setNextState(ClimbState.GRIPTRAVERSALBAR);
                 }
                 break;
             case GRIPTRAVERSALBAR:
-                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
+                if (getTimeSinceStartOfState() > 500 && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
                     setNextState(ClimbState.RELEASEHIGHBAR);
                 }else if(!(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
-                    setNextState(ClimbState.RETRYTRAVERSALBAR);
+                    limitSwitchLoopCounter++;
+                    if(limitSwitchLoopCounter >= 5) {
+                        limitSwitchLoopCounter = 0;
+                        setNextState(ClimbState.RETRYTRAVERSALBAR);
+                    }
+                }else{
+                    limitSwitchLoopCounter = 0;
                 }
                 break;
             case RETRYTRAVERSALBAR:

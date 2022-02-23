@@ -1,7 +1,13 @@
 package frc.robot.subsystems.parent;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class BaseSubsystem implements ISubsystem {
 
@@ -10,6 +16,8 @@ public abstract class BaseSubsystem implements ISubsystem {
     IState stateRequiring;
     boolean stateChanged;
     boolean stateFirstRunThrough;
+
+    Map<DoubleSolenoid, List<Long>> solenoidSetTimes = new HashMap<>();
 
     public boolean isRequiredByAnother(BaseSequence<? extends IState> sequence) {
         if(sequenceRequiring == sequence){
@@ -35,6 +43,7 @@ public abstract class BaseSubsystem implements ISubsystem {
     public void process(){
         isStillRequired();
         checkStateChanged();
+        checkToTurnOff();
     }
 
     private void setSequenceRequiring(BaseSequence<? extends IState> sequence){
@@ -91,4 +100,24 @@ public abstract class BaseSubsystem implements ISubsystem {
         return stateRequiring.getName();
     }
 
+    public void setWithADelayToOff(DoubleSolenoid ds, DoubleSolenoid.Value value, long millisUntilOff){
+        solenoidSetTimes.put(ds, Arrays.asList(System.currentTimeMillis(), millisUntilOff));
+        ds.set(value);
+    }
+
+    private boolean checkToTurnOff(){
+        boolean setToOff = false;
+        for(DoubleSolenoid ds : solenoidSetTimes.keySet()){
+            List<Long> times = solenoidSetTimes.get(ds);
+            if(ds.get() != DoubleSolenoid.Value.kOff
+                    && System.currentTimeMillis() - times.get(0) >= times.get(1)){
+                ds.set(DoubleSolenoid.Value.kOff);
+                solenoidSetTimes.remove(ds);
+                setToOff = true;
+            }else if(ds.get() == DoubleSolenoid.Value.kOff){
+                solenoidSetTimes.remove(ds);
+            }
+        }
+        return setToOff;
+    }
 }

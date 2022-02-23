@@ -2,17 +2,22 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
+
+import frc.robot.Constants.DelayToOff;
+import frc.robot.Constants.DelayToOff.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Climber extends BaseSubsystem {
 
     public Climber() {
-        // makes the graphical number to enter text - have to do a
-        // put to do a get
-        // SmartDashboard.putNumber("RPM: ", 0.0);
     }
 
     @Override
@@ -50,107 +55,112 @@ public class Climber extends BaseSubsystem {
         SmartDashboard.putNumber("Arm Encoder Position", RobotMap.m_climbMotor.getSelectedSensorPosition());
     }
 
+    public double getClimbArmDegree() {
+        return RobotMap.m_climbMotor.getSelectedSensorPosition() * Constants.FALCON_TICKS_TO_ARM_DEGREES;
+    }
+
+    public void setClimbArmDegree(double degree) {
+        RobotMap.m_climbMotor.set(ControlMode.MotionMagic, degree * Constants.ARM_DEGREES_TO_FALCON_TICKS);
+    }
+
     public void prepClaw() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_l1Claw.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_l1Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_l1Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
+            setWithADelayToOff(RobotMap.m_h2Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            setWithADelayToOff(RobotMap.m_l3Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            setWithADelayToOff(RobotMap.m_h4Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
         }
     }
 
     public void swingArm() {
-        RobotMap.m_climbMotor.set(ControlMode.Position, 90);
+
+        if (this.getStateFirstRunThrough()) {
+            setClimbArmDegree(90.0);
+        }
     }
 
     public void gripMidBar() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_h2Claw.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_h2Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_h2Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
         }
     }
 
     public void swingMidHigh() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_l3Claw.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_l3Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_l3Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
+            setClimbArmDegree(225.0);
         }
-        RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 1.0);
     }
 
     public void gripHighBar() {
 
         if (this.getStateFirstRunThrough()) {
             RobotMap.m_h4Claw.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_h4Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_h4Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
+            setClimbArmDegree(getClimbArmDegree());
+            System.out.println("Grip High Bar Climb Degree: " + getClimbArmDegree());
         }
     }
 
     public void retryHighBar() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_h4Claw.set(Value.kReverse);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_h4Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_h4Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            double angle = (getClimbArmDegree() < 180.0) ? 180.0 : getClimbArmDegree() - 15.0;
+            setClimbArmDegree(angle);
         }
     }
 
     public void releaseMidBar() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_l1Claw.set(Value.kReverse);
-            RobotMap.m_h2Claw.set(Value.kReverse);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_l1Claw.set(Value.kOff);
-            RobotMap.m_h2Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_l1Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            setWithADelayToOff(RobotMap.m_h2Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            setClimbArmDegree(405.0);
         }
     }
 
     public void swingHighTraversal() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_l1Claw.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_l1Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_l1Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
+            setClimbArmDegree(405.0);
         }
     }
 
     public void gripTraversalBar() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_h2Claw.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_h2Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_h2Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
+            setClimbArmDegree(getClimbArmDegree());
         }
     }
 
     public void retryTraversalBar() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_h2Claw.set(Value.kReverse);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_h2Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_h2Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            double angle = (getClimbArmDegree() < 360.0) ? 360.0 : getClimbArmDegree() - 15.0;
+            setClimbArmDegree(angle);
         }
     }
 
     public void releaseHighBar() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_l3Claw.set(Value.kReverse);
-            RobotMap.m_h4Claw.set(Value.kReverse);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 500) {
-            RobotMap.m_l3Claw.set(Value.kOff);
-            RobotMap.m_h4Claw.set(Value.kOff);
+            setWithADelayToOff(RobotMap.m_l3Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            setWithADelayToOff(RobotMap.m_h4Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            setClimbArmDegree(450.0);
         }
     }
 
     public void swingToRest() {
-        RobotMap.m_climbMotor.set(ControlMode.Position, 450);
+        if(this.getStateFirstRunThrough()) {
+            setClimbArmDegree(450.0);
+        }
     }
 
     @Override

@@ -91,14 +91,13 @@ public class Climber extends BaseSubsystem {
 
         if (this.getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_l3Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
-            setClimbArmDegree(225.0);
+            setClimbArmDegree(250.0);
         }
     }
 
     public void gripHighBar() {
 
         if (this.getStateFirstRunThrough()) {
-            RobotMap.m_h4Claw.set(Value.kForward);
             setWithADelayToOff(RobotMap.m_h4Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
             setClimbArmDegree(getClimbArmDegree());
             System.out.println("Grip High Bar Climb Degree: " + getClimbArmDegree());
@@ -119,7 +118,7 @@ public class Climber extends BaseSubsystem {
         if (this.getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_l1Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
             setWithADelayToOff(RobotMap.m_h2Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
-            setClimbArmDegree(405.0);
+            setClimbArmDegree(430.0);
         }
     }
 
@@ -127,7 +126,7 @@ public class Climber extends BaseSubsystem {
 
         if (this.getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_l1Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
-            setClimbArmDegree(405.0);
+            setClimbArmDegree(430.0);
         }
     }
 
@@ -136,6 +135,7 @@ public class Climber extends BaseSubsystem {
         if (this.getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_h2Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
             setClimbArmDegree(getClimbArmDegree());
+            System.out.println("Grip Traversal Bar Climb Degree: " + getClimbArmDegree());
         }
     }
 

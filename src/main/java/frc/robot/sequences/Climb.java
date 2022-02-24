@@ -32,7 +32,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case GRIPHIGHBAR:
-                if (getTimeSinceStartOfState() > 500 && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
+                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
                     setNextState(ClimbState.RELEASEMIDBAR);
                 }else if(!(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
                     limitSwitchLoopCounter++;
@@ -45,12 +45,12 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RETRYHIGHBAR:
-                if(getTimeSinceStartOfState() > 500){
+                if(getTimeSinceStartOfState() > 1500){
                     setNextState(ClimbState.SWINGMIDHIGH);
                 }
                 break;
             case RELEASEMIDBAR:
-                if (getTimeSinceStartOfState() > 500) {
+                if (getTimeSinceStartOfState() > 1000) {
                     setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
                 break;
@@ -60,7 +60,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case GRIPTRAVERSALBAR:
-                if (getTimeSinceStartOfState() > 500 && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
+                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
                     setNextState(ClimbState.RELEASEHIGHBAR);
                 }else if(!(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
                     limitSwitchLoopCounter++;
@@ -73,12 +73,12 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RETRYTRAVERSALBAR:
-                if(getTimeSinceStartOfState() > 500){
+                if(getTimeSinceStartOfState() > 1500){
                     setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
                 break;
             case RELEASEHIGHBAR:
-                if (getTimeSinceStartOfState() > 500) {
+                if (getTimeSinceStartOfState() > 1000) {
                     setNextState(ClimbState.SWINGTOREST);
                 }
                 break;

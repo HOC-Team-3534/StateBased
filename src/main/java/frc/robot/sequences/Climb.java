@@ -83,7 +83,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGTOREST:
-                if(RobotMap.m_climbMotor.getSelectedSensorPosition() == 450){                
+                if(RobotMap.m_climbMotor.getSelectedSensorPosition() >= 440){                
                     System.out.println("Hooray!");
                     setNextState(ClimbState.NEUTRAL);
                 }

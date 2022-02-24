@@ -1,5 +1,8 @@
 package frc.robot.sequences;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.RobotMap;
@@ -55,5 +58,6 @@ public class SequenceProcessor{
         intake.process();
         climbPrep.process();
         climb.process();
+        SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getState().getName() == "PREPPEDFORCLIMB");
     }
 }

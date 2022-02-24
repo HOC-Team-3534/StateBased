@@ -1,13 +1,14 @@
 package frc.robot.subsystems.parent;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
-
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.IState;
 
 public abstract class BaseSubsystem implements ISubsystem {
 
@@ -109,17 +110,21 @@ public abstract class BaseSubsystem implements ISubsystem {
     }
 
     private boolean checkToTurnOff(){
+        List<DoubleSolenoid> removeList = new ArrayList<DoubleSolenoid>();
         boolean setToOff = false;
         for(DoubleSolenoid ds : solenoidSetTimes.keySet()){
             List<Long> times = solenoidSetTimes.get(ds);
             if(ds.get() != DoubleSolenoid.Value.kOff
                     && System.currentTimeMillis() - times.get(0) >= times.get(1)){
                 ds.set(DoubleSolenoid.Value.kOff);
-                solenoidSetTimes.remove(ds);
+                removeList.add(ds);
                 setToOff = true;
             }else if(ds.get() == DoubleSolenoid.Value.kOff){
-                solenoidSetTimes.remove(ds);
+                removeList.add(ds);
             }
+        }
+        for(DoubleSolenoid ds : removeList){
+            solenoidSetTimes.remove(ds);
         }
         return setToOff;
     }

@@ -203,7 +203,7 @@ public class RobotMap {
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
 				.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
-						/ MAX_ANALOG_VOLTAGE * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+						/ Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
 		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
 		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
 		m_climbMotor.config_kP(0, 0.025);

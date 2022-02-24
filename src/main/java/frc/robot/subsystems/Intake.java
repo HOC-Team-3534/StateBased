@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
@@ -35,21 +37,12 @@ public class Intake extends BaseSubsystem {
     }
 
     public void kickOut() {
-        if(this.getStateFirstRunThrough()) {
-            RobotMap.m_intakeKickers.set(Value.kForward);
-        }else if(this.getSequenceRequiring().getTimeSinceStartOfState() > 1500){
-            RobotMap.m_intakeKickers.set(Value.kOff);
-        }
+        setWithADelayToOff(RobotMap.m_intakeKickers, Value.kForward, Constants.DelayToOff.INTAKE_KICKERS.millis);
         RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.40);
     }
 
     public void retract() {
-
-        if(this.getStateFirstRunThrough()) {
-            RobotMap.m_intakeKickers.set(Value.kReverse);
-        }else if(this.getSequenceRequiring().getTimeSinceStartOfState() > 1500){
-            RobotMap.m_intakeKickers.set(Value.kOff);
-        }
+        setWithADelayToOff(RobotMap.m_intakeKickers, Value.kReverse, Constants.DelayToOff.INTAKE_KICKERS.millis);
     }
 
     @Override

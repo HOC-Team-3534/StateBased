@@ -44,21 +44,11 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void punch() {
-
-        if (this.getStateFirstRunThrough()) {
-            RobotMap.pusher.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 250) {
-            RobotMap.pusher.set(Value.kOff);
-        }
+        setWithADelayToOff(RobotMap.pusher, Value.kForward, Constants.DelayToOff.SHOOTER_PUSHER.millis);
     }
 
     private void retract() {
-
-        if (this.getStateFirstRunThrough()) {
-            RobotMap.pusher.set(Value.kReverse);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 250) {
-            RobotMap.pusher.set(Value.kOff);
-        }
+        setWithADelayToOff(RobotMap.pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
     }
 
     @Override

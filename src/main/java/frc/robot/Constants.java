@@ -87,14 +87,15 @@ public final class Constants {
         public static final double MAX_ANALOG_VOLTAGE = 5.0;
         public static final double CLIMB_ARM_GEAR_RATIO = 716.8;
         public static final double CLIMB_ANALOG_VOLTAGE_OFFSET = 2.46;
+        public static final double CLIMB_ANALOG_VOLTAGE_TO_DEGREE = 0.014556;
         public static final double CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR;
         public static final double ARM_DEGREES_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR / 360.0;
         public static final double FALCON_TICKS_TO_ARM_DEGREES = 1 / ARM_DEGREES_TO_FALCON_TICKS;
 
-        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 10.0;
-        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 10.0;
+        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 20.0;
+        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 40;
         public static final int MAX_ARM_VELOCITY_NATIVE_UNITS = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
-        public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0 / 10.0);
+        public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         
         public static final int SHOOTER_MOTOR = 13;
 
@@ -138,7 +139,9 @@ public final class Constants {
                  * below is just an example from 2019
                  */
 
-                CLIMB_CLAWS(1.0);
+                CLIMB_CLAWS(1.0),
+                INTAKE_KICKERS(0.5),
+                SHOOTER_PUSHER(0.5);
 
                 public long millis;
 

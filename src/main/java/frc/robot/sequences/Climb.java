@@ -27,7 +27,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGMIDHIGH:
-                if ((RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
+                if ((RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get()) && Robot.climber.getClimbArmDegree() > 180.0) {
                     setNextState(ClimbState.GRIPHIGHBAR);
                 }
                 break;
@@ -55,7 +55,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGHIGHTRAVERSAL:
-                if ((RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
+                if ((RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get()) && Robot.climber.getClimbArmDegree() > 360.0) {
                     setNextState(ClimbState.GRIPTRAVERSALBAR);
                 }
                 break;

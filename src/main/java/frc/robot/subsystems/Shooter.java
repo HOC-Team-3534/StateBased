@@ -59,7 +59,6 @@ public class Shooter extends BaseSubsystem {
     @Override
     public boolean abort() {
         shoot(0);
-        forceRelease();
         return true;
     }
 

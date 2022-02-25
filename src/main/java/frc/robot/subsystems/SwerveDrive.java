@@ -109,7 +109,6 @@ public class SwerveDrive extends BaseSubsystem {
 	@Override
 	public boolean abort() {
 		drive(0.0, 0.0, 0.0, false);
-		forceRelease();
 		return true;
 	}
 }

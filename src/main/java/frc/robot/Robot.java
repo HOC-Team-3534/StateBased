@@ -74,10 +74,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		swerveDrive.neutral();
-		shooter.neutral();
-		intake.neutral();
-		climber.neutral();
+		swerveDrive.forceRelease();
+		shooter.forceRelease();
+		intake.forceRelease();
+		climber.forceRelease();
 	}
 
 	@Override

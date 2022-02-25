@@ -49,7 +49,6 @@ public class Intake extends BaseSubsystem {
     public boolean abort() {
         RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.0);
         RobotMap.m_intakeKickers.set(Value.kOff);
-        forceRelease();
         return true;
     }
 }

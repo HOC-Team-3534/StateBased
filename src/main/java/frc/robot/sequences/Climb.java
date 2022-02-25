@@ -50,7 +50,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RELEASEMIDBAR:
-                if (getTimeSinceStartOfState() > 1000) {
+                if (getTimeSinceStartOfState() > 3000) {
                     setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
                 break;
@@ -78,7 +78,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RELEASEHIGHBAR:
-                if (getTimeSinceStartOfState() > 1000) {
+                if (getTimeSinceStartOfState() > 3000) {
                     setNextState(ClimbState.SWINGTOREST);
                 }
                 break;

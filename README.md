@@ -12,3 +12,5 @@ Possible issues when configuring remote sensor feedback for talon FX https://www
 This would be cool to do if we had a lot of extra time maybe a v2 thing or something https://www.chiefdelphi.com/t/game-piece-tracking/
 
 https://www.chiefdelphi.com/t/remember-angle-in-swerve-drive/375581
+
+https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib:-Java-Usage

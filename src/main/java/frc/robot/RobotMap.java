@@ -1,20 +1,23 @@
-package org.usfirst.frc3534.RobotBasic;
+package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
+import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
+import com.swervedrivespecialties.swervelib.SwerveModule;
 
-import com.revrobotics.ColorSensorV3;
-
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
+import static frc.robot.Constants.*;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -24,228 +27,190 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class RobotMap {
 
-	public static WPI_TalonFX frontLeftMotor;		//1
-	public static WPI_TalonFX backLeftMotor;		//2
-	public static WPI_TalonFX backRightMotor;		//3
-	public static WPI_TalonFX frontRightMotor;		//4
-	public static WPI_TalonFX shooter; 				//5
-	public static WPI_TalonFX shooterSlave;			//6
-	//public static WPI_TalonSRX hood;				//7
-	public static WPI_TalonSRX topBelt;				//8
-	public static WPI_TalonSRX indexWheel;			//9
-	public static WPI_TalonSRX intakeArm;			//10
-	public static WPI_TalonSRX intakeRoller;		//11
-	public static WPI_TalonSRX elevator;			//12
-	public static WPI_TalonFX winch;				//13
-	public static WPI_TalonSRX translator;			//14
-	public static WPI_TalonSRX spinner;				//15
+	/**
+	 * EXAMPLE public static DoubleSolenoid elevatorCylinderOne; //first value ->
+	 * PCM A, CHANNEL 0, 1
+	 */
 
-	public static ColorSensorV3 colorSensor;
-	public static DigitalInput indexBottom;
-	public static DigitalInput indexTop;
-	public static DigitalInput shootCounter;
+	public static SwerveModule m_frontLeftModule;
+	public static SwerveModule m_frontRightModule;
+	public static SwerveModule m_backLeftModule;
+	public static SwerveModule m_backRightModule;
 
-	public static Spark blinkin;
+	public static PneumaticsControlModule m_mainPCM;
+	public static PneumaticsControlModule m_climbPCM;
 
-	/** EXAMPLE public static DoubleSolenoid elevatorCylinderOne;		//first value -> PCM A, CHANNEL 0, 1 */
+	public static WPI_TalonFX shooter;
+	public static DoubleSolenoid pusher;
 
+	public static WPI_TalonSRX m_intakeRoller;
+	public static DoubleSolenoid m_intakeKickers;
+
+	public static DigitalInput m_l1Switch;
+	public static DigitalInput m_h2Switch;
+	public static DigitalInput m_l3Switch;
+	public static DigitalInput m_h4Switch;
+
+	public static AnalogInput m_climbEncoder;
+
+	public static DoubleSolenoid m_l1Claw;
+	public static DoubleSolenoid m_h2Claw;
+	public static DoubleSolenoid m_l3Claw;
+	public static DoubleSolenoid m_h4Claw;
+
+	public static WPI_TalonFX m_climbMotor;
 
 	public static AHRS navx;
 
-	public static final int shooterVelocityDrop = 0;
-
 	public static final double spikeCurrent = 7.0;
-	public static final double rollerSpikeCurrent = 55.0;
-	
-	public static final int elevator_maxHeight = 10000;
-	public static final int elevatorCreepHeight = -500;
-	public static final int winch_maxPosition = 0;
-	public static final int winchLimit = 0;
 
-	public static final double maxVelocity = 6.6; //meters per second
-	public static final double maxAngularVelocity = Math.PI * 6; //radians per second
+	public static final double maxVelocity = 6.6; // meters per second
+	public static final double maxAngularVelocity = Math.PI * 6; // radians per second
 
 	// Wheel Encoder Calculations
-	//public static final double typicalAcceleration = 1.0; //meters per second per second
-	//public static final double robotMass = 50; //kg
+	// public static final double typicalAcceleration = 1.0; //meters per second per
+	// second
+	// public static final double robotMass = 50; //kg
 	public static final double wheelDiameter = .1524; // measured in meters
-	public static final double gearRatio = 1/7.71;
-	public static final int ticksPerMotorRotation = 2048; // 2048 for Falcon500 (old ecnoders 1440 if in talon, 360 if into roboRIO)
-	//public static final double driveWheelTorque = (wheelDiameter / 2) * (robotMass / 4 * typicalAcceleration) * Math.sin(90);
-	public static final double falconMaxRPM = 6380; //- 1 / 0.0007351097 * driveWheelTorque;
+	public static final double gearRatio = 1 / 7.71;
+	public static final int ticksPerMotorRotation = 2048; // 2048 for Falcon500 (old ecnoders 1440 if in talon, 360 if
+															// into roboRIO)
+	// public static final double driveWheelTorque = (wheelDiameter / 2) *
+	// (robotMass / 4 * typicalAcceleration) * Math.sin(90);
+	public static final double falconMaxRPM = 6380; // - 1 / 0.0007351097 * driveWheelTorque;
 	public static final double maxTicksPer100ms = falconMaxRPM * ticksPerMotorRotation / 60 / 10;
 	public static final double distancePerMotorRotation = gearRatio * wheelDiameter * Math.PI;
-	public static final double encoderVelocityToWheelVelocity =  ticksPerMotorRotation / 10 / distancePerMotorRotation; //encoder ticks per 100ms to meters per second
-	//public static final double inchesPerCountMultiplier = wheelDiameter * Math.PI / ticksPerRotation;
-	//public static final double codesPer100MillisToInchesPerSecond = inchesPerCountMultiplier * 10;
+	public static final double encoderVelocityToWheelVelocity = ticksPerMotorRotation / 10 / distancePerMotorRotation; // encoder
+																														// ticks
+																														// per
+																														// 100ms
+																														// to
+																														// meters
+																														// per
+																														// second
+	// public static final double inchesPerCountMultiplier = wheelDiameter * Math.PI
+	// / ticksPerRotation;
+	// public static final double codesPer100MillisToInchesPerSecond =
+	// inchesPerCountMultiplier * 10;
 
 	public static void init() {
 
-		frontLeftMotor = new WPI_TalonFX(1);
-		frontLeftMotor.config_kF(0, 0.05, 0);
-		frontLeftMotor.config_kP(0, 3, 0);
-		frontLeftMotor.config_kI(0, 0, 0);
-		frontLeftMotor.config_kD(0, 80, 0);
-		frontLeftMotor.setNeutralMode(NeutralMode.Brake);
+		ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-		backLeftMotor = new WPI_TalonFX(2);
-		backLeftMotor.config_kF(0, 0.05, 0);
-		backLeftMotor.config_kP(0, 3, 0);
-		backLeftMotor.config_kI(0, 0, 0);
-		backLeftMotor.config_kD(0, 80, 0);
-		backLeftMotor.setNeutralMode(NeutralMode.Brake);
+		// There are 4 methods you can call to create your swerve modules.
+		// The method you use depends on what motors you are using.
+		//
+		// Mk3SwerveModuleHelper.createFalcon500(...)
+		// Your module has two Falcon 500s on it. One for steering and one for driving.
+		//
+		// Mk3SwerveModuleHelper.createNeo(...)
+		// Your module has two NEOs on it. One for steering and one for driving.
+		//
+		// Mk3SwerveModuleHelper.createFalcon500Neo(...)
+		// Your module has a Falcon 500 and a NEO on it. The Falcon 500 is for driving
+		// and the NEO is for steering.
+		//
+		// Mk3SwerveModuleHelper.createNeoFalcon500(...)
+		// Your module has a NEO and a Falcon 500 on it. The NEO is for driving and the
+		// Falcon 500 is for steering.
+		//
+		// Similar helpers also exist for Mk4 modules using the Mk4SwerveModuleHelper
+		// class.
 
-		backRightMotor = new WPI_TalonFX(3);
-		backRightMotor.setInverted(true);
-		backRightMotor.config_kF(0, 0.05, 0);
-		backRightMotor.config_kP(0, 3, 0);
-		backRightMotor.config_kI(0, 0, 0);
-		backRightMotor.config_kD(0, 80, 0);
-		backRightMotor.setNeutralMode(NeutralMode.Brake);
-
-		frontRightMotor = new WPI_TalonFX(4);
-		frontRightMotor.setInverted(true);
-		frontRightMotor.config_kF(0, 0.05, 0);
-		frontRightMotor.config_kP(0, 3, 0);
-		frontRightMotor.config_kI(0, 0, 0);
-		frontRightMotor.config_kD(0, 80, 0);
-		frontRightMotor.setNeutralMode(NeutralMode.Brake);
-
-		shooter = new WPI_TalonFX(5);
-		shooterSlave = new WPI_TalonFX(6);
-		shooterSlave.follow(shooter);
-		shooter.setInverted(false);
-		shooterSlave.setInverted(true);
-
-		//hood = new WPI_TalonSRX(7);
-
-		topBelt = new WPI_TalonSRX(8);
-		topBelt.setInverted(true);
-		topBelt.setNeutralMode(NeutralMode.Brake);
-
-		indexWheel = new WPI_TalonSRX(9);
-		indexWheel.setNeutralMode(NeutralMode.Brake);
-		indexWheel.setInverted(true);
-
-		intakeArm = new WPI_TalonSRX(10);
-		intakeArm.setInverted(true);
-
-		intakeRoller = new WPI_TalonSRX(11);
-
-		elevator = new WPI_TalonSRX(12);
-		//elevator.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-		//elevator.setSelectedSensorPosition(0, 0, 0);
-		elevator.setInverted(true);
-		elevator.setNeutralMode(NeutralMode.Brake);
-		//elevator.setSensorPhase(true);
-		//elevator.selectProfileSlot(0, 0);
-
-		winch = new WPI_TalonFX(13);
-
-		translator = new WPI_TalonSRX(14);
-		translator.setNeutralMode(NeutralMode.Brake);
-
-		spinner = new WPI_TalonSRX(15);
+		// By default we will use Falcon 500s in standard configuration. But if you use
+		// a different configuration or motors
+		// you MUST change it. If you do not, your code will crash on startup.
+		// FIXME Setup motor configuration
 		
-		colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
-		shootCounter = new DigitalInput(4);
-		indexBottom = new DigitalInput(1);
-		indexTop = new DigitalInput(0);
+		m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+				// This parameter is optional, but will allow you to see the current state of
+				// the module on the dashboard.
+				tab.getLayout("Front Left Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(0, 0),
+				// This can either be STANDARD or FAST depending on your gear configuration
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				// This is the ID of the drive motor
+				FRONT_LEFT_MODULE_DRIVE_MOTOR,
+				// This is the ID of the steer motor
+				FRONT_LEFT_MODULE_STEER_MOTOR,
+				// This is the ID of the steer encoder
+				FRONT_LEFT_MODULE_STEER_ENCODER,
+				// This is how much the steer encoder is offset from true zero (In our case,
+				// zero is facing straight forward)
+				FRONT_LEFT_MODULE_STEER_OFFSET);
 
+		// We will do the same for the other modules
+		m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
+				tab.getLayout("Front Right Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(2, 0),
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+				FRONT_RIGHT_MODULE_STEER_MOTOR,
+				FRONT_RIGHT_MODULE_STEER_ENCODER,
+				FRONT_RIGHT_MODULE_STEER_OFFSET);
 
-		blinkin = new Spark(1);
+		m_backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+				tab.getLayout("Back Left Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(4, 0),
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				BACK_LEFT_MODULE_DRIVE_MOTOR,
+				BACK_LEFT_MODULE_STEER_MOTOR,
+				BACK_LEFT_MODULE_STEER_ENCODER,
+				BACK_LEFT_MODULE_STEER_OFFSET);
+
+		m_backRightModule = Mk4SwerveModuleHelper.createFalcon500(
+				tab.getLayout("Back Right Module", BuiltInLayouts.kList)
+						.withSize(2, 4)
+						.withPosition(6, 0),
+				Mk4SwerveModuleHelper.GearRatio.L2,
+				BACK_RIGHT_MODULE_DRIVE_MOTOR,
+				BACK_RIGHT_MODULE_STEER_MOTOR,
+				BACK_RIGHT_MODULE_STEER_ENCODER,
+				BACK_RIGHT_MODULE_STEER_OFFSET);
+
+		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
+		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
+
+		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
+		shooter.setInverted(true);
+		shooter.config_kF(0, 0.05);
+		shooter.config_kP(0, 0.2);
+		shooter.config_kD(0, 3.5);
+
+		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
+
+		m_intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
+		m_intakeRoller.setInverted(true);
+
+		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
+
+		m_l1Switch = new DigitalInput(L1_SWITCH);
+		m_h2Switch = new DigitalInput(H2_SWITCH);
+		m_l3Switch = new DigitalInput(L3_SWITCH);
+		m_h4Switch = new DigitalInput(H4_SWITCH);
+
+		m_l1Claw = m_climbPCM.makeDoubleSolenoid(L1_EXTEND, L1_RETRACT);
+		m_h2Claw = m_climbPCM.makeDoubleSolenoid(H2_EXTEND, H2_RETRACT);
+		m_l3Claw = m_climbPCM.makeDoubleSolenoid(L3_EXTEND, L3_RETRACT);
+		m_h4Claw = m_climbPCM.makeDoubleSolenoid(H4_EXTEND, H4_RETRACT);
+
+		m_climbEncoder = new AnalogInput(CLIMB_ENCODER);
+
+		m_climbMotor = new WPI_TalonFX(CLIMB_ARM_MOTOR);
+		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
+				.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
+						/ Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+		m_climbMotor.config_kP(0, 0.025);
+		m_climbMotor.config_kI(0, 0.0);
+		m_climbMotor.config_kD(0, 0.0);
+		m_climbMotor.config_kF(0, 0.0);
 
 		navx = new AHRS(SPI.Port.kMXP);
-
-	}
-
-	public enum DelayToOff{
-	
-		/** the delay in seconds until the solenoids for certain ports turn off
-		  *	below is just an example from 2019 
-		  */
-
-		elevator_stage1a(3.0),
-		elevator_stage1b(3.0),
-		elevator_stage2(3.0),
-		elevator_floor(3.0),
-		hatchPanelApparatus_collapsed(2.0),
-		hatchIntake_hold(2.0),
-		armExtend_extended(3.0),
-		armLift_collapsed(2.0),
-		armLift_mid(2.0),
-		armLift_up(2.0);
-
-		public double time;
-
-		private DelayToOff(double time){
-
-			this.time = time * 1000;
-
-		}
-	}
-
-	public enum FunctionStateDelay{
-	
-		/** the delay in seconds between different states in the function switch statements
-		  *	creates the wait time between cases in other words
-		  *	below is just an example from 2019 (the examples should probably be removed 
-		  *	when the next years copy of the code is made)
-		  */
-
-		cargoIntakeFloor_elevatorStage1A_to_armExtendExtended_rollerIntake(1.0),
-		cargoShoot_shooterShoot_to_shooterStop(0.2),
-		hatchPlace_hatchIntakeRelease_to_hatchPanelApparatusExtended(0.05), 
-		hatchPlace_hatchPanelApparatusExtended_to_hatchPanelApparatusCollapsed(0.25),
-		hatchPlace_hatchPanelApparatusCollapsed_to_hatchPlaceCompleted(3.0),
-		xButtonReset_armLiftMid_to_armExtendCollapsed(1.0),
-		intakeRoller_burpDelay(0.15);
-
-		public double time;
-
-		private FunctionStateDelay(double time){
-
-			this.time = time * 1000;
-
-		}
-	}
-
-	public enum PowerOutput{
-	
-		/** the power output in percentage for the different actions in the functions for the motors
-		  * for example, an intake motor at a constant percentage of power while button pressed
-		  *	below is just an example from 2019 (shooter was updated for RobotBasic)
-		  */
-
-		shooter_shooter_shootConstant(15500), //17750
-		//shooter_shooter_shootInner(0.1127 * Math.pow((Robot.drive.getDistance()), 2) - (42.1417 * Robot.drive.getDistance()) + 17746.7581),
-		shooter_topBelt_feed(0.80),
-		shooter_indexWheel_feed(0.40),
-		shooter_indexWheel_index(0.45),
-		shooter_indexWheel_reverseIndex(1.0),
-		shooter_indexWheel_manualIndex(-1.0),
-		shooter_hood_far(0.5),
-		shooter_hood_close(-0.5),
-		intake_intakeRoller_intake(.75),
-		intake_intakeRoller_burp(-0.5),
-		intake_intakeArm_armUp(0.80),
-		intake_intakeArm_armDown(-0.80),
-		elevator_elevator_maxup(0.9),
-		elevator_elevator_maxdown(0.5),
-		elevator_elevator_stop(0.1),
-		elevator_elevator_colorWheel(0.5),
-		elevator_elevator_removeResistance(0.0),
-		elevator_winch_winch(1.0),
-		elevator_translator_maxOutput(1.0),
-		spinner_spinner_spin(1.0);
-
-		public double power;
-
-		private PowerOutput(double power){
-
-			this.power = power;
-
-		}
-
 	}
 }

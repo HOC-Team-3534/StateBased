@@ -4,93 +4,157 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.sequences.IntakeSeq;
+import frc.robot.sequences.SequenceProcessor;
+import frc.robot.sequences.parent.BaseAutonSequence;
+import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Intake;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+	public static SwerveDrive swerveDrive;
+	public static Shooter shooter;
+	public static Intake intake;
+	public static Climber climber;
+	public static SequenceProcessor sequenceProcessor;
 
-  private RobotContainer m_robotContainer;
+	private BaseAutonSequence<? extends IState> m_autonomousSequence;
+	public static RobotContainer robotContainer;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-  }
+	public static boolean isAutonomous = false;
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for items like
-   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
-  }
+	private int loopCnt = 0;
+	private int loopPeriod = 0;
+	private int logCounter = 0;
 
-  /** This function is called once each time the robot enters Disabled mode. */
-  @Override
-  public void disabledInit() {}
+	public static double designatedLoopPeriod = 20;
 
-  @Override
-  public void disabledPeriodic() {}
+	@Override
+	public void robotInit() {
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+		RobotMap.init();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
-  }
+		robotContainer = new RobotContainer();
 
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
+		swerveDrive = new SwerveDrive();
 
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
-  }
+		shooter = new Shooter();
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
+		intake = new Intake();
 
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
+		climber = new Climber();
 
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
+		sequenceProcessor = new SequenceProcessor();
+	}
+	
+
+	@Override
+	public void robotPeriodic() {
+	}
+
+	@Override
+	public void disabledInit() {
+		swerveDrive.forceRelease();
+		shooter.forceRelease();
+		intake.forceRelease();
+		climber.forceRelease();
+	}
+
+	@Override
+	public void disabledPeriodic() {
+		log();
+	}
+
+	@Override
+	public void autonomousInit() {
+	}
+
+	@Override
+	public void autonomousPeriodic() {
+	}
+
+	@Override
+	public void teleopInit() {
+	}
+
+	@Override
+	public void teleopPeriodic() {
+
+		log();
+
+		isAutonomous = this.isAutonomous();
+
+		long prevLoopTime = 0;
+
+		while (this.isTeleop() && this.isEnabled()) {
+
+			log();
+
+			long currentTime = System.currentTimeMillis();
+
+			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+
+				loopPeriod = (int) (currentTime - prevLoopTime);
+				prevLoopTime = currentTime;
+				loopCnt++;
+
+				sequenceProcessor.process();
+				// run processes
+
+				/** Run subsystem process methods here */
+				swerveDrive.process();
+				shooter.process();
+				intake.process();
+				climber.process();
+			}
+
+			Timer.delay(0.001);
+		}
+	}
+
+	@Override
+	public void testInit() {
+	}
+
+	@Override
+	public void testPeriodic() {
+	}
+
+	public void log() {
+
+		logCounter++;
+
+		if (logCounter > 5) {
+
+			SmartDashboard.putNumber("Encoder Voltage", RobotMap.m_climbEncoder.getVoltage());
+			SmartDashboard.putBoolean("L1 switch 1", RobotMap.m_l1Switch.get());
+			SmartDashboard.putBoolean("L1 switch 2", RobotMap.m_h2Switch.get());
+			SmartDashboard.putBoolean("L3 switch 1", RobotMap.m_l3Switch.get());
+			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
+
+
+			logCounter = 0;
+		}
+
+	}
 }

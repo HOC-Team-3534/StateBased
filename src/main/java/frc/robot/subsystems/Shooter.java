@@ -13,7 +13,7 @@ public class Shooter extends BaseSubsystem {
     public Shooter() {
         // makes the graphical number to enter text - have to do a
         // put to do a get
-        SmartDashboard.putNumber("RPM: ", 3500.0);
+        SmartDashboard.putNumber("RPM: ", 4250.0);
     }
 
     @Override
@@ -44,21 +44,11 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void punch() {
-
-        if (this.getStateFirstRunThrough()) {
-            RobotMap.pusher.set(Value.kForward);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 250) {
-            RobotMap.pusher.set(Value.kOff);
-        }
+        setWithADelayToOff(RobotMap.pusher, Value.kForward, Constants.DelayToOff.SHOOTER_PUSHER.millis);
     }
 
     private void retract() {
-
-        if (this.getStateFirstRunThrough()) {
-            RobotMap.pusher.set(Value.kReverse);
-        } else if (this.getSequenceRequiring().getTimeSinceStartOfState() > 250) {
-            RobotMap.pusher.set(Value.kOff);
-        }
+        setWithADelayToOff(RobotMap.pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
     }
 
     @Override
@@ -69,8 +59,7 @@ public class Shooter extends BaseSubsystem {
     @Override
     public boolean abort() {
         shoot(0);
-        forceRelease();
-        return false;
+        return true;
     }
 
 }

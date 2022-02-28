@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -15,6 +17,7 @@ import frc.robot.sequences.IntakeSeq;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IState;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.Intake;
@@ -32,6 +35,7 @@ public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
 	public static Shooter shooter;
 	public static Intake intake;
+	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
 
 	private BaseAutonSequence<? extends IState> m_autonomousSequence;
@@ -58,8 +62,9 @@ public class Robot extends TimedRobot {
 
 		intake = new Intake();
 
-		sequenceProcessor = new SequenceProcessor();
+		climber = new Climber();
 
+		sequenceProcessor = new SequenceProcessor();
 	}
 	
 
@@ -69,13 +74,15 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledInit() {
-		swerveDrive.neutral();
-		shooter.neutral();
-		intake.neutral();
+		swerveDrive.forceRelease();
+		shooter.forceRelease();
+		intake.forceRelease();
+		climber.forceRelease();
 	}
 
 	@Override
 	public void disabledPeriodic() {
+		log();
 	}
 
 	@Override
@@ -118,10 +125,10 @@ public class Robot extends TimedRobot {
 				swerveDrive.process();
 				shooter.process();
 				intake.process();
+				climber.process();
 			}
 
 			Timer.delay(0.001);
-
 		}
 	}
 
@@ -138,6 +145,13 @@ public class Robot extends TimedRobot {
 		logCounter++;
 
 		if (logCounter > 5) {
+
+			SmartDashboard.putNumber("Encoder Voltage", RobotMap.m_climbEncoder.getVoltage());
+			SmartDashboard.putBoolean("L1 switch 1", RobotMap.m_l1Switch.get());
+			SmartDashboard.putBoolean("L1 switch 2", RobotMap.m_h2Switch.get());
+			SmartDashboard.putBoolean("L3 switch 1", RobotMap.m_l3Switch.get());
+			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
+
 
 			logCounter = 0;
 		}

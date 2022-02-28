@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import frc.robot.Robot;
+import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
@@ -19,6 +20,14 @@ public class Drive extends BaseSequence<DriveState> {
 
         switch (getState()) {
             case DRIVE:
+                if(Buttons.Creep.getButton()){
+                    setNextState(DriveState.CREEP);
+                }
+                break;
+            case CREEP:
+                if(!Buttons.Creep.getButton()){
+                    setNextState(DriveState.DRIVE);
+                }
                 break;
             case NEUTRAL:
                 break;
@@ -39,7 +48,8 @@ public class Drive extends BaseSequence<DriveState> {
 
 enum DriveState implements IState {
     NEUTRAL,
-    DRIVE(Robot.swerveDrive);
+    DRIVE(Robot.swerveDrive),
+    CREEP(Robot.swerveDrive);
 
     List<BaseSubsystem> requiredSubsystems;
 

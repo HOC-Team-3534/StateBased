@@ -52,6 +52,11 @@ public class SwerveDrive extends BaseSubsystem {
 					Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
 					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 					true);
+		}else if (getStateRequiringName() == "CREEP") {
+			drive(Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+					Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
+					true);
 		}
 	}
 
@@ -109,7 +114,6 @@ public class SwerveDrive extends BaseSubsystem {
 	@Override
 	public boolean abort() {
 		drive(0.0, 0.0, 0.0, false);
-		forceRelease();
-		return false;
+		return true;
 	}
 }

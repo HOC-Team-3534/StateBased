@@ -1,35 +1,23 @@
 package frc.robot;
 
-import static frc.robot.Constants.BACK_LEFT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.BACK_LEFT_MODULE_STEER_OFFSET;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.BACK_RIGHT_MODULE_STEER_OFFSET;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.FRONT_LEFT_MODULE_STEER_OFFSET;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_ENCODER;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_MOTOR;
-import static frc.robot.Constants.FRONT_RIGHT_MODULE_STEER_OFFSET;
-import static frc.robot.Constants.SHOOTER_MOTOR;
-
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
+import static frc.robot.Constants.*;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -57,6 +45,20 @@ public class RobotMap {
 
 	public static WPI_TalonSRX m_intakeRoller;
 	public static DoubleSolenoid m_intakeKickers;
+
+	public static DigitalInput m_l1Switch;
+	public static DigitalInput m_h2Switch;
+	public static DigitalInput m_l3Switch;
+	public static DigitalInput m_h4Switch;
+
+	public static AnalogInput m_climbEncoder;
+
+	public static DoubleSolenoid m_l1Claw;
+	public static DoubleSolenoid m_h2Claw;
+	public static DoubleSolenoid m_l3Claw;
+	public static DoubleSolenoid m_h4Claw;
+
+	public static WPI_TalonFX m_climbMotor;
 
 	public static AHRS navx;
 
@@ -92,7 +94,6 @@ public class RobotMap {
 	// inchesPerCountMultiplier * 10;
 
 	public static void init() {
-
 
 		ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -170,8 +171,8 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
 
-		m_mainPCM = new PneumaticsControlModule(Constants.MAIN_PCM);
-		m_climbPCM = new PneumaticsControlModule(Constants.CLIMB_PCM);
+		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
+		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
 
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
@@ -179,111 +180,37 @@ public class RobotMap {
 		shooter.config_kP(0, 0.2);
 		shooter.config_kD(0, 3.5);
 
-		pusher = m_mainPCM.makeDoubleSolenoid(Constants.PUSHER_FORWARD, Constants.PUSHER_REVERSE);
+		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 
-		m_intakeRoller = new WPI_TalonSRX(Constants.INTAKE_ROLLER);
+		m_intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
 		m_intakeRoller.setInverted(true);
 
-		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(Constants.INTAKE_EXTEND, Constants.INTAKE_RETRACT);
+		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
+
+		m_l1Switch = new DigitalInput(L1_SWITCH);
+		m_h2Switch = new DigitalInput(H2_SWITCH);
+		m_l3Switch = new DigitalInput(L3_SWITCH);
+		m_h4Switch = new DigitalInput(H4_SWITCH);
+
+		m_l1Claw = m_climbPCM.makeDoubleSolenoid(L1_EXTEND, L1_RETRACT);
+		m_h2Claw = m_climbPCM.makeDoubleSolenoid(H2_EXTEND, H2_RETRACT);
+		m_l3Claw = m_climbPCM.makeDoubleSolenoid(L3_EXTEND, L3_RETRACT);
+		m_h4Claw = m_climbPCM.makeDoubleSolenoid(H4_EXTEND, H4_RETRACT);
+
+		m_climbEncoder = new AnalogInput(CLIMB_ENCODER);
+
+		m_climbMotor = new WPI_TalonFX(CLIMB_ARM_MOTOR);
+		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
+				.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
+						/ Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+		m_climbMotor.config_kP(0, 0.025);
+		m_climbMotor.config_kI(0, 0.0);
+		m_climbMotor.config_kD(0, 0.0);
+		m_climbMotor.config_kF(0, 0.0);
 
 		navx = new AHRS(SPI.Port.kMXP);
-
-	}
-
-	public enum DelayToOff {
-
-		/**
-		 * the delay in seconds until the solenoids for certain ports turn off
-		 * below is just an example from 2019
-		 */
-
-		elevator_stage1a(3.0),
-		elevator_stage1b(3.0),
-		elevator_stage2(3.0),
-		elevator_floor(3.0),
-		hatchPanelApparatus_collapsed(2.0),
-		hatchIntake_hold(2.0),
-		armExtend_extended(3.0),
-		armLift_collapsed(2.0),
-		armLift_mid(2.0),
-		armLift_up(2.0);
-
-		public double time;
-
-		private DelayToOff(double time) {
-
-			this.time = time * 1000;
-
-		}
-	}
-
-	public enum FunctionStateDelay {
-
-		/**
-		 * the delay in seconds between different states in the function switch
-		 * statements
-		 * creates the wait time between cases in other words
-		 * below is just an example from 2019 (the examples should probably be removed
-		 * when the next years copy of the code is made)
-		 */
-
-		cargoIntakeFloor_elevatorStage1A_to_armExtendExtended_rollerIntake(1.0),
-		cargoShoot_shooterShoot_to_shooterStop(0.2),
-		hatchPlace_hatchIntakeRelease_to_hatchPanelApparatusExtended(0.05),
-		hatchPlace_hatchPanelApparatusExtended_to_hatchPanelApparatusCollapsed(0.25),
-		hatchPlace_hatchPanelApparatusCollapsed_to_hatchPlaceCompleted(3.0),
-		xButtonReset_armLiftMid_to_armExtendCollapsed(1.0),
-		intakeRoller_burpDelay(0.15);
-
-		public double time;
-
-		private FunctionStateDelay(double time) {
-
-			this.time = time * 1000;
-
-		}
-	}
-
-	public enum PowerOutput {
-
-		/**
-		 * the power output in percentage for the different actions in the functions for
-		 * the motors
-		 * for example, an intake motor at a constant percentage of power while button
-		 * pressed
-		 * below is just an example from 2020 (shooter was updated for RobotBasic)
-		 */
-
-		shooter_shooter_shootConstant(15500), // 17750
-		// shooter_shooter_shootInner(0.1127 * Math.pow((Robot.drive.getDistance()), 2)
-		// - (42.1417 * Robot.drive.getDistance()) + 17746.7581),
-		shooter_topBelt_feed(0.80),
-		shooter_indexWheel_feed(0.40),
-		shooter_indexWheel_index(0.45),
-		shooter_indexWheel_reverseIndex(1.0),
-		shooter_indexWheel_manualIndex(-1.0),
-		shooter_hood_far(0.5),
-		shooter_hood_close(-0.5),
-		intake_intakeRoller_intake(.75),
-		intake_intakeRoller_burp(-0.5),
-		intake_intakeArm_armUp(0.80),
-		intake_intakeArm_armDown(-0.80),
-		elevator_elevator_maxup(0.9),
-		elevator_elevator_maxdown(0.5),
-		elevator_elevator_stop(0.1),
-		elevator_elevator_colorWheel(0.5),
-		elevator_elevator_removeResistance(0.0),
-		elevator_winch_winch(1.0),
-		elevator_translator_maxOutput(1.0),
-		spinner_spinner_spin(1.0);
-
-		public double power;
-
-		private PowerOutput(double power) {
-
-			this.power = power;
-
-		}
-
 	}
 }

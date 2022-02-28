@@ -6,10 +6,6 @@ package frc.robot;
 
 import java.util.concurrent.Callable;
 
-import frc.robot.XboxPlusPOV.POV;
-
-import edu.wpi.first.wpilibj.buttons.POVButton;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -70,7 +66,16 @@ public class RobotContainer {
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
-				return RobotContainer.getController1().getAButton();
+				return RobotContainer.getController2().getRightTriggerAxis() > 0.15;
+			}
+			
+		}),
+		Creep(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getLeftTriggerAxis() > 0.15;
 			}
 			
 		}),
@@ -79,11 +84,28 @@ public class RobotContainer {
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getYButton();
+				return RobotContainer.getController1().getRightTriggerAxis() > 0.15;
 			}
 
-		});
+		}),
+		Climb(new Callable<Boolean>(){
 
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getYButton();
+			}
+			
+		}),
+		ClimbPrep(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getAButton();
+			}
+			
+		});
 
 		Callable<Boolean> callable;
 

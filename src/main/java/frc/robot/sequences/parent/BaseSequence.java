@@ -26,6 +26,11 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         updateSequenceStartTime();
     }
 
+    public boolean reset(){
+        setNextState(getNeutralState());
+        return updateState();
+    }
+
     public void start() {
         if (isNeutral()) {
             init();

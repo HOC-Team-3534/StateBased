@@ -3,41 +3,36 @@ package frc.robot.sequences;
 import java.util.Arrays;
 import java.util.List;
 
+import frc.robot.subsystems.Climber;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
-import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class Shoot extends BaseSequence<ShootState> {
+public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
-    public Shoot(ShootState neutralState, ShootState startState) {
+    public ClimbPrep(ClimbPrepState neutralState, ClimbPrepState startState) {
         super(neutralState, startState);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
+
         switch (getState()) {
-            case WAITNSPIN:
-                if (!Buttons.Shoot.getButton()) {
-                    setNextState(ShootState.NEUTRAL);
-                }
-                if (this.getTimeSinceStartOfState() > 1500 && RobotMap.shooter.getClosedLoopError() < 100) {
-                    System.out.println("In state");
-                    setNextState(ShootState.PUNCH);
+            case PREPCLAW:
+                if (getTimeSinceStartOfState() > 500) {
+                    setNextState(ClimbPrepState.SWINGARM);
                 }
                 break;
-            case PUNCH:
-                if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(ShootState.RETRACT);
+            case SWINGARM:
+                if (getTimeSinceStartOfState() > 500
+                        && (RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get())) {
+                    setNextState(ClimbPrepState.PREPPEDFORCLIMB);
                 }
                 break;
-            case RETRACT:
-                if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(ShootState.WAITNSPIN);
-                }
+            case PREPPEDFORCLIMB:
                 break;
             case NEUTRAL:
                 break;
@@ -46,26 +41,25 @@ public class Shoot extends BaseSequence<ShootState> {
 
         }
         updateState();
-
     }
 
     @Override
     public boolean abort() {
-        // TODO Auto-generated method stub
-        return false;
+        setNextState(getNeutralState());
+        return updateState();
     }
 
 }
 
-enum ShootState implements IState {
+enum ClimbPrepState implements IState {
     NEUTRAL,
-    WAITNSPIN(Robot.shooter),
-    PUNCH(Robot.shooter),
-    RETRACT(Robot.shooter);
+    PREPCLAW(Robot.climber),
+    SWINGARM(Robot.climber),
+    PREPPEDFORCLIMB(Robot.climber);
 
     List<BaseSubsystem> requiredSubsystems;
 
-    ShootState(BaseSubsystem... subsystems) {
+    ClimbPrepState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

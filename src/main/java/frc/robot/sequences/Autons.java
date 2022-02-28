@@ -19,23 +19,23 @@ public class Autons extends BaseAutonSequence<AutonState> {
     public void process() {
 
         switch (getState()) {
-            case MOVETO1:
+            case MOVETOBALL1:
                 break;
-            case PICKUP1:
+            case PICKUPBALL1:
                 break;
-            case MOVETOSHOOT1:
+            case MOVETOSHOOTBALL1:
                 break;
-            case SHOOT1:
+            case SHOOTBALL1:
                 break;
-            case MOVETO2:
+            case MOVETOBALL2:
                 break;
-            case PICKUP2:
+            case PICKUPBALL2:
                 break;
-            case MOVETO3:
+            case MOVETOBALL3:
                 break;
-            case PICKUP3:
+            case PICKUPBALL3:
                 break;
-            case SHOOT2:
+            case SHOOTBALL2:
                 break;
             case NEUTRAL:
                 break;
@@ -56,16 +56,16 @@ public class Autons extends BaseAutonSequence<AutonState> {
 
 enum AutonState implements IState {
     NEUTRAL,
-    MOVETO1(Robot.swerveDrive),
-    PICKUP1(Robot.intake),
-    MOVETOSHOOT1(Robot.swerveDrive),
-    SHOOT1(Robot.shooter),
-    MOVETO2(Robot.swerveDrive),
-    PICKUP2(Robot.intake),
-    MOVETO3(Robot.swerveDrive),
-    PICKUP3(Robot.intake),
-    MOVETOSHOOT2(Robot.swerveDrive),
-    SHOOT2(Robot.shooter);
+    MOVETOBALL1(Robot.swerveDrive),
+    PICKUPBALL1(Robot.intake),
+    MOVETOSHOOTBALL1(Robot.swerveDrive),
+    SHOOTBALL1(Robot.shooter),
+    MOVETOBALL2(Robot.swerveDrive),
+    PICKUPBALL2(Robot.intake),
+    MOVETOBALL3(Robot.swerveDrive),
+    PICKUPBALL3(Robot.intake),
+    MOVETOSHOOTBALL2(Robot.swerveDrive),
+    SHOOTBALL2(Robot.shooter);
 
     List<BaseSubsystem> requiredSubsystems;
 

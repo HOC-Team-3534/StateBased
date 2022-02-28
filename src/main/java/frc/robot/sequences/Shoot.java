@@ -30,7 +30,7 @@ public class Shoot extends BaseSequence<ShootState> {
                 }
                 break;
             case PUNCH:
-                if (this.getTimeSinceStartOfState() > 250) {
+                if (this.getTimeSinceStartOfState() > 500) {
                     setNextState(ShootState.RETRACT);
                 }
                 break;

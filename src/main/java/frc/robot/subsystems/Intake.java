@@ -38,7 +38,7 @@ public class Intake extends BaseSubsystem {
 
     public void kickOut() {
         setWithADelayToOff(RobotMap.m_intakeKickers, Value.kForward, Constants.DelayToOff.INTAKE_KICKERS.millis);
-        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.40);
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.60);
     }
 
     public void retract() {

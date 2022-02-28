@@ -66,7 +66,16 @@ public class RobotContainer {
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
-				return RobotContainer.getController1().getAButton();
+				return RobotContainer.getController2().getRightTriggerAxis() > 0.15;
+			}
+			
+		}),
+		Creep(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getLeftTriggerAxis() > 0.15;
 			}
 			
 		}),
@@ -75,7 +84,7 @@ public class RobotContainer {
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getYButton();
+				return RobotContainer.getController1().getRightTriggerAxis() > 0.15;
 			}
 
 		}),
@@ -84,7 +93,7 @@ public class RobotContainer {
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getAButton();
+				return RobotContainer.getController2().getYButton();
 			}
 			
 		}),
@@ -93,7 +102,7 @@ public class RobotContainer {
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getBButton();
+				return RobotContainer.getController2().getAButton();
 			}
 			
 		});

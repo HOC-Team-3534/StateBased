@@ -22,6 +22,9 @@ public class Climber extends BaseSubsystem {
 
     @Override
     public void process() {
+        //PAUSE BUTTON LOGIC, MAYBE FIND A WAY TO MAKE IT A HOLD INSTEAD?
+        //if pause button pressed && !neutral, climbstate laststate = laststate setnextstate = paused , updatestate
+        //if climb button pressed after pause, setnextstate = laststate, laststate = null, updatestate
         super.process();
         if (getStateRequiringName() == "PREPCLAW") {
             prepClaw();
@@ -91,7 +94,7 @@ public class Climber extends BaseSubsystem {
 
         if (this.getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_l3Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
-            setClimbArmDegree(250.0);
+            setClimbArmDegree(270.0);
         }
     }
 
@@ -118,7 +121,7 @@ public class Climber extends BaseSubsystem {
         if (this.getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_l1Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
             setWithADelayToOff(RobotMap.m_h2Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
-            setClimbArmDegree(430.0);
+            setClimbArmDegree(450.0);
         }
     }
 
@@ -126,7 +129,7 @@ public class Climber extends BaseSubsystem {
 
         if (this.getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_l1Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
-            setClimbArmDegree(430.0);
+            setClimbArmDegree(450.0);
         }
     }
 

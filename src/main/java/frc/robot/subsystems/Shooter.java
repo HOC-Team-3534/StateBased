@@ -13,7 +13,7 @@ public class Shooter extends BaseSubsystem {
     public Shooter() {
         // makes the graphical number to enter text - have to do a
         // put to do a get
-        SmartDashboard.putNumber("RPM: ", 3500.0);
+        SmartDashboard.putNumber("RPM: ", 4250.0);
     }
 
     @Override

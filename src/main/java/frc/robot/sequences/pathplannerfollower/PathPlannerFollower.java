@@ -25,6 +25,12 @@ public class PathPlannerFollower {
     }
 
     public Trajectory.State getCurrentState(){
-        return path.sample((double)(System.currentTimeMillis() - START_TIME) / 1000.0);
+        double timeSinceStart = (double)(System.currentTimeMillis() - START_TIME) / 1000.0;
+        return path.sample(timeSinceStart);
+    }
+
+    public boolean isFinished(){
+        double timeSinceStart = (double)(System.currentTimeMillis() - START_TIME) / 1000.0;
+        return timeSinceStart >= path.getTotalTimeSeconds();
     }
 }

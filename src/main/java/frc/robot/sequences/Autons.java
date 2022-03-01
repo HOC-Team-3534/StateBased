@@ -6,13 +6,14 @@ import java.util.List;
 import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.IAutonPathValues;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class Autons extends BaseAutonSequence<AutonState> {
+public class Autons extends BaseAutonSequence<AutonState, AutonPathValues> {
 
     public Autons(AutonState neutralState, AutonState startState, AutonPathValues chosenPaths) {
-        super(neutralState, startState);
+        super(neutralState, startState, chosenPaths);
     }
 
     @Override
@@ -97,7 +98,7 @@ enum AutonState implements IState {
     }
 }
 
-enum AutonPathValues{
+enum AutonPathValues implements IAutonPathValues {
     FROMPOSITION1;
     List<String> pathNames;
     AutonPathValues(String... pathNames){

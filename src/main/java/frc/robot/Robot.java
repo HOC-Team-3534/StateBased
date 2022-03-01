@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.sequences.IntakeSeq;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
+import frc.robot.sequences.parent.IAutonPathValues;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Shooter;
@@ -38,7 +39,7 @@ public class Robot extends TimedRobot {
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
 
-	private BaseAutonSequence<? extends IState> m_autonomousSequence;
+	private BaseAutonSequence<? extends IState, ? extends IAutonPathValues> m_autonomousSequence;
 	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;

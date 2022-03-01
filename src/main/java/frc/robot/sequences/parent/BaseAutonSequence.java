@@ -2,13 +2,16 @@ package frc.robot.sequences.parent;
 
 import frc.robot.sequences.pathplannerfollower.PathPlannerFollower;
 
-public abstract class BaseAutonSequence<S extends IState> extends BaseSequence<S>{
+import java.util.List;
+
+public abstract class BaseAutonSequence<S extends IState, A extends IAutonPathValues> extends BaseSequence<S>{
 
     PathPlannerFollower pathPlannerFollower;
+    A chosenPathValues;
 
-    public BaseAutonSequence(S neutralState, S startState) {
+    public BaseAutonSequence(S neutralState, S startState, A chosenPathValues) {
         super(neutralState, startState);
-        //TODO Auto-generated constructor stub
+        setChosenPathValues(chosenPathValues);
     }
 
     void createPathPlannerFollower(String pathName){
@@ -17,5 +20,13 @@ public abstract class BaseAutonSequence<S extends IState> extends BaseSequence<S
 
     PathPlannerFollower getPlannerFollower(){
         return pathPlannerFollower;
+    }
+
+    public A getChosenPathValues() {
+        return chosenPathValues;
+    }
+
+    public void setChosenPathValues(A chosenPathValues) {
+        this.chosenPathValues = chosenPathValues;
     }
 }

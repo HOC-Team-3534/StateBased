@@ -11,7 +11,7 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Autons extends BaseAutonSequence<AutonState> {
 
-    public Autons(AutonState neutralState, AutonState startState) {
+    public Autons(AutonState neutralState, AutonState startState, AutonPathValues chosenPaths) {
         super(neutralState, startState);
     }
 
@@ -94,5 +94,16 @@ enum AutonState implements IState {
     @Override
     public String getName() {
         return this.name();
+    }
+}
+
+enum AutonPathValues{
+    FROMPOSITION1;
+    List<String> pathNames;
+    AutonPathValues(String... pathNames){
+        this.pathNames = Arrays.asList(pathNames);
+    }
+    public String getPathNameAtIndex(int index){
+        return pathNames.get(index);
     }
 }

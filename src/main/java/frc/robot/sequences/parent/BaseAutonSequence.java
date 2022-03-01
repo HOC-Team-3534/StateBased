@@ -26,7 +26,7 @@ public abstract class BaseAutonSequence<S extends IState, A extends IAutonPathVa
         return chosenPathValues;
     }
 
-    public void setChosenPathValues(A chosenPathValues) {
+    void setChosenPathValues(A chosenPathValues) {
         this.chosenPathValues = chosenPathValues;
     }
 }

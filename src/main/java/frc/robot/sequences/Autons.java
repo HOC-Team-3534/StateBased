@@ -20,19 +20,16 @@ public class Autons extends BaseAutonSequence<AutonState, AutonPathValues> {
     public void process() {
 
         switch (getState()) {
-            case MOVETOBALL1:
-                break;
             case PICKUPBALL1:
+            if(this.getStateFirstRunThrough()){
+                this.createPathPlannerFollower(getChosenPathValues().getPathNameAtIndex(0));
+            }
                 break;
             case MOVETOSHOOTBALL1:
                 break;
             case SHOOTBALL1:
                 break;
-            case MOVETOBALL2:
-                break;
             case PICKUPBALL2:
-                break;
-            case MOVETOBALL3:
                 break;
             case PICKUPBALL3:
                 break;
@@ -57,16 +54,13 @@ public class Autons extends BaseAutonSequence<AutonState, AutonPathValues> {
 
 enum AutonState implements IState {
     NEUTRAL,
-    MOVETOBALL1(Robot.swerveDrive),
-    PICKUPBALL1(Robot.intake),
+    PICKUPBALL1(Robot.intake, Robot.swerveDrive),
     MOVETOSHOOTBALL1(Robot.swerveDrive),
-    SHOOTBALL1(Robot.shooter),
-    MOVETOBALL2(Robot.swerveDrive),
-    PICKUPBALL2(Robot.intake),
-    MOVETOBALL3(Robot.swerveDrive),
-    PICKUPBALL3(Robot.intake),
+    SHOOTBALL1(Robot.shooter, Robot.swerveDrive),
+    PICKUPBALL2(Robot.intake, Robot.swerveDrive),
+    PICKUPBALL3(Robot.intake, Robot.swerveDrive),
     MOVETOSHOOTBALL2(Robot.swerveDrive),
-    SHOOTBALL2(Robot.shooter);
+    SHOOTBALL2(Robot.shooter, Robot.swerveDrive);
 
     List<BaseSubsystem> requiredSubsystems;
 

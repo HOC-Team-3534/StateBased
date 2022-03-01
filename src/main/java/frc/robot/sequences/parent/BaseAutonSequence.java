@@ -14,7 +14,7 @@ public abstract class BaseAutonSequence<S extends IState, A extends IAutonPathVa
         setChosenPathValues(chosenPathValues);
     }
 
-    void createPathPlannerFollower(String pathName){
+    protected void createPathPlannerFollower(String pathName){
         this.pathPlannerFollower = new PathPlannerFollower(pathName);
     }
 

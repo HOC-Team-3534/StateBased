@@ -27,14 +27,14 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGMIDHIGH:
-                if ((RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get()) && Robot.climber.getClimbArmDegree() > 180.0) {
+                if ((!RobotMap.m_l3Switch.get() || !RobotMap.m_h4Switch.get()) && Robot.climber.getClimbArmDegree() > 180.0) {
                     setNextState(ClimbState.GRIPHIGHBAR);
                 }
                 break;
             case GRIPHIGHBAR:
-                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())) {
+                if (getTimeSinceStartOfState() > 1000 && (!RobotMap.m_l3Switch.get() || !RobotMap.m_h4Switch.get())) {
                     setNextState(ClimbState.RELEASEMIDBAR);
-                }else if(!(RobotMap.m_l3Switch.get() || RobotMap.m_h4Switch.get())){
+                }else if((RobotMap.m_l3Switch.get() && RobotMap.m_h4Switch.get())){
                     limitSwitchLoopCounter++;
                     if(limitSwitchLoopCounter >= 5) {
                         limitSwitchLoopCounter = 0;
@@ -55,14 +55,14 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGHIGHTRAVERSAL:
-                if ((RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get()) && Robot.climber.getClimbArmDegree() > 360.0) {
+                if ((!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get()) && Robot.climber.getClimbArmDegree() > 360.0) {
                     setNextState(ClimbState.GRIPTRAVERSALBAR);
                 }
                 break;
             case GRIPTRAVERSALBAR:
-                if (getTimeSinceStartOfState() > 1000 && (RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())) {
+                if (getTimeSinceStartOfState() > 1000 && (!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get())) {
                     setNextState(ClimbState.RELEASEHIGHBAR);
-                }else if(!(RobotMap.m_h2Switch.get() || RobotMap.m_l1Switch.get())){
+                }else if((RobotMap.m_h2Switch.get() && RobotMap.m_l1Switch.get())){
                     limitSwitchLoopCounter++;
                     if(limitSwitchLoopCounter >= 5) {
                         limitSwitchLoopCounter = 0;

@@ -28,7 +28,7 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
                 break;
             case SWINGARM:
                 if (getTimeSinceStartOfState() > 500
-                        && (RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get())) {
+                        && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
                     setNextState(ClimbPrepState.PREPPEDFORCLIMB);
                 }
                 break;

@@ -3,6 +3,8 @@ package frc.robot.sequences;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.BaseSequence;
@@ -21,9 +23,10 @@ public class Autons extends BaseAutonSequence<AutonState, AutonPathValues> {
 
         switch (getState()) {
             case PICKUPBALL1:
-            if(this.getStateFirstRunThrough()){
-                this.createPathPlannerFollower(getChosenPathValues().getPathNameAtIndex(0));
-            }
+                if(this.getStateFirstRunThrough()){
+                    this.createPathPlannerFollower(getChosenPathValues().getPathNameAtIndex(0));
+                }
+                PathPlannerTrajectory.PathPlannerState pathState = this.getPlannerFollower().getCurrentState();
                 break;
             case MOVETOSHOOTBALL1:
                 break;

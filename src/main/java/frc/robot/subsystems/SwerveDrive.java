@@ -15,7 +15,15 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 
 import frc.robot.Constants;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class SwerveDrive extends BaseSubsystem {
+
+	String[] pathFollowingStateStrings = {"MOVETOBALL1"};
+	Set<String> pathFollowingStates = new HashSet<>(Arrays.asList(pathFollowingStateStrings));
 
 	private double frontLeft_stateAngle = 0.0,
 			frontRight_stateAngle = 0.0,
@@ -46,6 +54,7 @@ public class SwerveDrive extends BaseSubsystem {
 	public void process() {
 
 		super.process();
+		updateOdometry();
 
 		if (getStateRequiringName() == "DRIVE") {
 			drive(Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
@@ -57,12 +66,9 @@ public class SwerveDrive extends BaseSubsystem {
 					Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
 					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
 					true);
+		}else if(pathFollowingStates.contains(getStateRequiringName())){
+			// TODO autonomous action
 		}
-	}
-
-	@Override
-	public void neutral() {
-		drive(0.0, 0.0, 0.0, false);
 	}
 
 	public Rotation2d getGyroHeading() {
@@ -109,6 +115,11 @@ public class SwerveDrive extends BaseSubsystem {
 						new Rotation2d(RobotMap.m_backLeftModule.getSteerAngle())),
 				new SwerveModuleState(RobotMap.m_backRightModule.getDriveVelocity(),
 						new Rotation2d(RobotMap.m_backRightModule.getSteerAngle())));
+	}
+
+	@Override
+	public void neutral() {
+		drive(0.0, 0.0, 0.0, false);
 	}
 
 	@Override

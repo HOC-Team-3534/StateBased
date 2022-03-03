@@ -18,7 +18,7 @@ public abstract class BaseAutonSequence<S extends IState, A extends IAutonPathVa
         this.pathPlannerFollower = new PathPlannerFollower(pathName);
     }
 
-    PathPlannerFollower getPlannerFollower(){
+    protected PathPlannerFollower getPlannerFollower(){
         return pathPlannerFollower;
     }
 

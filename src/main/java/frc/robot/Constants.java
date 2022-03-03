@@ -37,28 +37,28 @@ public final class Constants {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // FIXME Set front left module drive motor ID
         public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3; // FIXME Set front left module steer motor ID
         public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2; // FIXME Set front left steer encoder ID
-        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(264.8); // FIXME Measure and set
+        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(263.89); //85.2 // FIXME Measure and set
                                                                                            // front
                                                                                            // left steer offset
 
         public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; // FIXME Set front right drive motor ID
         public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6; // FIXME Set front right steer motor ID
         public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 5; // FIXME Set front right steer encoder ID
-        public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(185.3); // FIXME Measure and set
+        public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(173.45); //7.95 // FIXME Measure and set
                                                                                             // front
                                                                                             // right steer offset
 
         public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; // FIXME Set back left drive motor ID
         public static final int BACK_LEFT_MODULE_STEER_MOTOR = 9; // FIXME Set back left steer motor ID
         public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8; // FIXME Set back left steer encoder ID
-        public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(94.2); // FIXME Measure and set back
+        public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(92.0); //274.04 // FIXME Measure and set back
                                                                                           // left
                                                                                           // steer offset
 
         public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; // FIXME Set back right drive motor ID
         public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12; // FIXME Set back right steer motor ID
         public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11; // FIXME Set back right steer encoder ID
-        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(206.9); // FIXME Measure and set
+        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(199.5); //24.5 // FIXME Measure and set
                                                                                             // back
                                                                                             // right steer offset
 
@@ -86,14 +86,14 @@ public final class Constants {
 
         public static final double MAX_ANALOG_VOLTAGE = 5.0;
         public static final double CLIMB_ARM_GEAR_RATIO = 716.8;
-        public static final double CLIMB_ANALOG_VOLTAGE_OFFSET = 2.46; // 2.46
+        public static final double CLIMB_ANALOG_VOLTAGE_OFFSET = 2.21; // 2.46
         public static final double CLIMB_ANALOG_VOLTAGE_TO_DEGREE = 0.014556;
         public static final double CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR;
         public static final double ARM_DEGREES_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR / 360.0;
         public static final double FALCON_TICKS_TO_ARM_DEGREES = 1 / ARM_DEGREES_TO_FALCON_TICKS;
 
-        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 40.0;
-        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 60;
+        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 50.0;
+        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 75;
         public static final int MAX_ARM_VELOCITY_NATIVE_UNITS = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         

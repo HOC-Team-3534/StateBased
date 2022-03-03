@@ -24,9 +24,11 @@ public class Shooter extends BaseSubsystem {
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
             waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
+        } else if (getStateRequiringName() == "BURP") {
+            burp();
         } else if (getStateRequiringName() == "PUNCH") {
             punch();
-        } else if (getStateRequiringName() == "RETRACT") {
+        }else if (getStateRequiringName() == "RETRACT") {
             retract();
         } else {
             neutral();
@@ -41,6 +43,10 @@ public class Shooter extends BaseSubsystem {
 
     private void waitNSpin(double rpm) {
         shoot(rpm);
+    }
+
+    private void burp() {
+        shoot(2000);
     }
 
     private void punch() {

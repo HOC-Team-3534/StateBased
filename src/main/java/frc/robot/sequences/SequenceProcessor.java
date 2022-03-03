@@ -15,6 +15,7 @@ public class SequenceProcessor{
 
     public Drive drive;
     public Shoot shoot;
+    public Burp burp;
     public IntakeSeq intake;
     public ClimbPrep climbPrep;
     public Climb climb;
@@ -28,6 +29,7 @@ public class SequenceProcessor{
         drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
         
         shoot = new Shoot(ShootState.NEUTRAL, ShootState.WAITNSPIN);
+        burp = new Burp(BurpState.NEUTRAL, BurpState.BURP);
         intake = new IntakeSeq(IntakeState.NEUTRAL, IntakeState.EXTEND);
         climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
         climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
@@ -40,6 +42,9 @@ public class SequenceProcessor{
         }
         if(Buttons.Shoot.getButton()) {
             shoot.start();
+        }
+        if(Buttons.Burp.getButton()){
+            burp.start();
         }
         if(Buttons.Intake.getButton()) {
             intake.start();
@@ -55,6 +60,7 @@ public class SequenceProcessor{
 
         drive.process();
         shoot.process();
+        burp.process();
         intake.process();
         climbPrep.process();
         climb.process();

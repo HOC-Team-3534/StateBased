@@ -70,6 +70,15 @@ public class RobotContainer {
 			}
 			
 		}),
+		Burp(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getLeftTriggerAxis() > 0.15;
+			}
+			
+		}),
 		Creep(new Callable<Boolean>(){
 
 			@Override

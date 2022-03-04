@@ -153,6 +153,11 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putBoolean("L3 switch 1", RobotMap.m_l3Switch.get());
 			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
 
+			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorOffset());
+			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
+			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
+			
+
 
 			logCounter = 0;
 		}

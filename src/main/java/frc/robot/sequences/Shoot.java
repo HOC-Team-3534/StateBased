@@ -59,9 +59,9 @@ public class Shoot extends BaseSequence<ShootState> {
 
 enum ShootState implements IState {
     NEUTRAL,
-    WAITNSPIN(Robot.shooter),
-    PUNCH(Robot.shooter),
-    RETRACT(Robot.shooter);
+    WAITNSPIN(Robot.shooter, Robot.swerveDrive ),
+    PUNCH(Robot.shooter , Robot.swerveDrive),
+    RETRACT(Robot.shooter , Robot.swerveDrive);
 
     List<BaseSubsystem> requiredSubsystems;
 

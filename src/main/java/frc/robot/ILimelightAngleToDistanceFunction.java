@@ -1,2 +1,7 @@
-package PACKAGE_NAME;public interface ILimelightAngleToDistanceFunction {
+package frc.robot;
+
+public interface ILimelightAngleToDistanceFunction {
+
+    double getDistance(double ty);
+
 }

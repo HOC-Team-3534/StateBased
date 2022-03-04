@@ -10,10 +10,13 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 
 public class Shooter extends BaseSubsystem {
 
-    public Shooter() {
+    IDistanceToShooterRPM rpmFunction;
+
+    public Shooter(IDistanceToShooterRPM rpmFunction) {
         // makes the graphical number to enter text - have to do a
         // put to do a get
         SmartDashboard.putNumber("RPM: ", 4250.0);
+        this.rpmFunction = rpmFunction;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class Shooter extends BaseSubsystem {
 
     private void waitNSpin(double rpm) {
         shoot(rpm);
+        // TODO shoot(rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
     }
 
     private void punch() {

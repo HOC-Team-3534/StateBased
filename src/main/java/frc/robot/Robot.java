@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
-		shooter = new Shooter();
+		shooter = new Shooter(d -> 3 * Math.pow(d, 2) + 6.0 * d + 34.0);
 
 		intake = new Intake();
 

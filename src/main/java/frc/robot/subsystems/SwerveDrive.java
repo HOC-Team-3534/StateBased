@@ -44,8 +44,8 @@ public class SwerveDrive extends BaseSubsystem {
 			backLeft_stateAngle = 0.0,
 			backRight_stateAngle = 0.0;
 	
-	PIDController limelightPID = new PIDController(0.005, 0.0, 0.05 );
-	Rotation2d targetShootRotation;
+	PIDController limelightPID = new PIDController(0.125, 0.0, 0.0);
+	Rotation2d targetShootRotation = new Rotation2d();
 	// Locations for the swerve drive modules relative to the robot center.
 	private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			// Front left
@@ -70,6 +70,8 @@ public class SwerveDrive extends BaseSubsystem {
 		super.process();
 		updateOdometry();
 
+		SmartDashboard.putNumber("Aim current position", -targetShootRotation.minus(getGyroHeading()).getDegrees());
+
 		if (getStateRequiringName() == "DRIVE") {
 			drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
 					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
@@ -82,9 +84,11 @@ public class SwerveDrive extends BaseSubsystem {
 							true);
 		} else if (getStateRequiringName() == "WAITNSPIN" || getStateRequiringName() == "PUNCH"
 				|| getStateRequiringName() == "RETRACT") {
+					double pidOutput = limelightPID.calculate(-targetShootRotation.minus(getGyroHeading()).getDegrees(), 0.0);
+					SmartDashboard.putNumber("SHOOT PID OFFSET", pidOutput);
 					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
 					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-					limelightPID.calculate(targetShootRotation.minus(getGyroHeading()).getDegrees()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+					pidOutput * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
 					true);
 		}else if(pathFollowingStates.contains(getStateRequiringName())){
 			if(getStateFirstRunThrough()){
@@ -149,7 +153,11 @@ public class SwerveDrive extends BaseSubsystem {
 
 	public void resetTXOffset(){
 		Rotation2d limelightOffset = new Rotation2d(RobotMap.limelight.getHorOffset() / 180 * Math.PI);
-		this.targetShootRotation = getGyroHeading().plus(limelightOffset);
+		this.targetShootRotation = getGyroHeading().minus(limelightOffset);
+	}
+
+	public Rotation2d getTargetShootRotation(){
+		return targetShootRotation;
 	}
 
 	public void updateOdometry() {

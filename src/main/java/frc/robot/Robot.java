@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
-		shooter = new Shooter(d -> 3 * Math.pow(d, 2) + 6.0 * d + 34.0);
+		shooter = new Shooter(d -> 611.5 + 2982.5 * Math.log(d));
 
 		intake = new Intake();
 
@@ -194,7 +194,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
 			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
 			
-
+			SmartDashboard.putNumber("target rotation", swerveDrive.getTargetShootRotation().getRadians());
 
 			logCounter = 0;
 		}

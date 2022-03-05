@@ -45,8 +45,9 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void waitNSpin(double rpm) {
-        shoot(rpm);
-        // TODO shoot(rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
+        // shoot(rpm);
+        shoot(rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
+        
     }
 
     private void burp() {

@@ -174,7 +174,7 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
 
-		limelight = new Limelight( ty -> 3 * ty - 6 * Math.log(ty + 1));
+		limelight = new Limelight( ty -> .0045 * Math.pow(ty, 2) - .094 * ty + 3.353);
 
 		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
 		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -201,9 +202,10 @@ public class RobotMap {
 
 		m_climbMotor = new WPI_TalonFX(CLIMB_ARM_MOTOR);
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
-				.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
-						/ Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		// m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
+		// 		.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
+		// 				/ Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
 		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
 		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
 		m_climbMotor.config_kP(0, 0.025);
@@ -211,6 +213,6 @@ public class RobotMap {
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);
 
-		navx = new AHRS(SPI.Port.kMXP);
+		navx = new AHRS(SerialPort.Port.kUSB);
 	}
 }

@@ -3,36 +3,40 @@ package frc.robot.sequences;
 import java.util.Arrays;
 import java.util.List;
 
-import frc.robot.subsystems.Climber;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
+import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class ClimbPrep extends BaseSequence<ClimbPrepState> {
+public class Burp extends BaseSequence<BurpState> {
 
-    public ClimbPrep(ClimbPrepState neutralState, ClimbPrepState startState) {
+    public Burp(BurpState neutralState, BurpState startState) {
         super(neutralState, startState);
+        // TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-
         switch (getState()) {
-            case PREPCLAW:
-                if (getTimeSinceStartOfState() > 500) {
-                    setNextState(ClimbPrepState.SWINGARM);
+            case BURP:
+                if(!Buttons.Burp.getButton()){
+                    setNextState(BurpState.NEUTRAL);
+                }if (this.getTimeSinceStartOfState() > 1750 && RobotMap.shooter.getClosedLoopError() < 100) {
+                    System.out.println("In state");
+                    setNextState(BurpState.PUNCH);
                 }
                 break;
-            case SWINGARM:
-                if (getTimeSinceStartOfState() > 500
-                        && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
-                    setNextState(ClimbPrepState.PREPPEDFORCLIMB);
+            case PUNCH:
+                if (this.getTimeSinceStartOfState() > 500) {
+                    setNextState(BurpState.RETRACT);
                 }
                 break;
-            case PREPPEDFORCLIMB:
+            case RETRACT:
+                if (this.getTimeSinceStartOfState() > 500) {
+                    setNextState(BurpState.BURP);
+                }
                 break;
             case NEUTRAL:
                 break;
@@ -41,25 +45,26 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
         }
         updateState();
+
     }
 
     @Override
     public boolean abort() {
-        setNextState(getNeutralState());
-        return updateState();
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }
 
-enum ClimbPrepState implements IState {
+enum BurpState implements IState {
     NEUTRAL,
-    PREPCLAW(Robot.climber),
-    SWINGARM(Robot.climber),
-    PREPPEDFORCLIMB(Robot.climber);
+    BURP(Robot.shooter),
+    PUNCH(Robot.shooter),
+    RETRACT(Robot.shooter);
 
     List<BaseSubsystem> requiredSubsystems;
 
-    ClimbPrepState(BaseSubsystem... subsystems) {
+    BurpState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

@@ -182,9 +182,9 @@ public class Climber extends BaseSubsystem {
 
     public void moveArmManually(){
         if(Buttons.MoveClimbArmForward.getButton()){
-            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.25);
+            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.30);
         }else if(Buttons.MoveClimbArmBackward.getButton()){
-            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, -0.25);
+            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, -0.30);
         }else if(Buttons.ClimbArmEncoderReset.getButton()){
             RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
             RobotMap.m_climbMotor.setSelectedSensorPosition(0.0);

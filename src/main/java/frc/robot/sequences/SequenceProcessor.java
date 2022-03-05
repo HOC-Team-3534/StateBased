@@ -77,5 +77,6 @@ public class SequenceProcessor{
         climb.process();
         climbReset.process();
         SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getState().getName() == "PREPPEDFORCLIMB");
+        SmartDashboard.putString("Climb State", climb.getState().getName());
     }
 }

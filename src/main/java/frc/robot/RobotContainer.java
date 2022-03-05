@@ -189,17 +189,17 @@ public class RobotContainer {
 
 		@Override public Double call()throws Exception{
 
-		return modifyAxis(RobotContainer.getController1().getLeftY());}
+		return -modifyAxis(RobotContainer.getController1().getLeftY());}
 
 		}),
 		Drive_LeftRight(new Callable<Double>(){
 
 		@Override public Double call()throws Exception{
 
-		return modifyAxis(RobotContainer.getController1().getLeftX());}}),
+		return -modifyAxis(RobotContainer.getController1().getLeftX());}}),
 		Drive_Rotation(new Callable<Double>(){@Override public Double call()throws Exception{
 
-		return modifyAxis(RobotContainer.getController1().getRightX());}});
+		return -modifyAxis(RobotContainer.getController1().getRightX());}});
 
 		Callable<Double> callable;
 

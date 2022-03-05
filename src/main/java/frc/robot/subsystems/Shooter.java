@@ -38,7 +38,7 @@ public class Shooter extends BaseSubsystem {
     public void shoot(double rpm) {
         double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
         RobotMap.shooter.set(ControlMode.Velocity, countsPer100MS);
-        System.out.println("Speed is " + countsPer100MS);
+        //System.out.println("Speed is " + countsPer100MS);
     }
 
     private void waitNSpin(double rpm) {

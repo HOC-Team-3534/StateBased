@@ -60,7 +60,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RELEASEMIDBAR:
-                if (getTimeSinceStartOfState() > 3000) {
+                if (Robot.climber.getClimbArmDegree() > 270) {
                     setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
                 if(!Buttons.Climb.getButton()){
@@ -100,7 +100,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RELEASEHIGHBAR:
-                if (getTimeSinceStartOfState() > 3000) {
+                if (Robot.climber.getClimbArmDegree() > 390) {
                     setNextState(ClimbState.SWINGTOREST);
                 }
                 if(!Buttons.Climb.getButton()){

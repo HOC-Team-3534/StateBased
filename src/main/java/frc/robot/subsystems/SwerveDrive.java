@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
-<<<<<<< HEAD
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.controller.PIDController;
-=======
->>>>>>> 1.3
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,7 +21,6 @@ import frc.robot.sequences.pathplannerfollower.PathPlannerFollower;
 import frc.robot.sequences.pathplannerfollower.PathStateController;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-<<<<<<< HEAD
 import frc.robot.Constants;
 
 import java.util.Arrays;
@@ -32,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-=======
->>>>>>> 1.3
 public class SwerveDrive extends BaseSubsystem {
 
 	String[] pathFollowingStateStrings = {"PICKUPBALL1"};

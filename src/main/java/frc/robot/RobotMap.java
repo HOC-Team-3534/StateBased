@@ -182,8 +182,8 @@ public class RobotMap {
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
 		shooter.config_kF(0, 0.05);
-		shooter.config_kP(0, 0.2);
-		shooter.config_kD(0, 3.5);
+		shooter.config_kP(0, 0.45);
+		shooter.config_kD(0, 80);
 
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 

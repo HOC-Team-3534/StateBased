@@ -45,7 +45,7 @@ public class SequenceProcessor{
             drive.start(Robot.swerveDrive);
         }
         if(Buttons.Shoot.getButton()) {
-            shoot.start();
+            shoot.start(Robot.swerveDrive);
         }
         if(Buttons.Burp.getButton()){
             burp.start();

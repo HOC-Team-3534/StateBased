@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -212,6 +213,6 @@ public class RobotMap {
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);
 
-		navx = new AHRS(SPI.Port.kMXP);
+		navx = new AHRS(SerialPort.Port.kUSB);
 	}
 }

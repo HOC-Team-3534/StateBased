@@ -146,6 +146,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putBoolean("L1 switch 2", RobotMap.m_h2Switch.get());
 			SmartDashboard.putBoolean("L3 switch 1", RobotMap.m_l3Switch.get());
 			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
+			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
 
 			logCounter = 0;

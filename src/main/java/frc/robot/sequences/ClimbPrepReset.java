@@ -11,9 +11,9 @@ import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class ClimbPrep extends BaseSequence<ClimbPrepState> {
+public class ClimbPrepReset extends BaseSequence<ClimbPrepResetState> {
 
-    public ClimbPrep(ClimbPrepState neutralState, ClimbPrepState startState) {
+    public ClimbPrepReset(ClimbPrepResetState neutralState, ClimbPrepResetState startState) {
         super(neutralState, startState);
     }
 
@@ -21,18 +21,10 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
     public void process() {
 
         switch (getState()) {
-            case PREPCLAW:
-                if (getTimeSinceStartOfState() > 500) {
-                    setNextState(ClimbPrepState.SWINGARM);
+            case RESETARM:
+                if (Robot.climber.getClimbArmDegree() < 10){
+                    setNextState(ClimbPrepResetState.NEUTRAL);
                 }
-                break;
-            case SWINGARM:
-                if (getTimeSinceStartOfState() > 500
-                        && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
-                    setNextState(ClimbPrepState.PREPPEDFORCLIMB);
-                }
-                break;
-            case PREPPEDFORCLIMB:
                 break;
             case NEUTRAL:
                 break;
@@ -40,7 +32,9 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
                 break;
 
         }
-        updateState();
+
+    updateState();
+
     }
 
     @Override
@@ -51,15 +45,13 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
 }
 
-enum ClimbPrepState implements IState {
+enum ClimbPrepResetState implements IState {
     NEUTRAL,
-    PREPCLAW(Robot.climber),
-    SWINGARM(Robot.climber),
-    PREPPEDFORCLIMB(Robot.climber);
+    RESETARM(Robot.climber);
 
     List<BaseSubsystem> requiredSubsystems;
 
-    ClimbPrepState(BaseSubsystem... subsystems) {
+    ClimbPrepResetState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

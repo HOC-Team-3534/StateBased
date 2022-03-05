@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,15 +14,16 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.sequences.IntakeSeq;
+import frc.robot.sequences.*;
+import frc.robot.sequences.Burp;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IAutonPathValues;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,11 +37,13 @@ import frc.robot.subsystems.Intake;
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
 	public static Shooter shooter;
+	public static Burp burp;
 	public static Intake intake;
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
 
-	private BaseAutonSequence<? extends IState, ? extends IAutonPathValues> m_autonomousSequence;
+	//private BaseAutonSequence<? extends IState, ? extends IAutonPathValues> m_autonomousSequence;
+	public static AutonProcessor autonProcessor;
 	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
@@ -66,6 +70,8 @@ public class Robot extends TimedRobot {
 		climber = new Climber();
 
 		sequenceProcessor = new SequenceProcessor();
+
+		autonProcessor = new AutonProcessor();
 	}
 	
 
@@ -92,6 +98,36 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
+		log();
+
+		isAutonomous = this.isAutonomous();
+
+		long prevLoopTime = 0;
+
+		while (this.isAutonomous() && this.isEnabled()) {
+
+			log();
+
+			long currentTime = System.currentTimeMillis();
+
+			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+
+				loopPeriod = (int) (currentTime - prevLoopTime);
+				prevLoopTime = currentTime;
+				loopCnt++;
+
+				autonProcessor.process();
+				// run processes
+
+				/** Run subsystem process methods here */
+				swerveDrive.process();
+				shooter.process();
+				intake.process();
+				//climber.process();
+			}
+
+			Timer.delay(0.001);
+		}
 	}
 
 	@Override
@@ -152,6 +188,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putBoolean("L1 switch 2", RobotMap.m_h2Switch.get());
 			SmartDashboard.putBoolean("L3 switch 1", RobotMap.m_l3Switch.get());
 			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
+			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
 			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorOffset());
 			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());

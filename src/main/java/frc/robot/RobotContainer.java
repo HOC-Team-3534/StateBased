@@ -70,6 +70,15 @@ public class RobotContainer {
 			}
 			
 		}),
+		Burp(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getLeftTriggerAxis() > 0.15;
+			}
+			
+		}),
 		Creep(new Callable<Boolean>(){
 
 			@Override
@@ -97,12 +106,57 @@ public class RobotContainer {
 			}
 			
 		}),
+		MoveClimbArmManually(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getBackButton();
+			}
+			
+		}),
+		MoveClimbArmForward(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getRightBumper();
+			}
+			
+		}),
+		MoveClimbArmBackward(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getLeftBumper();
+			}
+			
+		}),
+		ClimbArmEncoderReset(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getStartButton();
+			}
+			
+		}),
 		ClimbPrep(new Callable<Boolean>(){
 
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
 				return RobotContainer.getController2().getAButton();
+			}
+			
+		}),
+		ClimbPrepReset(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getBackButton();
 			}
 			
 		});

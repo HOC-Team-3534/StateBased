@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseAutonSequence;
@@ -25,8 +28,11 @@ public class Autons extends BaseAutonSequence<AutonState, AutonPathValues> {
             case PICKUPBALL1:
                 if(this.getStateFirstRunThrough()){
                     this.createPathPlannerFollower(getChosenPathValues().getPathNameAtIndex(0));
+                    Robot.swerveDrive.setPathPlannerFollower(this.getPlannerFollower());
                 }
-                PathPlannerTrajectory.PathPlannerState pathState = this.getPlannerFollower().getCurrentState();
+                if(this.getPlannerFollower().isFinished()){
+                    setNextState(AutonState.MOVETOSHOOTBALL1);
+                }
                 break;
             case MOVETOSHOOTBALL1:
                 break;

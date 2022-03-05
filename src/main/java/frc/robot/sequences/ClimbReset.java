@@ -7,13 +7,14 @@ import frc.robot.subsystems.Climber;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
+import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class ClimbPrep extends BaseSequence<ClimbPrepState> {
+public class ClimbReset extends BaseSequence<ClimbResetState> {
 
-    public ClimbPrep(ClimbPrepState neutralState, ClimbPrepState startState) {
+    public ClimbReset(ClimbResetState neutralState, ClimbResetState startState) {
         super(neutralState, startState);
     }
 
@@ -21,18 +22,10 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
     public void process() {
 
         switch (getState()) {
-            case PREPCLAW:
-                if (getTimeSinceStartOfState() > 500) {
-                    setNextState(ClimbPrepState.SWINGARM);
+            case MOVEARMMANUALLY:
+                if (!Buttons.MoveClimbArmManually.getButton()){
+                    setNextState(ClimbResetState.NEUTRAL);
                 }
-                break;
-            case SWINGARM:
-                if (getTimeSinceStartOfState() > 500
-                        && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
-                    setNextState(ClimbPrepState.PREPPEDFORCLIMB);
-                }
-                break;
-            case PREPPEDFORCLIMB:
                 break;
             case NEUTRAL:
                 break;
@@ -40,7 +33,9 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
                 break;
 
         }
-        updateState();
+
+    updateState();
+
     }
 
     @Override
@@ -51,15 +46,13 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
 }
 
-enum ClimbPrepState implements IState {
+enum ClimbResetState implements IState {
     NEUTRAL,
-    PREPCLAW(Robot.climber),
-    SWINGARM(Robot.climber),
-    PREPPEDFORCLIMB(Robot.climber);
+    MOVEARMMANUALLY(Robot.climber);
 
     List<BaseSubsystem> requiredSubsystems;
 
-    ClimbPrepState(BaseSubsystem... subsystems) {
+    ClimbResetState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

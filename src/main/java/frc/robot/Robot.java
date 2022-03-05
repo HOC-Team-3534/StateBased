@@ -13,8 +13,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.sequences.IntakeSeq;
-import frc.robot.sequences.SequenceProcessor;
+import frc.robot.sequences.*;
 import frc.robot.sequences.parent.BaseAutonSequence;
 import frc.robot.sequences.parent.IAutonPathValues;
 import frc.robot.sequences.parent.IState;
@@ -39,7 +38,8 @@ public class Robot extends TimedRobot {
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
 
-	private BaseAutonSequence<? extends IState, ? extends IAutonPathValues> m_autonomousSequence;
+	//private BaseAutonSequence<? extends IState, ? extends IAutonPathValues> m_autonomousSequence;
+	public static AutonProcessor autonProcessor;
 	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
@@ -66,6 +66,8 @@ public class Robot extends TimedRobot {
 		climber = new Climber();
 
 		sequenceProcessor = new SequenceProcessor();
+
+		autonProcessor = new AutonProcessor();
 	}
 	
 
@@ -92,6 +94,36 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
+		log();
+
+		isAutonomous = this.isAutonomous();
+
+		long prevLoopTime = 0;
+
+		while (this.isAutonomous() && this.isEnabled()) {
+
+			log();
+
+			long currentTime = System.currentTimeMillis();
+
+			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+
+				loopPeriod = (int) (currentTime - prevLoopTime);
+				prevLoopTime = currentTime;
+				loopCnt++;
+
+				autonProcessor.process();
+				// run processes
+
+				/** Run subsystem process methods here */
+				swerveDrive.process();
+				shooter.process();
+				intake.process();
+				//climber.process();
+			}
+
+			Timer.delay(0.001);
+		}
 	}
 
 	@Override

@@ -28,14 +28,11 @@ public class Autons extends BaseAutonSequence<AutonState, AutonPathValues> {
             case PICKUPBALL1:
                 if(this.getStateFirstRunThrough()){
                     this.createPathPlannerFollower(getChosenPathValues().getPathNameAtIndex(0));
+                    Robot.swerveDrive.setPathPlannerFollower(this.getPlannerFollower());
                 }
-                PathPlannerTrajectory.PathPlannerState pathState = this.getPlannerFollower().getCurrentState();
-                Pose2d pose = pathState.poseMeters;
-                double fwd_back_position = pose.getX(); //going down field, closer or farther from driver station
-                double left_right_position = pose.getY(); //side to side, parallel with driver station wall
-                Translation2d targetPosition = pose.getTranslation();
-                Rotation2d targetHeading = pose.getRotation();
-
+                if(this.getPlannerFollower().isFinished()){
+                    setNextState(AutonState.MOVETOSHOOTBALL1);
+                }
                 break;
             case MOVETOSHOOTBALL1:
                 break;

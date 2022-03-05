@@ -30,8 +30,8 @@ public class PathPlannerFollower {
         return (PathPlannerTrajectory.PathPlannerState) path.sample(timeSinceStart);
     }
 
-    public boolean isFinished(){
-        double timeSinceStart = (double)(System.currentTimeMillis() - START_TIME) / 1000.0;
+    public boolean isFinished() {
+        double timeSinceStart = (double) (System.currentTimeMillis() - START_TIME) / 1000.0;
         return timeSinceStart >= path.getTotalTimeSeconds();
     }
 }

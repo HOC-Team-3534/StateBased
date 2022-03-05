@@ -45,6 +45,7 @@ public class SwerveDrive extends BaseSubsystem {
 			backRight_stateAngle = 0.0;
 	
 	PIDController limelightPID = new PIDController(0.005, 0.0, 0.05 );
+	Rotation2d targetShootRotation;
 	// Locations for the swerve drive modules relative to the robot center.
 	private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 			// Front left
@@ -83,7 +84,7 @@ public class SwerveDrive extends BaseSubsystem {
 				|| getStateRequiringName() == "RETRACT") {
 					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
 					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-					limelightPID.calculate(RobotMap.limelight.getHorOffset()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+					limelightPID.calculate(targetShootRotation.minus(getGyroHeading()).getDegrees()) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 					true);
 		}else if(pathFollowingStates.contains(getStateRequiringName())){
 			if(getStateFirstRunThrough()){
@@ -144,6 +145,11 @@ public class SwerveDrive extends BaseSubsystem {
 
 	public void setPathPlannerFollower(PathPlannerFollower ppf){
 		this.pathStateController.setPathPlannerFollower(ppf);
+	}
+
+	public void resetTXOffset(){
+		Rotation2d limelightOffset = new Rotation2d(RobotMap.limelight.getHorOffset() / 180 * Math.PI);
+		this.targetShootRotation = getGyroHeading().plus(limelightOffset);
 	}
 
 	public void updateOdometry() {

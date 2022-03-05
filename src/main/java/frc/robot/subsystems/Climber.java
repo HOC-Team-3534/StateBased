@@ -11,6 +11,7 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 
 import frc.robot.Constants.DelayToOff;
 import frc.robot.Constants.DelayToOff.*;
+import frc.robot.RobotContainer.Buttons;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +23,11 @@ public class Climber extends BaseSubsystem {
 
     @Override
     public void process() {
-        //PAUSE BUTTON LOGIC, MAYBE FIND A WAY TO MAKE IT A HOLD INSTEAD?
-        //if pause button pressed && !neutral, climbstate laststate = laststate setnextstate = paused , updatestate
-        //if climb button pressed after pause, setnextstate = laststate, laststate = null, updatestate
+        // PAUSE BUTTON LOGIC, MAYBE FIND A WAY TO MAKE IT A HOLD INSTEAD?
+        // if pause button pressed && !neutral, climbstate laststate = laststate
+        // setnextstate = paused , updatestate
+        // if climb button pressed after pause, setnextstate = laststate, laststate =
+        // null, updatestate
         super.process();
         if (getStateRequiringName() == "PREPCLAW") {
             prepClaw();
@@ -52,6 +55,10 @@ public class Climber extends BaseSubsystem {
             releaseHighBar();
         } else if (getStateRequiringName() == "SWINGTOREST") {
             swingToRest();
+        } else if (getStateRequiringName() == "RESETARM") {
+            resetArm();
+        }else if(getStateRequiringName() == "MOVEARMMANUALLY"){
+            moveArmManually();
         } else {
             neutral();
         }
@@ -161,9 +168,30 @@ public class Climber extends BaseSubsystem {
     }
 
     public void swingToRest() {
-        if(this.getStateFirstRunThrough()) {
+        if (this.getStateFirstRunThrough()) {
             setClimbArmDegree(450.0);
         }
+    }
+
+    public void resetArm(){
+        if(this.getStateFirstRunThrough()){
+            setWithADelayToOff(RobotMap.m_l1Claw, Value.kReverse, DelayToOff.CLIMB_CLAWS.millis);
+            setClimbArmDegree(0.0);
+        }
+    }
+
+    public void moveArmManually(){
+        if(Buttons.MoveClimbArmForward.getButton()){
+            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.25);
+        }else if(Buttons.MoveClimbArmBackward.getButton()){
+            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, -0.25);
+        }else if(Buttons.ClimbArmEncoderReset.getButton()){
+            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
+            RobotMap.m_climbMotor.setSelectedSensorPosition(0.0);
+        }else{
+            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
+        }
+        
     }
 
     @Override

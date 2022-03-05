@@ -5,6 +5,7 @@ import java.util.List;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 public class Climb extends BaseSequence<ClimbState> {
 
     int limitSwitchLoopCounter = 0;
+    ClimbState savedPauseState;
 
     public Climb(ClimbState neutralState, ClimbState startState) {
         super(neutralState, startState);
@@ -29,6 +31,10 @@ public class Climb extends BaseSequence<ClimbState> {
             case SWINGMIDHIGH:
                 if ((!RobotMap.m_l3Switch.get() || !RobotMap.m_h4Switch.get()) && Robot.climber.getClimbArmDegree() > 180.0) {
                     setNextState(ClimbState.GRIPHIGHBAR);
+                }
+                if(!Buttons.Climb.getButton()){
+                    savedPauseState = getState();
+                    setNextState(ClimbState.PAUSED);
                 }
                 break;
             case GRIPHIGHBAR:
@@ -48,15 +54,27 @@ public class Climb extends BaseSequence<ClimbState> {
                 if(getTimeSinceStartOfState() > 1500){
                     setNextState(ClimbState.SWINGMIDHIGH);
                 }
+                if(!Buttons.Climb.getButton()){
+                    savedPauseState = getState();
+                    setNextState(ClimbState.PAUSED);
+                }
                 break;
             case RELEASEMIDBAR:
                 if (getTimeSinceStartOfState() > 3000) {
                     setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
+                if(!Buttons.Climb.getButton()){
+                    savedPauseState = getState();
+                    setNextState(ClimbState.PAUSED);
+                }
                 break;
             case SWINGHIGHTRAVERSAL:
                 if ((!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get()) && Robot.climber.getClimbArmDegree() > 360.0) {
                     setNextState(ClimbState.GRIPTRAVERSALBAR);
+                }
+                if(!Buttons.Climb.getButton()){
+                    savedPauseState = getState();
+                    setNextState(ClimbState.PAUSED);
                 }
                 break;
             case GRIPTRAVERSALBAR:
@@ -76,15 +94,33 @@ public class Climb extends BaseSequence<ClimbState> {
                 if(getTimeSinceStartOfState() > 1500){
                     setNextState(ClimbState.SWINGHIGHTRAVERSAL);
                 }
+                if(!Buttons.Climb.getButton()){
+                    savedPauseState = getState();
+                    setNextState(ClimbState.PAUSED);
+                }
                 break;
             case RELEASEHIGHBAR:
                 if (getTimeSinceStartOfState() > 3000) {
                     setNextState(ClimbState.SWINGTOREST);
                 }
+                if(!Buttons.Climb.getButton()){
+                    savedPauseState = getState();
+                    setNextState(ClimbState.PAUSED);
+                }
                 break;
             case SWINGTOREST:
                 if(RobotMap.m_climbMotor.getSelectedSensorPosition() >= 440){                
                     System.out.println("Hooray!");
+                }
+                if(!Buttons.Climb.getButton()){
+                    savedPauseState = getState();
+                    setNextState(ClimbState.PAUSED);
+                }
+                break;
+            case PAUSED:
+                if(Buttons.Climb.getButton()){
+                    setNextState(savedPauseState);
+                    savedPauseState = null;
                 }
                 break;
             case NEUTRAL:
@@ -108,6 +144,7 @@ public class Climb extends BaseSequence<ClimbState> {
 
 enum ClimbState implements IState {
     NEUTRAL,
+    PAUSED(Robot.climber, Robot.swerveDrive),
     GRIPMIDBAR(Robot.climber, Robot.swerveDrive),
     SWINGMIDHIGH(Robot.climber, Robot.swerveDrive),
     GRIPHIGHBAR(Robot.climber, Robot.swerveDrive),

@@ -119,7 +119,6 @@ public class Robot extends TimedRobot {
 				/** Run subsystem process methods here */
 				swerveDrive.process();
 				shooter.process();
-				burp.process();
 				intake.process();
 				climber.process();
 			}

@@ -106,12 +106,57 @@ public class RobotContainer {
 			}
 			
 		}),
+		MoveClimbArmManually(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getBackButton();
+			}
+			
+		}),
+		MoveClimbArmForward(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getRightBumper();
+			}
+			
+		}),
+		MoveClimbArmBackward(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getLeftBumper();
+			}
+			
+		}),
+		ClimbArmEncoderReset(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getStartButton();
+			}
+			
+		}),
 		ClimbPrep(new Callable<Boolean>(){
 
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
 				return RobotContainer.getController2().getAButton();
+			}
+			
+		}),
+		ClimbPrepReset(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getBackButton();
 			}
 			
 		});
@@ -144,17 +189,17 @@ public class RobotContainer {
 
 		@Override public Double call()throws Exception{
 
-		return -modifyAxis(RobotContainer.getController1().getLeftY());}
+		return modifyAxis(RobotContainer.getController1().getLeftY());}
 
 		}),
 		Drive_LeftRight(new Callable<Double>(){
 
 		@Override public Double call()throws Exception{
 
-		return -modifyAxis(RobotContainer.getController1().getLeftX());}}),
+		return modifyAxis(RobotContainer.getController1().getLeftX());}}),
 		Drive_Rotation(new Callable<Double>(){@Override public Double call()throws Exception{
 
-		return -modifyAxis(RobotContainer.getController1().getRightX());}});
+		return modifyAxis(RobotContainer.getController1().getRightX());}});
 
 		Callable<Double> callable;
 

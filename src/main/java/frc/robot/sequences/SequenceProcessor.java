@@ -19,6 +19,8 @@ public class SequenceProcessor{
     public IntakeSeq intake;
     public ClimbPrep climbPrep;
     public Climb climb;
+    public ClimbPrepReset climbPrepReset;
+    public ClimbReset climbReset;
 
     public SequenceProcessor() {
 
@@ -33,6 +35,8 @@ public class SequenceProcessor{
         intake = new IntakeSeq(IntakeState.NEUTRAL, IntakeState.EXTEND);
         climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
         climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
+        climbPrepReset = new ClimbPrepReset(ClimbPrepResetState.NEUTRAL, ClimbPrepResetState.RESETARM);
+        climbReset = new ClimbReset(ClimbResetState.NEUTRAL, ClimbResetState.MOVEARMMANUALLY);
     }
 
     public void process() {
@@ -54,8 +58,14 @@ public class SequenceProcessor{
         }
         if (Buttons.Climb.getButton()
                 && Robot.climber.getSequenceRequiring().getState().getName() == "PREPPEDFORCLIMB"
-                && (RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get())) {
+                && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
             climb.start(Robot.climber, Robot.swerveDrive);
+        }
+        if(Buttons.ClimbPrepReset.getButton() && !climbPrep.isNeutral()){
+            climbPrepReset.start(Robot.climber);
+        }
+        if(Buttons.MoveClimbArmManually.getButton()){
+            climbReset.start();
         }
 
         drive.process();
@@ -63,7 +73,9 @@ public class SequenceProcessor{
         burp.process();
         intake.process();
         climbPrep.process();
+        climbPrepReset.process();
         climb.process();
+        climbReset.process();
         SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getState().getName() == "PREPPEDFORCLIMB");
     }
 }

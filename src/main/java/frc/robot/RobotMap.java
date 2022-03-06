@@ -38,6 +38,8 @@ public class RobotMap {
 	public static SwerveModule m_backLeftModule;
 	public static SwerveModule m_backRightModule;
 
+	public static Limelight limelight;
+
 	public static PneumaticsControlModule m_mainPCM;
 	public static PneumaticsControlModule m_climbPCM;
 
@@ -172,14 +174,16 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
 
+		limelight = new Limelight( ty -> .0045 * Math.pow(ty, 2) - .094 * ty + 3.353);
+
 		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
 		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
 
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
 		shooter.config_kF(0, 0.05);
-		shooter.config_kP(0, 0.2);
-		shooter.config_kD(0, 3.5);
+		shooter.config_kP(0, 0.45);
+		shooter.config_kD(0, 80);
 
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 

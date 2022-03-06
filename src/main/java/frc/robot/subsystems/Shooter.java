@@ -21,10 +21,13 @@ public class Shooter extends BaseSubsystem {
     Set<String> autonPunchStates = new HashSet<>(Arrays.asList(autonPunchStateStrings));
     Set<String> autonResetPunchStates = new HashSet<>(Arrays.asList(autonResetPunchStateStrings));
 
-    public Shooter() {
+    IDistanceToShooterRPM rpmFunction;
+
+    public Shooter(IDistanceToShooterRPM rpmFunction) {
         // makes the graphical number to enter text - have to do a
         // put to do a get
         SmartDashboard.putNumber("RPM: ", 4250.0);
+        this.rpmFunction = rpmFunction;
     }
 
     @Override
@@ -54,7 +57,9 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void waitNSpin(double rpm) {
-        shoot(rpm);
+        // shoot(rpm);
+        shoot(rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
+        
     }
 
     private void burp() {

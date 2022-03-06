@@ -41,11 +41,15 @@ public class SequenceProcessor{
 
     public void process() {
 
-        if (climb.isNeutral()) {
+        if(shoot.isNeutral()){
+            Robot.swerveDrive.resetTXOffset();
+        }
+
+        if (climb.isNeutral() && shoot.isNeutral()) {
             drive.start(Robot.swerveDrive);
         }
         if(Buttons.Shoot.getButton()) {
-            shoot.start();
+            shoot.start(Robot.swerveDrive);
         }
         if(Buttons.Burp.getButton()){
             burp.start();

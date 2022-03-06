@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer.Axes;
 import frc.robot.RobotMap;
@@ -28,11 +29,16 @@ public class SwerveDrive extends BaseDriveSubsystem {
 		super(RobotMap.m_frontLeftModule, RobotMap.m_frontRightModule, RobotMap.m_backLeftModule, RobotMap.m_backRightModule);
 		setPathStateController(pathStateController);
 	}
+	
+	PIDController limelightPID = new PIDController(0.125, 0.0, 0.0);
+	Rotation2d targetShootRotation = new Rotation2d();
 
 	@Override
 	public void process() {
 
 		super.process();
+
+		SmartDashboard.putNumber("Aim current position", -targetShootRotation.minus(getGyroHeading()).getDegrees());
 
 		if (getStateRequiringName() == "DRIVE") {
 			drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
@@ -40,9 +46,17 @@ public class SwerveDrive extends BaseDriveSubsystem {
 					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
 					true);
 		}else if (getStateRequiringName() == "CREEP") {
-			drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+							Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+							Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
+							true);
+		} else if (getStateRequiringName() == "WAITNSPIN" || getStateRequiringName() == "PUNCH"
+				|| getStateRequiringName() == "RETRACT") {
+					double pidOutput = limelightPID.calculate(-targetShootRotation.minus(getGyroHeading()).getDegrees(), 0.0);
+					SmartDashboard.putNumber("SHOOT PID OFFSET", pidOutput);
+					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
 					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
+					pidOutput * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
 					true);
 		}else if(isStatePathFollowing()){
 			if(getStateFirstRunThrough()){
@@ -56,6 +70,15 @@ public class SwerveDrive extends BaseDriveSubsystem {
 		}else{
 			neutral();
 		}
+	}
+
+	public void resetTXOffset(){
+		Rotation2d limelightOffset = new Rotation2d(RobotMap.limelight.getHorOffset() / 180 * Math.PI);
+		this.targetShootRotation = getGyroHeading().minus(limelightOffset);
+	}
+
+	public Rotation2d getTargetShootRotation(){
+		return targetShootRotation;
 	}
 
 	@Override

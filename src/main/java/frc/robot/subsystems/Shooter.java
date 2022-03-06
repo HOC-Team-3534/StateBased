@@ -15,9 +15,11 @@ import java.util.Set;
 
 public class Shooter extends BaseSubsystem {
 
+    String[] autonPreShootStateStrings = {"PICKUPBALL1", "PICKUPBALL2"};
     String[] autonShootStateStrings = {"SHOOTBALL1", "SHOOTBALL2"};
-    String[] autonPunchStateStrings = {"PICKUPBALL1", "PICKUPBALL2"};
-    String[] autonResetPunchStateStrings = {"SHOOTBALL1", "SHOOTBALL3"};
+    String[] autonPunchStateStrings = {"PUNCH1", "PUNCH2"};
+    String[] autonResetPunchStateStrings = {"RESETPUNCH1", "RESETPUNCH2"};
+    Set<String> autonPreShootStates = new HashSet<>(Arrays.asList(autonPreShootStateStrings));
     Set<String> autonShootStates = new HashSet<>(Arrays.asList(autonShootStateStrings));
     Set<String> autonPunchStates = new HashSet<>(Arrays.asList(autonPunchStateStrings));
     Set<String> autonResetPunchStates = new HashSet<>(Arrays.asList(autonResetPunchStateStrings));
@@ -41,6 +43,12 @@ public class Shooter extends BaseSubsystem {
             // grabs the number from SmartDashboard
             // waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
             waitNSpin();
+        } else if (autonPreShootStates.contains(getStateRequiringName())){
+            if(Robot.swerveDrive.getPathStateController().getPathPlannerFollower().getRemainingTimeSeconds() < 1.0) {
+                autonShoot();
+            }else{
+                neutral();
+            }
         } else if (autonShootStates.contains(getStateRequiringName())){
             autonShoot();
         } else if (getStateRequiringName() == "BURP") {

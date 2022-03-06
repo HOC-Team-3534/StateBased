@@ -1,13 +1,14 @@
 package frc.robot.autons;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Robot;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
-import frc.robot.sequences.parent.BaseSequence;
 
 public enum Auton {
-    STATION1_4BALL(new FourBallAutonStation1(FourBallAutonStation1State.NEUTRAL, FourBallAutonStation1State.PICKUPBALL1, Robot.swerveDrive, "", ""));
+    STATION3_4BALL(new FourBallAutonStation3(
+            FourBallAutonStation3State.NEUTRAL,
+            FourBallAutonStation3State.PICKUPBALL1, Robot.swerveDrive,
+            "Station 3 4 Ball 1", "Station 3 4 Ball 2"));
     
     BaseAutonSequence<? extends IAutonState> auton;
     

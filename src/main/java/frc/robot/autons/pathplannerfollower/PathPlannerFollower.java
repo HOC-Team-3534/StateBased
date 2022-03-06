@@ -34,6 +34,11 @@ public class PathPlannerFollower {
         return path.getInitialState().poseMeters;
     }
 
+    public double getRemainingTimeSeconds(){
+        double timeSinceStart = (double) (System.currentTimeMillis() - START_TIME) / 1000.0;
+        return path.getTotalTimeSeconds() - timeSinceStart;
+    }
+
     public boolean isFinished() {
         double timeSinceStart = (double) (System.currentTimeMillis() - START_TIME) / 1000.0;
         return timeSinceStart >= path.getTotalTimeSeconds();

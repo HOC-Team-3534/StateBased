@@ -4,14 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.autons.Auton;
-import frc.robot.autons.FourBallAutonStation1;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.sequences.Burp;
@@ -67,7 +65,7 @@ public class Robot extends TimedRobot {
 
 		sequenceProcessor = new SequenceProcessor();
 
-		sendableChooser.setDefaultOption("Station 1: 4 Ball", Auton.STATION1_4BALL);
+		sendableChooser.setDefaultOption("Station 1: 4 Ball", Auton.STATION3_4BALL);
 
 		SmartDashboard.putData(sendableChooser);
 	}
@@ -132,6 +130,10 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		swerveDrive.forceRelease();
+		shooter.forceRelease();
+		intake.forceRelease();
+		climber.forceRelease();
 	}
 
 	@Override

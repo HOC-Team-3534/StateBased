@@ -96,6 +96,11 @@ public final class Constants {
         public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 60;
         public static final int MAX_ARM_VELOCITY_NATIVE_UNITS = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
+
+        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND_SLOW = 40.0;
+        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW = 60;
+        public static final int MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
+        public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         
         public static final int SHOOTER_MOTOR = 13;
 
@@ -135,6 +140,20 @@ public final class Constants {
                         Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
         public static final double MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.25;
+
+        public static final double MIDBAR_GRAB_ANGLE_COMMAND = 90.0;
+        public static final double HIGHBAR_GRAB_ANGLE_COMMAND = 260.0; //impossible to actually be at 270
+        public static final double TRAVERSALBAR_GRAB_ANGLE_COMMMAND = 440.0; //impossible to actually be at 450
+        public static final double SWINGTOREST_ANGLE_COMMAND = 450.0;
+
+        public static final double MIDHIGHBAR_SLOWDOWN_ANGLE = 180.0;
+        public static final double HIGHTRAVERSAL_SLOWDOWN_ANGLE = 360.0;
+
+        public static final double MIDHIGHBAR_RECENTER_ANGLE_COMMAND = 200.0; //would be sitting perpendicular to the bars at 180
+        public static final double HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND = 380.0; //would be sitting perpendicular to the bars at 360
+        public static final double RECENTER_ANGLE_TOLERANCE = 5.0; //should at least be 3 degrees just for comfort, if not at least 5
+
+        public static final double DONERELEASINGMIDBAR_ANGLE = 270.0;
 
         public enum DelayToOff {
 

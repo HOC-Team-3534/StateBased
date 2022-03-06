@@ -105,4 +105,7 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
         return false;
     }
 
+    public double getMetersFromLocation(Translation2d location){
+        return getSwerveDriveOdometry().getPoseMeters().getTranslation().getDistance(location);
+    }
 }

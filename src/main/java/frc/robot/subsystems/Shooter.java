@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
@@ -38,7 +39,10 @@ public class Shooter extends BaseSubsystem {
         //TODO add in auton control of shooter once vision branch merged in
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
-            waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
+            // waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
+            waitNSpin();
+        } else if (autonShootStates.contains(getStateRequiringName())){
+            autonShoot();
         } else if (getStateRequiringName() == "BURP") {
             burp();
         } else if (getStateRequiringName() == "PUNCH" || autonPunchStates.contains(getStateRequiringName())) {
@@ -56,10 +60,16 @@ public class Shooter extends BaseSubsystem {
         //System.out.println("Speed is " + countsPer100MS);
     }
 
-    private void waitNSpin(double rpm) {
-        // shoot(rpm);
+    private void waitNSpin() {
         shoot(rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
-        
+    }
+
+    private void waitNSpin(double rpm) {
+        shoot(rpm);
+    }
+
+    private void autonShoot() {
+        shoot(rpmFunction.getShooterRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)));
     }
 
     private void burp() {

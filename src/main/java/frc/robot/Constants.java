@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -137,6 +138,8 @@ public final class Constants {
                         Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
         public static final double MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.25;
+
+        public static final Translation2d HUB_LOCATION = new Translation2d(8.27, 4.15);
 
         public enum DelayToOff {
 

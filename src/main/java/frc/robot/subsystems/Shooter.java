@@ -8,7 +8,18 @@ import frc.robot.Constants;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Shooter extends BaseSubsystem {
+
+    String[] autonShootStateStrings = {"SHOOTBALL1", "SHOOTBALL2"};
+    String[] autonPunchStateStrings = {"PICKUPBALL1", "PICKUPBALL2"};
+    String[] autonResetPunchStateStrings = {"SHOOTBALL1", "SHOOTBALL3"};
+    Set<String> autonShootStates = new HashSet<>(Arrays.asList(autonShootStateStrings));
+    Set<String> autonPunchStates = new HashSet<>(Arrays.asList(autonPunchStateStrings));
+    Set<String> autonResetPunchStates = new HashSet<>(Arrays.asList(autonResetPunchStateStrings));
 
     public Shooter() {
         // makes the graphical number to enter text - have to do a
@@ -21,15 +32,16 @@ public class Shooter extends BaseSubsystem {
 
         super.process();
 
+        //TODO add in auton control of shooter once vision branch merged in
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
             waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
         } else if (getStateRequiringName() == "BURP") {
             burp();
-        } else if (getStateRequiringName() == "PUNCH") {
+        } else if (getStateRequiringName() == "PUNCH" || autonPunchStates.contains(getStateRequiringName())) {
             punch();
-        }else if (getStateRequiringName() == "RETRACT") {
-            retract();
+        }else if (getStateRequiringName() == "RESETPUNCH" || autonResetPunchStates.contains(getStateRequiringName())) {
+            resetPunch();
         } else {
             neutral();
         }
@@ -50,11 +62,15 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void punch() {
-        setWithADelayToOff(RobotMap.pusher, Value.kForward, Constants.DelayToOff.SHOOTER_PUSHER.millis);
+        if(getStateFirstRunThrough()) {
+            setWithADelayToOff(RobotMap.pusher, Value.kForward, Constants.DelayToOff.SHOOTER_PUSHER.millis);
+        }
     }
 
-    private void retract() {
-        setWithADelayToOff(RobotMap.pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
+    private void resetPunch() {
+        if(getStateFirstRunThrough()) {
+            setWithADelayToOff(RobotMap.pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
+        }
     }
 
     @Override

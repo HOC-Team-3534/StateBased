@@ -1,4 +1,4 @@
-package frc.robot.sequences.pathplannerfollower;
+package frc.robot.autons.pathplannerfollower;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
@@ -46,6 +46,7 @@ public class PathStateController {
 
         double output_x_vel = x_velocity + x_pid.calculate(currentX, fwd_back_position);
         double output_y_vel = y_velocity + y_pid.calculate(currentY, left_right_position);
+        // TODO validate that the error below is calculated correctly, maybe plus?
         Rotation2d orientationError = targetHolonomicHeading.minus(currentOrientation);
         double output_rot_vel = angular_velocity + rot_pid.calculate(orientationError.getRadians(), 0.0);
 

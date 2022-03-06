@@ -31,10 +31,10 @@ public class Shoot extends BaseSequence<ShootState> {
                 break;
             case PUNCH:
                 if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(ShootState.RETRACT);
+                    setNextState(ShootState.RESETPUNCH);
                 }
                 break;
-            case RETRACT:
+            case RESETPUNCH:
                 if (this.getTimeSinceStartOfState() > 500) {
                     setNextState(ShootState.WAITNSPIN);
                 }
@@ -61,7 +61,7 @@ enum ShootState implements IState {
     NEUTRAL,
     WAITNSPIN(Robot.shooter),
     PUNCH(Robot.shooter),
-    RETRACT(Robot.shooter);
+    RESETPUNCH(Robot.shooter);
 
     List<BaseSubsystem> requiredSubsystems;
 

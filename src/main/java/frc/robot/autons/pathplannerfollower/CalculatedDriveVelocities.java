@@ -1,4 +1,4 @@
-package frc.robot.sequences.pathplannerfollower;
+package frc.robot.autons.pathplannerfollower;
 
 public class CalculatedDriveVelocities {
 

@@ -1,8 +1,8 @@
-package frc.robot.sequences.pathplannerfollower;
+package frc.robot.autons.pathplannerfollower;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.Constants;
 
 public class PathPlannerFollower {
@@ -28,6 +28,10 @@ public class PathPlannerFollower {
     public PathPlannerTrajectory.PathPlannerState getCurrentState(){
         double timeSinceStart = (double)(System.currentTimeMillis() - START_TIME) / 1000.0;
         return (PathPlannerTrajectory.PathPlannerState) path.sample(timeSinceStart);
+    }
+
+    public Pose2d getInitialPosition(){
+        return path.getInitialState().poseMeters;
     }
 
     public boolean isFinished() {

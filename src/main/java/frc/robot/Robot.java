@@ -4,22 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.sequences.*;
+import frc.robot.autons.Auton;
+import frc.robot.autons.FourBallAutonStation1;
+import frc.robot.autons.parent.BaseAutonSequence;
+import frc.robot.autons.parent.IAutonState;
 import frc.robot.sequences.Burp;
 import frc.robot.sequences.SequenceProcessor;
-import frc.robot.sequences.parent.BaseAutonSequence;
-import frc.robot.sequences.parent.IAutonPathValues;
-import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -41,9 +37,6 @@ public class Robot extends TimedRobot {
 	public static Intake intake;
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
-
-	//private BaseAutonSequence<? extends IState, ? extends IAutonPathValues> m_autonomousSequence;
-	public static AutonProcessor autonProcessor;
 	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
@@ -53,6 +46,9 @@ public class Robot extends TimedRobot {
 	private int logCounter = 0;
 
 	public static double designatedLoopPeriod = 20;
+
+	public static BaseAutonSequence<? extends IAutonState> chosenAuton;
+	private SendableChooser<Auton> sendableChooser;
 
 	@Override
 	public void robotInit() {
@@ -71,7 +67,9 @@ public class Robot extends TimedRobot {
 
 		sequenceProcessor = new SequenceProcessor();
 
-		autonProcessor = new AutonProcessor();
+		sendableChooser.setDefaultOption("Station 1: 4 Ball", Auton.STATION1_4BALL);
+
+		SmartDashboard.putData(sendableChooser);
 	}
 	
 
@@ -94,6 +92,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		this.chosenAuton = sendableChooser.getSelected().getAuton();
+		chosenAuton.start();
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-				autonProcessor.process();
+				chosenAuton.process();
 				// run processes
 
 				/** Run subsystem process methods here */

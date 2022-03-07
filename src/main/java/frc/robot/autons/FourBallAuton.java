@@ -11,11 +11,11 @@ import frc.robot.sequences.parent.*;
 import frc.robot.subsystems.parent.BaseDriveSubsystem;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class FourBallAutonStation3 extends BaseAutonSequence<FourBallAutonStation3State> {
+public class FourBallAuton extends BaseAutonSequence<FourBallAutonState> {
 
     int ballsShot = 0;
 
-    public FourBallAutonStation3(FourBallAutonStation3State neutralState, FourBallAutonStation3State startState, BaseDriveSubsystem driveSubsystem, String path0, String path1) {
+    public FourBallAuton(FourBallAutonState neutralState, FourBallAutonState startState, BaseDriveSubsystem driveSubsystem, String path0, String path1) {
         super(neutralState, startState, driveSubsystem, new String[]{path0, path1});
     }
 
@@ -26,54 +26,54 @@ public class FourBallAutonStation3 extends BaseAutonSequence<FourBallAutonStatio
             case PICKUPBALL1:
                 setPathPlannerFollowerAtStartOfState(true);
                 if(this.getPlannerFollower().isFinished()){
-                    setNextState(FourBallAutonStation3State.SHOOTBALL1);
+                    setNextState(FourBallAutonState.SHOOTBALL1);
                 }
                 break;
             case SHOOTBALL1:
                 if ((ballsShot == 0 || (ballsShot == 1 && this.getTimeSinceStartOfState() > 500))
                         && RobotMap.shooter.getClosedLoopError() < 100) {
-                    setNextState(FourBallAutonStation3State.PUNCH1);
+                    setNextState(FourBallAutonState.PUNCH1);
                 }
                 break;
             case PUNCH1:
                 if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(FourBallAutonStation3State.RESETPUNCH1);
+                    setNextState(FourBallAutonState.RESETPUNCH1);
                     ballsShot++;
                 }
                 break;
             case RESETPUNCH1:
                 if (this.getTimeSinceStartOfState() > 500) {
                     if(ballsShot == 2){
-                        setNextState(FourBallAutonStation3State.PICKUPBALL2);
+                        setNextState(FourBallAutonState.PICKUPBALL2);
                     }else{
-                        setNextState(FourBallAutonStation3State.SHOOTBALL1);
+                        setNextState(FourBallAutonState.SHOOTBALL1);
                     }
                 }
                 break;
             case PICKUPBALL2:
                 setPathPlannerFollowerAtStartOfState(false);
                 if(this.getPlannerFollower().isFinished()){
-                    setNextState(FourBallAutonStation3State.SHOOTBALL2);
+                    setNextState(FourBallAutonState.SHOOTBALL2);
                 }
                 break;
             case SHOOTBALL2:
                 if ((ballsShot == 2 || (ballsShot == 3 && this.getTimeSinceStartOfState() > 500))
                         && RobotMap.shooter.getClosedLoopError() < 100) {
-                    setNextState(FourBallAutonStation3State.PUNCH2);
+                    setNextState(FourBallAutonState.PUNCH2);
                 }
                 break;
             case PUNCH2:
                 if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(FourBallAutonStation3State.RESETPUNCH2);
+                    setNextState(FourBallAutonState.RESETPUNCH2);
                     ballsShot++;
                 }
                 break;
             case RESETPUNCH2:
                 if (this.getTimeSinceStartOfState() > 500) {
                     if(ballsShot == 4){
-                        setNextState(FourBallAutonStation3State.NEUTRAL);
+                        setNextState(FourBallAutonState.NEUTRAL);
                     }else{
-                        setNextState(FourBallAutonStation3State.SHOOTBALL2);
+                        setNextState(FourBallAutonState.SHOOTBALL2);
                     }
                 }
                 break;
@@ -92,7 +92,7 @@ public class FourBallAutonStation3 extends BaseAutonSequence<FourBallAutonStatio
 
 }
 
-enum FourBallAutonStation3State implements IAutonState {
+enum FourBallAutonState implements IAutonState {
     NEUTRAL(false, -999),
     PICKUPBALL1(true, 0, Robot.intake, Robot.swerveDrive, Robot.shooter),
     SHOOTBALL1(false, -999, Robot.shooter, Robot.intake),
@@ -107,7 +107,7 @@ enum FourBallAutonStation3State implements IAutonState {
     int pathIndex;
     List<BaseSubsystem> requiredSubsystems;
 
-    FourBallAutonStation3State(boolean isPathFollowing, int pathIndex, BaseSubsystem... subsystems) {
+    FourBallAutonState(boolean isPathFollowing, int pathIndex, BaseSubsystem... subsystems) {
         this.isPathFollowing = isPathFollowing;
         this.pathIndex = pathIndex;
         requiredSubsystems = Arrays.asList(subsystems);

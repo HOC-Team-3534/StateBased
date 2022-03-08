@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -128,6 +129,8 @@ public final class Constants {
                         SdsModuleConfigurations.MK4_L2.getDriveReduction() *
                         SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI * .02;
 
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND = 1.25;
+
         public static final double MAX_VELOCITY_CREEP_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.25;
         /**
          * The maximum angular velocity of the robot in radians per second.
@@ -154,6 +157,8 @@ public final class Constants {
         public static final double RECENTER_ANGLE_TOLERANCE = 5.0; //should at least be 3 degrees just for comfort, if not at least 5
 
         public static final double DONERELEASINGMIDBAR_ANGLE = 270.0;
+  
+        public static final Translation2d HUB_LOCATION = new Translation2d(8.27, 4.15);
 
         public enum DelayToOff {
 

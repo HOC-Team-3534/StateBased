@@ -6,11 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import frc.robot.autons.Auton;
+import frc.robot.autons.parent.BaseAutonSequence;
+import frc.robot.autons.parent.IAutonState;
 import frc.robot.sequences.Burp;
 import frc.robot.sequences.SequenceProcessor;
-import frc.robot.sequences.parent.BaseAutonSequence;
-import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -32,8 +35,6 @@ public class Robot extends TimedRobot {
 	public static Intake intake;
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
-
-	private BaseAutonSequence<? extends IState> m_autonomousSequence;
 	public static RobotContainer robotContainer;
 
 	public static boolean isAutonomous = false;
@@ -44,6 +45,9 @@ public class Robot extends TimedRobot {
 
 	public static double designatedLoopPeriod = 20;
 
+	public static BaseAutonSequence<? extends IAutonState> chosenAuton;
+	private SendableChooser<Auton> sendableChooser;
+
 	@Override
 	public void robotInit() {
 
@@ -53,13 +57,17 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
-		shooter = new Shooter();
+		shooter = new Shooter(d -> 611.5 + 2982.5 * Math.log(d));
 
 		intake = new Intake();
 
 		climber = new Climber();
 
 		sequenceProcessor = new SequenceProcessor();
+
+		sendableChooser.setDefaultOption("Station 1: 4 Ball", Auton.STATION3_4BALL);
+
+		SmartDashboard.putData(sendableChooser);
 	}
 	
 
@@ -82,14 +90,50 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		this.chosenAuton = sendableChooser.getSelected().getAuton();
+		chosenAuton.start();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
+		log();
+
+		isAutonomous = this.isAutonomous();
+
+		long prevLoopTime = 0;
+
+		while (this.isAutonomous() && this.isEnabled()) {
+
+			log();
+
+			long currentTime = System.currentTimeMillis();
+
+			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+
+				loopPeriod = (int) (currentTime - prevLoopTime);
+				prevLoopTime = currentTime;
+				loopCnt++;
+
+				chosenAuton.process();
+				// run processes
+
+				/** Run subsystem process methods here */
+				swerveDrive.process();
+				shooter.process();
+				intake.process();
+				//climber.process();
+			}
+
+			Timer.delay(0.001);
+		}
 	}
 
 	@Override
 	public void teleopInit() {
+		swerveDrive.forceRelease();
+		shooter.forceRelease();
+		intake.forceRelease();
+		climber.forceRelease();
 	}
 
 	@Override
@@ -148,6 +192,11 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
 			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
+			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorOffset());
+			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
+			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
+			
+			SmartDashboard.putNumber("target rotation", swerveDrive.getTargetShootRotation().getRadians());
 
 			logCounter = 0;
 		}

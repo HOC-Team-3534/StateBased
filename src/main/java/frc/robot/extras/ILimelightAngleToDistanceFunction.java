@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.extras;
 
 public interface ILimelightAngleToDistanceFunction {
 

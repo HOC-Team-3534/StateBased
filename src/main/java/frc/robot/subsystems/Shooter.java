@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.IDistanceToShooterRPM;
 
 import java.util.Arrays;
 import java.util.HashSet;

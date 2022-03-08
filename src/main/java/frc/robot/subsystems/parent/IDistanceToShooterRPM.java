@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.parent;
 
 public interface IDistanceToShooterRPM {
 

@@ -195,8 +195,11 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorOffset());
 			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
 			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
-			
+
 			SmartDashboard.putNumber("target rotation", swerveDrive.getTargetShootRotation().getRadians());
+
+			SmartDashboard.putNumber("Odometry X", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getX());
+			SmartDashboard.putNumber("Odometry Y", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getY());
 
 			logCounter = 0;
 		}

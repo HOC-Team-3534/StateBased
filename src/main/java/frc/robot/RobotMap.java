@@ -208,7 +208,7 @@ public class RobotMap {
 		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
 		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
 		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
-		m_climbMotor.config_kP(0, 0.025);
+		m_climbMotor.config_kP(0, 0.075);
 		m_climbMotor.config_kI(0, 0.0);
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);

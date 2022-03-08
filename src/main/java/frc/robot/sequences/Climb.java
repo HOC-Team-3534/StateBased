@@ -31,7 +31,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 break;
             case SWINGMIDHIGH1:
                 if (Robot.climber.getClimbArmDegree() > Constants.MIDHIGHBAR_SLOWDOWN_ANGLE) {
-                    setNextState(ClimbState.GRIPHIGHBAR);
+                    setNextState(ClimbState.SWINGMIDHIGH2);
                 }
                 if(!Buttons.Climb.getButton()){
                     savedPauseState = getState();
@@ -107,7 +107,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 break;
             case GRIPTRAVERSALBAR:
                 if (getTimeSinceStartOfState() > 1000 && (!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get())) {
-                    setNextState(ClimbState.RELEASEHIGHBAR);
+                    setNextState(ClimbState.RECENTERHIGHTRAVERSALBAR);
                 }else if((RobotMap.m_h2Switch.get() && RobotMap.m_l1Switch.get())){
                     limitSwitchLoopCounter++;
                     if(limitSwitchLoopCounter >= 5) {
@@ -144,7 +144,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGTOREST:
-                if(RobotMap.m_climbMotor.getSelectedSensorPosition() >= 440){                
+                if(RobotMap.m_climbMotor.getSelectedSensorPosition() >= 445){
                     System.out.println("Hooray!");
                 }
                 if(!Buttons.Climb.getButton()){

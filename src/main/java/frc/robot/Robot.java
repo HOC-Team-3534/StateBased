@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autons.Auton;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
+import frc.robot.Constants.RobotType;
 import frc.robot.sequences.Burp;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.Climber;

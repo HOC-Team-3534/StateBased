@@ -124,7 +124,7 @@ public class RobotMap {
 		// a different configuration or motors
 		// you MUST change it. If you do not, your code will crash on startup.
 		// FIXME Setup motor configuration
-		
+
 		m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
 				// This parameter is optional, but will allow you to see the current state of
 				// the module on the dashboard.
@@ -188,7 +188,11 @@ public class RobotMap {
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 
 		m_intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
-		m_intakeRoller.setInverted(true);
+		if (ROBOTTYPE == RobotType.PBOT) {
+			m_intakeRoller.setInverted(true);
+		} else {
+			m_intakeRoller.setInverted(false);
+		}
 
 		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
 
@@ -207,8 +211,9 @@ public class RobotMap {
 		m_climbMotor = new WPI_TalonFX(CLIMB_ARM_MOTOR);
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 		// m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
-		// 		.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
-		// 				/ Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		// .valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
+		// / Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 *
+		// CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
 		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
 		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
 		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
@@ -217,6 +222,6 @@ public class RobotMap {
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);
 
-		navx = new AHRS(SerialPort.Port.kUSB);
+		navx = ROBOTTYPE == RobotType.PBOT ? new AHRS(SerialPort.Port.kUSB) : new AHRS(SPI.Port.kMXP);
 	}
 }

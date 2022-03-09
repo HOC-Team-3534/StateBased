@@ -8,7 +8,11 @@ public enum Auton {
     STATION3_4BALL(new FourBallAuton(
             FourBallAutonState.NEUTRAL,
             FourBallAutonState.PICKUPBALL1, Robot.swerveDrive,
-            "Station 3 4 Ball 1", "Station 3 4 Ball 2"));
+            "Station 3 4 Ball 1", "Station 3 4 Ball 2")),
+    STRAIGHTLINETEST(new StraightTestAuton(
+            StraightTestAutonState.NEUTRAL,
+            StraightTestAutonState.PICKUPBALL1, Robot.swerveDrive,
+            "Straight Test"));
     
     BaseAutonSequence<? extends IAutonState> auton;
     

@@ -8,11 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -188,11 +184,7 @@ public class RobotMap {
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 
 		m_intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
-		if (ROBOTTYPE == RobotType.PBOT) {
-			m_intakeRoller.setInverted(true);
-		} else {
-			m_intakeRoller.setInverted(false);
-		}
+		m_intakeRoller.setInverted(true);
 
 		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
 
@@ -222,6 +214,6 @@ public class RobotMap {
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);
 
-		navx = ROBOTTYPE == RobotType.PBOT ? new AHRS(SerialPort.Port.kUSB) : new AHRS(SPI.Port.kMXP);
+		navx = new AHRS(SerialPort.Port.kUSB);
 	}
 }

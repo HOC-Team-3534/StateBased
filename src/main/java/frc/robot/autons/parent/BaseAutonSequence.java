@@ -25,7 +25,7 @@ public abstract class BaseAutonSequence<S extends IAutonState> extends BaseSeque
         this.pathPlannerFollower = new PathPlannerFollower(pathName);
     }
 
-    protected PathPlannerFollower getPlannerFollower(){
+    public PathPlannerFollower getPlannerFollower(){
         return pathPlannerFollower;
     }
 

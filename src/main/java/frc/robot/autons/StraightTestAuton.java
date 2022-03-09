@@ -26,6 +26,8 @@ public class StraightTestAuton extends BaseAutonSequence<StraightTestAutonState>
         switch (getState()) {
             case PICKUPBALL1:
                 setPathPlannerFollowerAtStartOfState(true);
+                //System.out.println("Current Odometry (x,y): " + getBaseDriveSubsystem().getSwerveDriveOdometry().getPoseMeters().getTranslation().toString());
+                //System.out.println("Current Orientation (radians): " + getBaseDriveSubsystem().getSwerveDriveOdometry().getPoseMeters().getTranslation().toString());
                 if(this.getPlannerFollower().isFinished()){
                     setNextState(StraightTestAutonState.NEUTRAL);
                 }

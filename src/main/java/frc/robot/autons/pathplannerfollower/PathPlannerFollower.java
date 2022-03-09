@@ -22,7 +22,7 @@ public class PathPlannerFollower {
     }
 
     private void loadPath(String pathName){
-        this.path = (PathPlannerTrajectory) PathPlanner.loadPath(pathName, 3, 3);
+        this.path = (PathPlannerTrajectory) PathPlanner.loadPath(pathName, 1, 1);
         System.out.println(path.toString());
     }
 

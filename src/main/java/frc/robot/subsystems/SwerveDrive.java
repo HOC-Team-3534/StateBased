@@ -20,9 +20,9 @@ public class SwerveDrive extends BaseDriveSubsystem {
 			backLeft_stateAngle = 0.0,
 			backRight_stateAngle = 0.0;
 
-	PIDController xPID = new PIDController(4,0,0);
-	PIDController yPID = new PIDController(4,0,0);
-	PIDController rotPID = new PIDController(2,0,0);
+	PIDController xPID = new PIDController(2,0,0);
+	PIDController yPID = new PIDController(2,0,0);
+	PIDController rotPID = new PIDController(1,0,0);
 
 	PathStateController pathStateController = new PathStateController(xPID, yPID, rotPID);
 
@@ -125,9 +125,9 @@ public class SwerveDrive extends BaseDriveSubsystem {
 					.getVelocitiesAtCurrentState(this.getSwerveDriveOdometry(), this.getGyroHeading());
 
 			Translation2d currentPosition = getSwerveDriveOdometry().getPoseMeters().getTranslation();
-			System.out.println(String.format("Current Odometry [ X: %.2f Y:%.2f ] Heading [ Rot (radians): %.2f ]", currentPosition.getX(), currentPosition.getY(), getGyroHeading().getRadians()));
-			System.out.println("Current Velocity Calculations: " + velocities.toString());
-			//drive(velocities.getXVel(), velocities.getYVel(), velocities.getRotVel(), true);
+			// System.out.println(String.format("Current Odometry [ X: %.2f Y:%.2f ] Heading [ Rot (radians): %.2f ]", currentPosition.getX(), currentPosition.getY(), getGyroHeading().getRadians()));
+			// System.out.println("Current Velocity Calculations: " + velocities.toString());
+			drive(velocities.getXVel(), velocities.getYVel(), velocities.getRotVel(), true);
 	}
 
 	@Override

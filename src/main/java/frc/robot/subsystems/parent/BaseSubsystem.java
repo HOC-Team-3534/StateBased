@@ -107,7 +107,7 @@ public abstract class BaseSubsystem implements ISubsystem {
     }
 
     public void setWithADelayToOff(DoubleSolenoid ds, DoubleSolenoid.Value value, long millisUntilOff) {
-        solenoidSetTimes.put(ds, Arrays.asList(System.currentTimeMillis(), millisUntilOff));
+        //solenoidSetTimes.put(ds, Arrays.asList(System.currentTimeMillis(), millisUntilOff));
         ds.set(value);
     }
 

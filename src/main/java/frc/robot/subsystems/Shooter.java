@@ -56,7 +56,7 @@ public class Shooter extends BaseSubsystem {
             burp();
         } else if (getStateRequiringName() == "PUNCH" || autonPunchStates.contains(getStateRequiringName())) {
             punch();
-        }else if (getStateRequiringName() == "RESETPUNCH" || autonResetPunchStates.contains(getStateRequiringName())) {
+        }else if (getStateRequiringName() == "RESETPUNCH" || getStateRequiringName() == "RETRACT" || autonResetPunchStates.contains(getStateRequiringName())) {
             resetPunch();
         } else {
             neutral();

@@ -31,11 +31,14 @@ public class Shoot extends BaseSequence<ShootState> {
                 break;
             case PUNCH:
                 if (this.getTimeSinceStartOfState() > 500) {
+                    System.out.println("punching");
                     setNextState(ShootState.RESETPUNCH);
+
                 }
                 break;
             case RESETPUNCH:
                 if (this.getTimeSinceStartOfState() > 500) {
+                    System.out.println("resetting");
                     setNextState(ShootState.WAITNSPIN);
                 }
                 break;

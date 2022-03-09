@@ -3,6 +3,8 @@ package frc.robot.autons.pathplannerfollower;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
 
 public class PathPlannerFollower {
@@ -13,7 +15,9 @@ public class PathPlannerFollower {
 
     public PathPlannerFollower(String pathName){
         PATH_FILE_NAME = pathName;
+        long load_start = System.currentTimeMillis();
         loadPath(PATH_FILE_NAME);
+        System.out.println(String.format("Path: [%s] took %d milliseconds.", pathName, System.currentTimeMillis() - load_start));
         START_TIME = System.currentTimeMillis();
     }
 
@@ -31,9 +35,11 @@ public class PathPlannerFollower {
         return (PathPlannerTrajectory.PathPlannerState) path.sample(timeSinceStart);
     }
 
-    public Pose2d getInitialPosition(){
-        return path.getInitialState().poseMeters;
+    public Translation2d getInitialPosition(){
+        return path.getInitialState().poseMeters.getTranslation();
     }
+
+    public Rotation2d getInitialHolonomic() { return path.getInitialState().holonomicRotation;}
 
     public double getRemainingTimeSeconds(){
         double timeSinceStart = (double) (System.currentTimeMillis() - START_TIME) / 1000.0;

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -123,7 +124,10 @@ public class SwerveDrive extends BaseDriveSubsystem {
 			CalculatedDriveVelocities velocities = this.getPathStateController()
 					.getVelocitiesAtCurrentState(this.getSwerveDriveOdometry(), this.getGyroHeading());
 
-			drive(velocities.getXVel(), velocities.getYVel(), velocities.getRotVel(), true);
+			Translation2d currentPosition = getSwerveDriveOdometry().getPoseMeters().getTranslation();
+			System.out.println(String.format("Current Odometry [ X: %.2f Y:%.2f ] Heading [ Rot (radians): %.2f ]", currentPosition.getX(), currentPosition.getY(), getGyroHeading()));
+			System.out.println("Current Velocity Calculations: " + velocities.toString());
+			//drive(velocities.getXVel(), velocities.getYVel(), velocities.getRotVel(), true);
 	}
 
 	@Override

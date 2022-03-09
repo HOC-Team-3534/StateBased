@@ -21,5 +21,8 @@ public class CalculatedDriveVelocities {
     public double getRotVel() {
         return rotVel;
     }
-    
+
+    public String toString(){
+        return String.format("Velocities[ X:%.2f Y:%.2f Rot:%.2f", xVel, yVel, rotVel);
+    }
 }

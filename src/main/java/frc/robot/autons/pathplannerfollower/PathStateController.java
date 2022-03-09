@@ -51,7 +51,7 @@ public class PathStateController {
         double output_y_vel = y_velocity + y_pid.calculate(currentY, left_right_position);
         // TODO validate that the error below is calculated correctly, maybe plus?
         Rotation2d orientationError = targetHolonomicHeading.minus(currentOrientation);
-        double output_rot_vel = angular_velocity + rot_pid.calculate(orientationError.getRadians(), 0.0);
+        double output_rot_vel = angular_velocity + rot_pid.calculate(-orientationError.getRadians(), 0.0);
 
         return new CalculatedDriveVelocities(output_x_vel, output_y_vel, output_rot_vel);
     }

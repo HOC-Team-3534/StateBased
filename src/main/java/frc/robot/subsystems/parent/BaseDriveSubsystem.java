@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.autons.pathplannerfollower.PathStateController;
@@ -62,7 +63,7 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
     public void setPathPlannerFollower(PathPlannerFollower ppf, boolean setInitialPosition){
         this.getPathStateController().setPathPlannerFollower(ppf);
         if(setInitialPosition){
-            gyroOffset = ppf.getInitialHolonomic();
+            gyroOffset = ppf.getInitialHolonomic().minus(RobotMap.navx.getRotation2d());
             resetOdometry(ppf.getInitialPosition());
             System.out.println("Initial Translation of Path (should match following odometry: " + ppf.getInitialPosition().toString());
             System.out.println("Initial Odometry Set to: " + getSwerveDriveOdometry().getPoseMeters().toString());

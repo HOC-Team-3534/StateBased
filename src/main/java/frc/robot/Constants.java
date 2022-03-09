@@ -20,7 +20,7 @@ import edu.wpi.first.math.geometry.Translation2d;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-        public static RobotType ROBOTTYPE = RobotType.CBOT;
+        public static RobotType ROBOTTYPE = RobotType.PBOT;
         /**
          * The left-to-right distance between the drivetrain wheels
          *

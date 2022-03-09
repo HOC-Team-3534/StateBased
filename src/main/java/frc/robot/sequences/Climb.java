@@ -52,7 +52,7 @@ public class Climb extends BaseSequence<ClimbState> {
                     setNextState(ClimbState.RECENTERMIDHIGHBAR);
                 }else if((RobotMap.m_l3Switch.get() && RobotMap.m_h4Switch.get())){
                     limitSwitchLoopCounter++;
-                    if(limitSwitchLoopCounter >= 5) {
+                    if(limitSwitchLoopCounter >= 10) {
                         limitSwitchLoopCounter = 0;
                         setNextState(ClimbState.RETRYHIGHBAR);
                     }
@@ -110,7 +110,7 @@ public class Climb extends BaseSequence<ClimbState> {
                     setNextState(ClimbState.RECENTERHIGHTRAVERSALBAR);
                 }else if((RobotMap.m_h2Switch.get() && RobotMap.m_l1Switch.get())){
                     limitSwitchLoopCounter++;
-                    if(limitSwitchLoopCounter >= 5) {
+                    if(limitSwitchLoopCounter >= 10) {
                         limitSwitchLoopCounter = 0;
                         setNextState(ClimbState.RETRYTRAVERSALBAR);
                     }

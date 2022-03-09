@@ -84,7 +84,7 @@ enum StraightTestAutonState implements IAutonState {
 
     @Override
     public String getPathName(BaseAutonSequence<? extends IAutonState> sequence) {
-        if(this.pathIndex > 0 && pathIndex < sequence.getPathNames().size()){
+        if(this.pathIndex >= 0 && pathIndex < sequence.getPathNames().size()){
             return sequence.getPathNames().get(pathIndex);
         }
         System.out.println("ERROR: Tried to get path name for state that doesn't have a valid path");

@@ -37,7 +37,7 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
                     -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
     SwerveDriveOdometry swerveDriveOdometry = new SwerveDriveOdometry(this.swerveDriveKinematics,
-            getGyroHeading(), new Pose2d(0.0, 0.0, new Rotation2d()));
+            getGyroHeading(), new Pose2d(0.0, 0.0, getGyroHeading()));
 
     public BaseDriveSubsystem(SwerveModule frontLeftModule, SwerveModule frontRightModule, SwerveModule backLeftModule, SwerveModule backRightModule){
         this.frontLeftModule = frontLeftModule;

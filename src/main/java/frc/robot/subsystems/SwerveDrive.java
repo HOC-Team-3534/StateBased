@@ -107,16 +107,16 @@ public class SwerveDrive extends BaseDriveSubsystem {
 			backRight_stateAngle = swerveModuleStates[3].angle.getRadians();
 		}
 		RobotMap.m_frontLeftModule.set(swerveModuleStates[0].speedMetersPerSecond
-				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
 				frontLeft_stateAngle);
 		RobotMap.m_frontRightModule.set(swerveModuleStates[1].speedMetersPerSecond
-				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
 				frontRight_stateAngle);
 		RobotMap.m_backLeftModule.set(swerveModuleStates[2].speedMetersPerSecond
-				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
 				backLeft_stateAngle);
 		RobotMap.m_backRightModule.set(swerveModuleStates[3].speedMetersPerSecond
-				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
+				/ Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.MAX_VOLTAGE,
 				backRight_stateAngle);
 	}
 
@@ -135,16 +135,16 @@ public class SwerveDrive extends BaseDriveSubsystem {
 			backRight_stateAngle = swerveModuleStates[3].angle.getRadians();
 		}
 		RobotMap.m_frontLeftModule.set(swerveModuleStates[0].speedMetersPerSecond
-						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
 				frontLeft_stateAngle);
 		RobotMap.m_frontRightModule.set(swerveModuleStates[1].speedMetersPerSecond
-						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
 				frontRight_stateAngle);
 		RobotMap.m_backLeftModule.set(swerveModuleStates[2].speedMetersPerSecond
-						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
 				backLeft_stateAngle);
 		RobotMap.m_backRightModule.set(swerveModuleStates[3].speedMetersPerSecond
-						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE * Constants.AUTON_MAX_VELOCITY_RATIO,
 				backRight_stateAngle);
 	}
 

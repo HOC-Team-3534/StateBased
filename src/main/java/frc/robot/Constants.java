@@ -126,11 +126,15 @@ public final class Constants {
 
         public static final double MAX_VOLTAGE = 12.0;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
-                        SdsModuleConfigurations.MK4_L2.getDriveReduction() *
-                        SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI * .02;
+        public static final double PHYSICAL_MAX_VELOCITY = 6380.0 / 60.0 *
+                SdsModuleConfigurations.MK4_L2.getDriveReduction() *
+                SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
+
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = PHYSICAL_MAX_VELOCITY * .02;
 
         public static final double MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS = 1.0;
+
+        public static final double AUTON_MAX_VELOCITY_RATIO = MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS / PHYSICAL_MAX_VELOCITY;
 
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND = 1.25;
 

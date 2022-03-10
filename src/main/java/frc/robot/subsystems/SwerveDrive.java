@@ -120,6 +120,34 @@ public class SwerveDrive extends BaseDriveSubsystem {
 				backRight_stateAngle);
 	}
 
+	public void driveAutonomously(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+		var swerveModuleStates = getSwerveDriveKinematics().toSwerveModuleStates(
+				fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+						xSpeed, ySpeed, rot, getGyroHeading())
+						: new ChassisSpeeds(xSpeed, ySpeed, rot));
+		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS);
+		if (Math.abs(swerveModuleStates[0].speedMetersPerSecond) + Math.abs(swerveModuleStates[1].speedMetersPerSecond)
+				+ Math.abs(swerveModuleStates[2].speedMetersPerSecond)
+				+ Math.abs(swerveModuleStates[3].speedMetersPerSecond) > 0.001) {
+			frontLeft_stateAngle = swerveModuleStates[0].angle.getRadians();
+			frontRight_stateAngle = swerveModuleStates[1].angle.getRadians();
+			backLeft_stateAngle = swerveModuleStates[2].angle.getRadians();
+			backRight_stateAngle = swerveModuleStates[3].angle.getRadians();
+		}
+		RobotMap.m_frontLeftModule.set(swerveModuleStates[0].speedMetersPerSecond
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+				frontLeft_stateAngle);
+		RobotMap.m_frontRightModule.set(swerveModuleStates[1].speedMetersPerSecond
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+				frontRight_stateAngle);
+		RobotMap.m_backLeftModule.set(swerveModuleStates[2].speedMetersPerSecond
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+				backLeft_stateAngle);
+		RobotMap.m_backRightModule.set(swerveModuleStates[3].speedMetersPerSecond
+						/ Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS * Constants.MAX_VOLTAGE,
+				backRight_stateAngle);
+	}
+
 	private void driveOnPath() {
 			CalculatedDriveVelocities velocities = this.getPathStateController()
 					.getVelocitiesAtCurrentState(this.getSwerveDriveOdometry(), this.getGyroHeading());
@@ -127,7 +155,7 @@ public class SwerveDrive extends BaseDriveSubsystem {
 			Translation2d currentPosition = getSwerveDriveOdometry().getPoseMeters().getTranslation();
 			// System.out.println(String.format("Current Odometry [ X: %.2f Y:%.2f ] Heading [ Rot (radians): %.2f ]", currentPosition.getX(), currentPosition.getY(), getGyroHeading().getRadians()));
 			// System.out.println("Current Velocity Calculations: " + velocities.toString());
-			drive(velocities.getXVel(), velocities.getYVel(), velocities.getRotVel(), true);
+			driveAutonomously(velocities.getXVel(), velocities.getYVel(), velocities.getRotVel(), true);
 	}
 
 	@Override

@@ -130,6 +130,8 @@ public final class Constants {
                         SdsModuleConfigurations.MK4_L2.getDriveReduction() *
                         SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI * .02;
 
+        public static final double MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS = 1.0;
+
         public static final double MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND = 1.25;
 
         public static final double MAX_VELOCITY_CREEP_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.25;

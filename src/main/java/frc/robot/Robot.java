@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -52,6 +53,9 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 
 		RobotMap.init();
+
+		PortForwarder.add(5800, "10.35.34.11", 1800);
+		PortForwarder.add(5801, "10.35.34.11", 1801);
 
 		robotContainer = new RobotContainer();
 

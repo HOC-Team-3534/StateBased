@@ -3,16 +3,17 @@ package frc.robot.autons;
 import frc.robot.Robot;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
+import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 
 public enum Auton {
     STATION3_4BALL(new FourBallAuton(
             FourBallAutonState.NEUTRAL,
             FourBallAutonState.PICKUPBALL1, Robot.swerveDrive,
-            "Station 3 4 Ball 1", "Station 3 4 Ball 2")),
+            new PathPlannerFollower("Station 3 4 Ball 1"), new PathPlannerFollower("Station 3 4 Ball 2"))),
     STRAIGHTLINETEST(new StraightTestAuton(
             StraightTestAutonState.NEUTRAL,
             StraightTestAutonState.PICKUPBALL1, Robot.swerveDrive,
-            "Straight Test"));
+            new PathPlannerFollower("Straight Test")));
     
     BaseAutonSequence<? extends IAutonState> auton;
     

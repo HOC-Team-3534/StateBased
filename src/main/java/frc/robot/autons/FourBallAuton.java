@@ -7,6 +7,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
+import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.sequences.parent.*;
 import frc.robot.subsystems.parent.BaseDriveSubsystem;
 import frc.robot.subsystems.parent.BaseSubsystem;
@@ -15,8 +16,8 @@ public class FourBallAuton extends BaseAutonSequence<FourBallAutonState> {
 
     int ballsShot = 0;
 
-    public FourBallAuton(FourBallAutonState neutralState, FourBallAutonState startState, BaseDriveSubsystem driveSubsystem, String path0, String path1) {
-        super(neutralState, startState, driveSubsystem, new String[]{path0, path1});
+    public FourBallAuton(FourBallAutonState neutralState, FourBallAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0, PathPlannerFollower path1) {
+        super(neutralState, startState, driveSubsystem, new PathPlannerFollower[]{path0, path1});
     }
 
     @Override
@@ -137,12 +138,12 @@ enum FourBallAutonState implements IAutonState {
     }
 
     @Override
-    public String getPathName(BaseAutonSequence<? extends IAutonState> sequence) {
-        if(this.pathIndex > 0 && pathIndex < sequence.getPathNames().size()){
-            return sequence.getPathNames().get(pathIndex);
+    public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence) {
+        if(this.pathIndex > 0 && pathIndex < sequence.getPaths().size()){
+            return sequence.getPaths().get(pathIndex);
         }
-        System.out.println("ERROR: Tried to get path name for state that doesn't have a valid path");
-        return "";
+        System.out.println("ERROR: Tried to get path for state that doesn't have a valid path");
+        return null;
     }
 
     @Override

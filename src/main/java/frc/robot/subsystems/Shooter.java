@@ -31,6 +31,7 @@ public class Shooter extends BaseSubsystem {
         // makes the graphical number to enter text - have to do a
         // put to do a get
         SmartDashboard.putNumber("RPM MULTIPLIER (%)", 100.0);
+        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 100.0);
         this.rpmFunction = rpmFunction;
     }
 
@@ -85,7 +86,8 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void autonShoot() {
-        shoot(rpmFunction.getShooterRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)));
+        double autonRPMMultiplier = SmartDashboard.getNumber("AUTON RPM MULTIPLIER (%)", 100.0) / 100.0;
+        shoot(autonRPMMultiplier * rpmFunction.getShooterRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)));
     }
 
     private void burp() {

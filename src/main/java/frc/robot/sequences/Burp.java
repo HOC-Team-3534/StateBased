@@ -23,7 +23,7 @@ public class Burp extends BaseSequence<BurpState> {
             case BURP:
                 if(!Buttons.Burp.getButton()){
                     setNextState(BurpState.NEUTRAL);
-                }if (this.getTimeSinceStartOfState() > 1750 && RobotMap.shooter.getClosedLoopError() < 100) {
+                }if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 250) {
                     System.out.println("In state");
                     setNextState(BurpState.PUNCH);
                 }
@@ -34,7 +34,7 @@ public class Burp extends BaseSequence<BurpState> {
                 }
                 break;
             case RETRACT:
-                if (this.getTimeSinceStartOfState() > 500) {
+                if (this.getTimeSinceStartOfState() > 1000) {
                     setNextState(BurpState.BURP);
                 }
                 break;

@@ -24,7 +24,7 @@ public class Shoot extends BaseSequence<ShootState> {
                 if (!Buttons.Shoot.getButton()) {
                     setNextState(ShootState.NEUTRAL);
                 }
-                if (this.getTimeSinceStartOfState() > 1500 && RobotMap.shooter.getClosedLoopError() < 100) {
+                if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 100) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }

@@ -73,8 +73,8 @@ public final class Constants {
         public static final int L3_EXTEND = 4;
         public static final int L3_RETRACT = 5;
 
-        public static final int H4_EXTEND = 6;
-        public static final int H4_RETRACT = 7;
+        public static final int H4_EXTEND = 6; //6
+        public static final int H4_RETRACT = 7; //7
 
         public static final int L1_SWITCH = 0;
         public static final int H2_SWITCH = 1;

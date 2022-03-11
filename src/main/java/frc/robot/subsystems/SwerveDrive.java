@@ -20,9 +20,9 @@ public class SwerveDrive extends BaseDriveSubsystem {
 			backLeft_stateAngle = 0.0,
 			backRight_stateAngle = 0.0;
 
-	PIDController xPID = new PIDController(0.25,0,0);
-	PIDController yPID = new PIDController(0.25,0,0);
-	PIDController rotPID = new PIDController(0.25,0,0);
+	PIDController xPID = new PIDController(4,0,0);
+	PIDController yPID = new PIDController(4,0,0);
+	PIDController rotPID = new PIDController(2,0,0);
 
 	PathStateController pathStateController = new PathStateController(xPID, yPID, rotPID);
 

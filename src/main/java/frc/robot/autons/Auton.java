@@ -18,6 +18,10 @@ public enum Auton {
             OneBallAutonState.NEUTRAL,
             OneBallAutonState.DRIVE1, Robot.swerveDrive,
             new PathPlannerFollower("Corner 2 1 Ball 1"))),
+    CORNER3_1BALL(new OneBallAuton(
+            OneBallAutonState.NEUTRAL,
+            OneBallAutonState.DRIVE1, Robot.swerveDrive,
+            new PathPlannerFollower("Corner 3 1 Ball 1"))),
     CORNER4_5BALL(new FiveBallAuton(
             FiveBallAutonState.NEUTRAL,
             FiveBallAutonState.SHOOTBALL1, Robot.swerveDrive,

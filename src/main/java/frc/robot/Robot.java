@@ -73,7 +73,9 @@ public class Robot extends TimedRobot {
 		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
 		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);
 
-		sendableChooser.setDefaultOption("CORNER 2: 1 BALL", Auton.CORNER2_1BALL);
+		sendableChooser.addOption("CORNER 3: 1 BALL", Auton.CORNER3_1BALL);
+
+		sendableChooser.addOption("CORNER 2: 1 BALL", Auton.CORNER2_1BALL);
 
 		sendableChooser.addOption("CORNER 1: 2 BALL", Auton.CORNER1_2BALL);
 		sendableChooser.addOption("CORNER 1: 1 BALL", Auton.CORNER1_1BALL);

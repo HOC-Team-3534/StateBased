@@ -13,7 +13,14 @@ public enum Auton {
     STRAIGHTLINETEST(new StraightTestAuton(
             StraightTestAutonState.NEUTRAL,
             StraightTestAutonState.PICKUPBALL1, Robot.swerveDrive,
-            new PathPlannerFollower("Straight Test")));
+            new PathPlannerFollower("Straight Test"))),
+    STATION1_2BALL(new TwoBallAuton(
+            TwoBallAutonState.NEUTRAL,
+            TwoBallAutonState.PICKUPBALL1, Robot.swerveDrive,
+            new PathPlannerFollower("Station 1 2 Ball Auton 1"))),
+    NO_OP(new NoOpAuton(
+            NoOpAutonState.NEUTRAL,
+            NoOpAutonState.NEUTRAL, Robot.swerveDrive));
     
     BaseAutonSequence<? extends IAutonState> auton;
     

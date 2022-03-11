@@ -54,8 +54,9 @@ public class Robot extends TimedRobot {
 
 		RobotMap.init();
 
-		PortForwarder.add(5800, "10.35.34.11", 1800);
-		PortForwarder.add(5801, "10.35.34.11", 1801);
+		PortForwarder.add(5800, "limelight.local", 5800);
+		PortForwarder.add(5801, "limelight.local", 5801);
+		PortForwarder.add(5805, "limelight.local", 5805);
 
 		robotContainer = new RobotContainer();
 
@@ -70,6 +71,10 @@ public class Robot extends TimedRobot {
 		sequenceProcessor = new SequenceProcessor();
 
 		sendableChooser.setDefaultOption("Straight Line Test", Auton.STRAIGHTLINETEST);
+
+		sendableChooser.addOption("Station 1: 2 Ball", Auton.STATION1_2BALL);
+
+		sendableChooser.addOption("NO AUTON (MUST BE STRAIGHT ALIGNED)", Auton.NO_OP);
 
 		sendableChooser.addOption("Station 1: 4 Ball", Auton.STATION3_4BALL);
 

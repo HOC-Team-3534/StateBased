@@ -16,10 +16,10 @@ import java.util.Set;
 
 public class Shooter extends BaseSubsystem {
 
-    String[] autonPreShootStateStrings = {"PICKUPBALL1", "PICKUPBALL2"};
-    String[] autonShootStateStrings = {"SHOOTBALL1", "SHOOTBALL2"};
-    String[] autonPunchStateStrings = {"PUNCH1", "PUNCH2"};
-    String[] autonResetPunchStateStrings = {"RESETPUNCH1", "RESETPUNCH2"};
+    String[] autonPreShootStateStrings = {"PICKUPBALL1", "PICKUPBALL3"};
+    String[] autonShootStateStrings = {"SHOOTBALL1", "SHOOTBALL2", "SHOOTBALL3"};
+    String[] autonPunchStateStrings = {"PUNCH1", "PUNCH2", "PUNCH3"};
+    String[] autonResetPunchStateStrings = {"RESETPUNCH1", "RESETPUNCH2", "RESETPUNCH3"};
     Set<String> autonPreShootStates = new HashSet<>(Arrays.asList(autonPreShootStateStrings));
     Set<String> autonShootStates = new HashSet<>(Arrays.asList(autonShootStateStrings));
     Set<String> autonPunchStates = new HashSet<>(Arrays.asList(autonPunchStateStrings));

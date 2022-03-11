@@ -33,6 +33,12 @@ public abstract class BaseAutonSequence<S extends IAutonState> extends BaseSeque
         }
     }
 
+    protected void setInitialPoseFromCurrentPath(){
+        if(this.getStateFirstRunThrough()){
+            this.getBaseDriveSubsystem().setInitalPoseFromFirstPathPlannerFollower(this.getState().getPath(this));
+        }
+    }
+
     protected BaseDriveSubsystem getBaseDriveSubsystem(){return baseDriveSubsystem;}
 
     public List<PathPlannerFollower> getPaths(){return paths;}

@@ -1,6 +1,7 @@
 package frc.robot.autons;
 
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
@@ -12,11 +13,9 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 import java.util.Arrays;
 import java.util.List;
 
-public class StraightTestAuton extends BaseAutonSequence<StraightTestAutonState> {
+public class OneBallAuton extends BaseAutonSequence<OneBallAutonState> {
 
-    int ballsShot = 0;
-
-    public StraightTestAuton(StraightTestAutonState neutralState, StraightTestAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0) {
+    public OneBallAuton(OneBallAutonState neutralState, OneBallAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0) {
         super(neutralState, startState, driveSubsystem, path0);
     }
 
@@ -24,10 +23,26 @@ public class StraightTestAuton extends BaseAutonSequence<StraightTestAutonState>
     public void process() {
 
         switch (getState()) {
-            case PICKUPBALL1:
+            case DRIVE1:
                 setPathPlannerFollowerAtStartOfState(true);
                 if(this.getPlannerFollower().isFinished()){
-                    setNextState(StraightTestAutonState.NEUTRAL);
+                    setNextState(OneBallAutonState.NEUTRAL);
+                }
+                break;
+            case SHOOTBALL1:
+                if ((this.getTimeSinceStartOfState() > 1000)
+                        && RobotMap.shooter.getClosedLoopError() < 100) {
+                    setNextState(OneBallAutonState.PUNCH1);
+                }
+                break;
+            case PUNCH1:
+                if (this.getTimeSinceStartOfState() > 500) {
+                    setNextState(OneBallAutonState.RESETPUNCH1);
+                }
+                break;
+            case RESETPUNCH1:
+                if (this.getTimeSinceStartOfState() > 500) {
+                    setNextState(OneBallAutonState.NEUTRAL);
                 }
                 break;
             case NEUTRAL:
@@ -45,15 +60,18 @@ public class StraightTestAuton extends BaseAutonSequence<StraightTestAutonState>
 
 }
 
-enum StraightTestAutonState implements IAutonState {
+enum OneBallAutonState implements IAutonState {
     NEUTRAL(false, -999),
-    PICKUPBALL1(true, 0, Robot.swerveDrive);
+    DRIVE1(true, 0, Robot.swerveDrive, Robot.shooter),
+    SHOOTBALL1(false, -999, Robot.shooter),
+    PUNCH1(false, -999, Robot.shooter),
+    RESETPUNCH1(false, -999, Robot.shooter);
 
     boolean isPathFollowing;
     int pathIndex;
     List<BaseSubsystem> requiredSubsystems;
 
-    StraightTestAutonState(boolean isPathFollowing, int pathIndex, BaseSubsystem... subsystems) {
+    OneBallAutonState(boolean isPathFollowing, int pathIndex, BaseSubsystem... subsystems) {
         this.isPathFollowing = isPathFollowing;
         this.pathIndex = pathIndex;
         requiredSubsystems = Arrays.asList(subsystems);

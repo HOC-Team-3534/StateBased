@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autons.*;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
-import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.sequences.Burp;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.Climber;
@@ -71,13 +70,15 @@ public class Robot extends TimedRobot {
 
 		sequenceProcessor = new SequenceProcessor();
 
-		sendableChooser.setDefaultOption("Straight Line Test", Auton.STRAIGHTLINETEST);
+		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
+		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);
 
-		sendableChooser.addOption("Station 1: 2 Ball", Auton.STATION1_2BALL);
+		sendableChooser.setDefaultOption("CORNER 2: 1 BALL", Auton.CORNER2_1BALL);
+
+		sendableChooser.addOption("CORNER 1: 2 BALL", Auton.CORNER1_2BALL);
+		sendableChooser.addOption("CORNER 1: 1 BALL", Auton.CORNER1_1BALL);
 
 		sendableChooser.addOption("NO AUTON (MUST BE STRAIGHT ALIGNED)", Auton.NO_OP);
-
-		sendableChooser.addOption("Station 1: 4 Ball", Auton.STATION3_4BALL);
 
 		SmartDashboard.putData(sendableChooser);
 	}

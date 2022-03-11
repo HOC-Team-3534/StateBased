@@ -63,11 +63,15 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
     public void setPathPlannerFollower(PathPlannerFollower ppf, boolean setInitialPosition){
         this.getPathStateController().setPathPlannerFollower(ppf);
         if(setInitialPosition){
-            gyroOffset = ppf.getInitialHolonomic().minus(RobotMap.navx.getRotation2d());
-            resetOdometry(ppf.getInitialPosition());
-            System.out.println("Initial Translation of Path (should match following odometry: " + ppf.getInitialPosition().toString());
-            System.out.println("Initial Odometry Set to: " + getSwerveDriveOdometry().getPoseMeters().toString());
+            setInitalPoseFromFirstPathPlannerFollower(ppf);
         }
+    }
+
+    public void setInitalPoseFromFirstPathPlannerFollower(PathPlannerFollower ppf){
+        gyroOffset = ppf.getInitialHolonomic().minus(RobotMap.navx.getRotation2d());
+        resetOdometry(ppf.getInitialPosition());
+        System.out.println("Initial Translation of Path (should match following odometry: " + ppf.getInitialPosition().toString());
+        System.out.println("Initial Odometry Set to: " + getSwerveDriveOdometry().getPoseMeters().toString());
     }
 
     public SwerveDriveKinematics getSwerveDriveKinematics() {

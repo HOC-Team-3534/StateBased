@@ -26,7 +26,7 @@ public class OneBallAuton extends BaseAutonSequence<OneBallAutonState> {
             case DRIVE1:
                 setPathPlannerFollowerAtStartOfState(true);
                 if(this.getPlannerFollower().isFinished()){
-                    setNextState(OneBallAutonState.NEUTRAL);
+                    setNextState(OneBallAutonState.SHOOTBALL1);
                 }
                 break;
             case SHOOTBALL1:

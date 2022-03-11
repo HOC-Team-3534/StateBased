@@ -17,7 +17,7 @@ public class StraightTestAuton extends BaseAutonSequence<StraightTestAutonState>
     int ballsShot = 0;
 
     public StraightTestAuton(StraightTestAutonState neutralState, StraightTestAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0) {
-        super(neutralState, startState, driveSubsystem, new PathPlannerFollower[]{path0});
+        super(neutralState, startState, driveSubsystem, path0);
     }
 
     @Override
@@ -66,15 +66,7 @@ enum StraightTestAutonState implements IAutonState {
 
     @Override
     public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            if (subsystem.isRequiredByAnother(sequence)) {
-                return false;
-            }
-        }
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            subsystem.require(sequence, this);
-        }
-        return true;
+        return IState.requireSubsystems(sequence, requiredSubsystems, this);
     }
 
     @Override
@@ -84,11 +76,7 @@ enum StraightTestAutonState implements IAutonState {
 
     @Override
     public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence) {
-        if(this.pathIndex >= 0 && pathIndex < sequence.getPaths().size()){
-            return sequence.getPaths().get(pathIndex);
-        }
-        System.out.println("ERROR: Tried to get path for state that doesn't have a valid path");
-        return null;
+        return IAutonState.getPath(sequence, pathIndex);
     }
 
     @Override

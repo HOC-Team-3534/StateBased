@@ -184,11 +184,7 @@ public class RobotMap {
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 
 		m_intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
-		if(ROBOTTYPE == RobotType.PBOT) {
-			m_intakeRoller.setInverted(true);
-		}else{
-			m_intakeRoller.setInverted(false);
-		}
+		m_intakeRoller.setInverted(ROBOTTYPE == RobotType.PBOT);
 
 		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
 

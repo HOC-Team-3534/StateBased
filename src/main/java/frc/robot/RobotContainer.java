@@ -61,7 +61,7 @@ public class RobotContainer {
 		return value;
 	}
 
-	public static enum Buttons {
+	public enum Buttons {
 
 		Shoot(new Callable<Boolean>(){
 
@@ -165,7 +165,7 @@ public class RobotContainer {
 
 		Callable<Boolean> callable;
 
-		private Buttons(Callable<Boolean> callable){
+		Buttons(Callable<Boolean> callable){
 	
 			this.callable = callable;
 	
@@ -186,7 +186,7 @@ public class RobotContainer {
 
 	}
 
-	public static enum Axes {
+	public enum Axes {
 		Drive_ForwardBackward(new Callable<Double>(){
 
 		@Override public Double call()throws Exception{
@@ -205,7 +205,7 @@ public class RobotContainer {
 
 		Callable<Double> callable;
 
-		private Axes(Callable<Double> callable) {
+		Axes(Callable<Double> callable) {
 
 			this.callable = callable;
 

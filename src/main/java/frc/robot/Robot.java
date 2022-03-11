@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
 	public static double designatedLoopPeriod = 20;
 
 	public static BaseAutonSequence<? extends IAutonState> chosenAuton;
-	private SendableChooser<Auton> sendableChooser = new SendableChooser<>();
+	private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
 
 	@Override
 	public void robotInit() {
@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		this.chosenAuton = sendableChooser.getSelected().getAuton();
+		chosenAuton = sendableChooser.getSelected().getAuton();
 		chosenAuton.start();
 	}
 

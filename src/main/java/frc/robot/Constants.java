@@ -180,7 +180,7 @@ public final class Constants {
 
                 public long millis;
 
-                private DelayToOff(double time) {
+                DelayToOff(double time) {
 
                         this.millis = (long) time * 1000;
 
@@ -207,7 +207,7 @@ public final class Constants {
 
                 public double time;
 
-                private FunctionStateDelay(double time) {
+                FunctionStateDelay(double time) {
 
                         this.time = time * 1000;
 
@@ -249,7 +249,7 @@ public final class Constants {
 
                 public double power;
 
-                private PowerOutput(double power) {
+                PowerOutput(double power) {
 
                         this.power = power;
 
@@ -258,6 +258,6 @@ public final class Constants {
         }
 
         public enum RobotType{
-                PBOT, CBOT;
+                PBOT, CBOT
         }
 }

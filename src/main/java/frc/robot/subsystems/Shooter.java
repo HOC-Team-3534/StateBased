@@ -30,7 +30,7 @@ public class Shooter extends BaseSubsystem {
     public Shooter(IDistanceToShooterRPM rpmFunction) {
         // makes the graphical number to enter text - have to do a
         // put to do a get
-        SmartDashboard.putNumber("RPM: ", 4250.0);
+        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 100.0);
         this.rpmFunction = rpmFunction;
     }
 
@@ -70,7 +70,8 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void waitNSpin() {
-        shoot(rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
+        double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
+        shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
     }
 
     private void waitNSpin(double rpm) {

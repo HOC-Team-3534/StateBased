@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.autons.Auton;
+import frc.robot.autons.*;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
+import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.sequences.Burp;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.Climber;

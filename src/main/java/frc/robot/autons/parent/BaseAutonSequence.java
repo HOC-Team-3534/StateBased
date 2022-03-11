@@ -28,6 +28,7 @@ public abstract class BaseAutonSequence<S extends IAutonState> extends BaseSeque
     protected void setPathPlannerFollowerAtStartOfState(boolean setInitialPositionAndHeading){
         if(this.getStateFirstRunThrough()) {
             this.pathPlannerFollower = this.getState().getPath(this);
+            this.pathPlannerFollower.resetStart();
             this.getBaseDriveSubsystem().setPathPlannerFollower(getPlannerFollower(), setInitialPositionAndHeading);
         }
     }

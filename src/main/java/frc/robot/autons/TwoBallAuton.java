@@ -70,9 +70,9 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
 enum TwoBallAutonState implements IAutonState {
     NEUTRAL(false, -999),
     PICKUPBALL1(true, 0, Robot.intake, Robot.swerveDrive, Robot.shooter),
-    SHOOTBALL1(false, -999, Robot.shooter, Robot.intake),
+    SHOOTBALL1(false, -999, Robot.shooter),
     PUNCH1(false, -999, Robot.shooter),
-    RESETPUNCH1(false, -999, Robot.shooter);
+    RESETPUNCH1(false, -999, Robot.shooter,Robot.intake);
 
     boolean isPathFollowing;
     int pathIndex;

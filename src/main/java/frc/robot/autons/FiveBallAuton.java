@@ -125,15 +125,15 @@ enum FiveBallAutonState implements IAutonState {
     PUNCH1(false, -999, Robot.shooter),
     RESETPUNCH1(false, -999, Robot.shooter),
     PICKUPBALL1(true, 0, Robot.intake, Robot.swerveDrive, Robot.shooter),
-    SHOOTBALL2(false, -999, Robot.shooter, Robot.intake),
+    SHOOTBALL2(false, -999, Robot.shooter),
     PUNCH2(false, -999, Robot.shooter),
-    RESETPUNCH2(false, -999, Robot.shooter),
+    RESETPUNCH2(false, -999, Robot.shooter, Robot.intake),
     PICKUPBALL2(true, 1, Robot.intake, Robot.swerveDrive),
     WAITFORINTAKE(false, -999, Robot.intake),
     PICKUPBALL3(true, 2, Robot.intake, Robot.swerveDrive, Robot.shooter),
-    SHOOTBALL3(false, -999, Robot.shooter, Robot.intake),
+    SHOOTBALL3(false, -999, Robot.shooter),
     PUNCH3(false, -999, Robot.shooter),
-    RESETPUNCH3(false, -999, Robot.shooter);
+    RESETPUNCH3(false, -999, Robot.shooter, Robot.intake);
 
     boolean isPathFollowing;
     int pathIndex;

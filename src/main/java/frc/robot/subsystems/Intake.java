@@ -15,7 +15,7 @@ import java.util.Set;
 public class Intake extends BaseSubsystem {
 
     String[] autonKickOutStateStrings = {"PICKUPBALL1", "PICKUPBALL2", "WAITFORINTAKE1", "PICKUPBALL3"};
-    String[] autonRetractStateStrings = {"SHOOTBALL1", "SHOOTBALL2", "SHOOTBALL3"};
+    String[] autonRetractStateStrings = {"RESETPUNCH1", "RESETPUNCH2", "RESETPUNCH3"};
     Set<String> autonKickOutStates = new HashSet<>(Arrays.asList(autonKickOutStateStrings));
     Set<String> autonRetractStates = new HashSet<>(Arrays.asList(autonRetractStateStrings));
 

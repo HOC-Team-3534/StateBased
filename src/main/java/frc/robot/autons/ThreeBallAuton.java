@@ -89,9 +89,9 @@ enum ThreeBallAutonState implements IAutonState {
     PUNCH1(false, -999, Robot.shooter),
     RESETPUNCH1(false, -999, Robot.shooter),
     PICKUPBALL1(true, 0, Robot.intake, Robot.swerveDrive, Robot.shooter),
-    SHOOTBALL2(false, -999, Robot.shooter, Robot.intake),
+    SHOOTBALL2(false, -999, Robot.shooter),
     PUNCH2(false, -999, Robot.shooter),
-    RESETPUNCH2(false, -999, Robot.shooter);
+    RESETPUNCH2(false, -999, Robot.shooter,Robot.intake);
 
     boolean isPathFollowing;
     int pathIndex;

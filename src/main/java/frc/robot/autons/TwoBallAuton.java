@@ -44,7 +44,7 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
                 }
                 break;
             case RESETPUNCH1:
-                if (this.getTimeSinceStartOfState() > 500) {
+                if (this.getTimeSinceStartOfState() > 1500) {
                     if(ballsShot == 2){
                         setNextState(TwoBallAutonState.NEUTRAL);
                     }else{

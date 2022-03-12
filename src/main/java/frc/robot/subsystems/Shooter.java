@@ -30,8 +30,8 @@ public class Shooter extends BaseSubsystem {
     public Shooter(IDistanceToShooterRPM rpmFunction) {
         // makes the graphical number to enter text - have to do a
         // put to do a get
-        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 100.0);
-        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 100.0);
+        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 105.0);
+        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 105.0);
         this.rpmFunction = rpmFunction;
     }
 

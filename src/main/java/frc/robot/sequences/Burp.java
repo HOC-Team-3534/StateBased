@@ -34,7 +34,7 @@ public class Burp extends BaseSequence<BurpState> {
                 }
                 break;
             case RETRACT:
-                if (this.getTimeSinceStartOfState() > 1000) {
+                if (this.getTimeSinceStartOfState() > 1500) {
                     setNextState(BurpState.BURP);
                 }
                 break;

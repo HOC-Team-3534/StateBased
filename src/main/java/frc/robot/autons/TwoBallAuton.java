@@ -17,8 +17,8 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
 
     int ballsShot = 0;
 
-    public TwoBallAuton(TwoBallAutonState neutralState, TwoBallAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0) {
-        super(neutralState, startState, driveSubsystem, path0);
+    public TwoBallAuton(TwoBallAutonState neutralState, TwoBallAutonState startState, BaseDriveSubsystem driveSubsystem) {
+        super(neutralState, startState, driveSubsystem);
     }
 
     @Override

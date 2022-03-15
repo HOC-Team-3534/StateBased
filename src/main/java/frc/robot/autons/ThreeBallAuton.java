@@ -17,8 +17,8 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
 
     int ballsShot = 0;
 
-    public ThreeBallAuton(ThreeBallAutonState neutralState, ThreeBallAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0) {
-        super(neutralState, startState, driveSubsystem, path0);
+    public ThreeBallAuton(ThreeBallAutonState neutralState, ThreeBallAutonState startState, BaseDriveSubsystem driveSubsystem) {
+        super(neutralState, startState, driveSubsystem);
     }
 
     @Override

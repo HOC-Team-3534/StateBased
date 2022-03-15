@@ -15,8 +15,8 @@ import java.util.List;
 
 public class OneBallAuton extends BaseAutonSequence<OneBallAutonState> {
 
-    public OneBallAuton(OneBallAutonState neutralState, OneBallAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0) {
-        super(neutralState, startState, driveSubsystem, path0);
+    public OneBallAuton(OneBallAutonState neutralState, OneBallAutonState startState, BaseDriveSubsystem driveSubsystem) {
+        super(neutralState, startState, driveSubsystem);
     }
 
     @Override

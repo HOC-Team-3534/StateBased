@@ -16,8 +16,8 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonState> {
 
     int ballsShot = 0;
 
-    public FiveBallAuton(FiveBallAutonState neutralState, FiveBallAutonState startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower path0, PathPlannerFollower path1, PathPlannerFollower path2) {
-        super(neutralState, startState, driveSubsystem, path0, path1, path2);
+    public FiveBallAuton(FiveBallAutonState neutralState, FiveBallAutonState startState, BaseDriveSubsystem driveSubsystem) {
+        super(neutralState, startState, driveSubsystem);
     }
 
     @Override

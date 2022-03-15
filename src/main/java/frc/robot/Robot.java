@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autons.*;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
+import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.sequences.Burp;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.Climber;
@@ -49,6 +50,14 @@ public class Robot extends TimedRobot {
 	public static BaseAutonSequence<? extends IAutonState> chosenAuton;
 	private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
 
+	public static PathPlannerFollower corner1OneBall1;
+	public static PathPlannerFollower corner1TwoBall1;
+	public static PathPlannerFollower corner2OneBall1;
+	public static PathPlannerFollower corner3OneBall1;
+	public static PathPlannerFollower corner4FiveBall1;
+	public static PathPlannerFollower corner4FiveBall2;
+	public static PathPlannerFollower corner4FiveBall3;
+
 	@Override
 	public void robotInit() {
 
@@ -69,6 +78,21 @@ public class Robot extends TimedRobot {
 		climber = new Climber();
 
 		sequenceProcessor = new SequenceProcessor();
+
+		corner1OneBall1 = new PathPlannerFollower("Corner 1 1 Ball 1");
+		corner1TwoBall1 = new PathPlannerFollower("Corner 1 2 Ball 1");
+		corner2OneBall1 = new PathPlannerFollower("Corner 2 1 Ball 1");
+		corner3OneBall1 = new PathPlannerFollower("Corner 3 1 Ball 1");
+		corner4FiveBall1 = new PathPlannerFollower("Corner 4 5 Ball 1");
+		corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2");
+		corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3");
+
+		Auton.CORNER1_1BALL.setPathPlannerFollowers(corner1OneBall1);
+		Auton.CORNER1_2BALL.setPathPlannerFollowers(corner1TwoBall1);
+		Auton.CORNER2_1BALL.setPathPlannerFollowers(corner2OneBall1);
+		Auton.CORNER3_1BALL.setPathPlannerFollowers(corner3OneBall1);
+		Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBall1);
+		Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
 
 		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
 		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);

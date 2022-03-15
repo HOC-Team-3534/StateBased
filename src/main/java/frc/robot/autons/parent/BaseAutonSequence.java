@@ -13,12 +13,15 @@ public abstract class BaseAutonSequence<S extends IAutonState> extends BaseSeque
 
     PathPlannerFollower pathPlannerFollower;
     final BaseDriveSubsystem baseDriveSubsystem;
-    final List<PathPlannerFollower> paths;
+    List<PathPlannerFollower> paths;
 
-    public BaseAutonSequence(S neutralState, S startState, BaseDriveSubsystem driveSubsystem, PathPlannerFollower... paths) {
+    public BaseAutonSequence(S neutralState, S startState, BaseDriveSubsystem driveSubsystem) {
         super(neutralState, startState);
         this.baseDriveSubsystem = driveSubsystem;
-        this.paths = Arrays.asList(paths);
+    }
+
+    public void setPathPlannerFollowers(PathPlannerFollower... pathPlannerFollowers){
+        this.paths = Arrays.asList(pathPlannerFollowers);
     }
 
     public PathPlannerFollower getPlannerFollower(){

@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.extras;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class XboxPlusPOV extends XboxController {
 
 		int value;
 
-		private POV(int value) {
+		POV(int value) {
 
 			this.value = value;
 

@@ -2,10 +2,10 @@ package frc.robot.subsystems.parent;
 
 public interface ISubsystem {
 
-    public void process();
+    void process();
 
-    public void neutral();
+    void neutral();
 
-    public boolean abort();
+    boolean abort();
     
 }

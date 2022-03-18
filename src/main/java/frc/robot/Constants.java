@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -52,7 +53,7 @@ public final class Constants {
         public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; // FIXME Set back left drive motor ID
         public static final int BACK_LEFT_MODULE_STEER_MOTOR = 9; // FIXME Set back left steer motor ID
         public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8; // FIXME Set back left steer encoder ID
-        public static final double BACK_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(92.0) : -Math.toRadians(64.83); //274.04 // FIXME Measure and set back
+        public static final double BACK_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(92.0) : -Math.toRadians(133.4); //274.04 // FIXME Measure and set back
                                                                                           // left
                                                                                           // steer offset
 
@@ -72,8 +73,8 @@ public final class Constants {
         public static final int L3_EXTEND = 4;
         public static final int L3_RETRACT = 5;
 
-        public static final int H4_EXTEND = 6;
-        public static final int H4_RETRACT = 7;
+        public static final int H4_EXTEND = 6; //6
+        public static final int H4_RETRACT = 7; //7
 
         public static final int L1_SWITCH = 0;
         public static final int H2_SWITCH = 1;
@@ -93,10 +94,15 @@ public final class Constants {
         public static final double ARM_DEGREES_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR / 360.0;
         public static final double FALCON_TICKS_TO_ARM_DEGREES = 1 / ARM_DEGREES_TO_FALCON_TICKS;
 
-        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 40.0;
-        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 60;
+        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 45.0;
+        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 50.0;
         public static final int MAX_ARM_VELOCITY_NATIVE_UNITS = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
+
+        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND_SLOW = 45.0;
+        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW = 50.0;
+        public static final int MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
+        public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         
         public static final int SHOOTER_MOTOR = 13;
 
@@ -120,9 +126,17 @@ public final class Constants {
 
         public static final double MAX_VOLTAGE = 12.0;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 *
-                        SdsModuleConfigurations.MK4_L2.getDriveReduction() *
-                        SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI * .02;
+        public static final double PHYSICAL_MAX_VELOCITY = 6380.0 / 60.0 *
+                SdsModuleConfigurations.MK4_L2.getDriveReduction() *
+                SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
+
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = PHYSICAL_MAX_VELOCITY * .02;
+
+        public static final double MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS = 2.0;
+
+        public static final double AUTON_MAX_VELOCITY_RATIO = MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS / PHYSICAL_MAX_VELOCITY;
+
+        public static final double MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND = 3.0;
 
         public static final double MAX_VELOCITY_CREEP_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.25;
         /**
@@ -137,6 +151,22 @@ public final class Constants {
 
         public static final double MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.25;
 
+        public static final double MIDBAR_GRAB_ANGLE_COMMAND = 90.0;
+        public static final double HIGHBAR_GRAB_ANGLE_COMMAND = 265.0; //impossible to actually be at 270
+        public static final double TRAVERSALBAR_GRAB_ANGLE_COMMMAND = 445.0; //impossible to actually be at 450
+        public static final double SWINGTOREST_ANGLE_COMMAND = 450.0;
+
+        public static final double MIDHIGHBAR_SLOWDOWN_ANGLE = 210.0;
+        public static final double HIGHTRAVERSAL_SLOWDOWN_ANGLE = 390.0;
+
+        public static final double MIDHIGHBAR_RECENTER_ANGLE_COMMAND = 220.0; //would be sitting perpendicular to the bars at 180
+        public static final double HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND = 400.0; //would be sitting perpendicular to the bars at 360
+        public static final double RECENTER_ANGLE_TOLERANCE = 5.0; //should at least be 3 degrees just for comfort, if not at least 5
+
+        public static final double DONERELEASINGMIDBAR_ANGLE = 270.0;
+  
+        public static final Translation2d HUB_LOCATION = new Translation2d(8.27, 4.15);
+
         public enum DelayToOff {
 
                 /**
@@ -150,7 +180,7 @@ public final class Constants {
 
                 public long millis;
 
-                private DelayToOff(double time) {
+                DelayToOff(double time) {
 
                         this.millis = (long) time * 1000;
 
@@ -177,7 +207,7 @@ public final class Constants {
 
                 public double time;
 
-                private FunctionStateDelay(double time) {
+                FunctionStateDelay(double time) {
 
                         this.time = time * 1000;
 
@@ -219,7 +249,7 @@ public final class Constants {
 
                 public double power;
 
-                private PowerOutput(double power) {
+                PowerOutput(double power) {
 
                         this.power = power;
 
@@ -228,6 +258,6 @@ public final class Constants {
         }
 
         public enum RobotType{
-                PBOT, CBOT;
+                PBOT, CBOT
         }
 }

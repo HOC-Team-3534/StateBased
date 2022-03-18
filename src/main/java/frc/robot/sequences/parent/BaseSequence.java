@@ -13,6 +13,8 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     long timeAtStartOfSequence = 0;
     long timeAtStartOfState = 0;
 
+    boolean stateFirstRunThrough = false;
+
     public BaseSequence(S neutralState, S startState) {
         setNeutralState(neutralState);
         setStartState(startState);
@@ -61,6 +63,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         if (state.requireSubsystems(this)) {
             this.state = state;
             updateStateStartTime();
+            stateFirstRunThrough = true;
             return true;
         }
         return false;
@@ -95,6 +98,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     }
 
     protected boolean updateState() {
+        stateFirstRunThrough = false;
         if (getState() != getNextState()) {
             return setState(nextState);
         }
@@ -116,5 +120,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
     public long getTimeSinceStartOfState() {
         return System.currentTimeMillis() - timeAtStartOfState;
     }
+
+    public boolean getStateFirstRunThrough() { return stateFirstRunThrough; }
 
 }

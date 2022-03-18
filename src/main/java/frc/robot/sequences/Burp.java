@@ -23,7 +23,7 @@ public class Burp extends BaseSequence<BurpState> {
             case BURP:
                 if(!Buttons.Burp.getButton()){
                     setNextState(BurpState.NEUTRAL);
-                }if (this.getTimeSinceStartOfState() > 1750 && RobotMap.shooter.getClosedLoopError() < 100) {
+                }if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 250) {
                     System.out.println("In state");
                     setNextState(BurpState.PUNCH);
                 }
@@ -34,7 +34,7 @@ public class Burp extends BaseSequence<BurpState> {
                 }
                 break;
             case RETRACT:
-                if (this.getTimeSinceStartOfState() > 500) {
+                if (this.getTimeSinceStartOfState() > 1500) {
                     setNextState(BurpState.BURP);
                 }
                 break;
@@ -75,15 +75,7 @@ enum BurpState implements IState {
 
     @Override
     public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            if (subsystem.isRequiredByAnother(sequence)) {
-                return false;
-            }
-        }
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            subsystem.require(sequence, this);
-        }
-        return true;
+        return IState.requireSubsystems(sequence, requiredSubsystems, this);
     }
 
     @Override

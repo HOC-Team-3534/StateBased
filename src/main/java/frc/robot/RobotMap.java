@@ -180,6 +180,7 @@ public class RobotMap {
 		shooter.config_kF(0, 0.05);
 		shooter.config_kP(0, 0.45);
 		shooter.config_kD(0, 80);
+		shooter.configClosedloopRamp(2.045);
 
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 

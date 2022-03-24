@@ -20,7 +20,7 @@ import edu.wpi.first.math.geometry.Translation2d;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-        public static RobotType ROBOTTYPE = RobotType.CBOT;
+        public static RobotType ROBOTTYPE = RobotType.PBOT;
         /**
          * The left-to-right distance between the drivetrain wheels
          *
@@ -105,6 +105,8 @@ public final class Constants {
         public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         
         public static final int SHOOTER_MOTOR = 13;
+
+        public static final int SHOOTER_BOOT = 18;
 
         public static final int INTAKE_ROLLER = 15;
 

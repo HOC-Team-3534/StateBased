@@ -27,12 +27,13 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
         switch (getState()) {
             case PICKUPBALL1:
                 setPathPlannerFollowerAtStartOfState(true);
+                ballsShot = 0;
                 if(this.getPlannerFollower().isFinished()){
                     setNextState(TwoBallAutonState.SHOOTBALL1);
                 }
                 break;
             case SHOOTBALL1:
-                if (((ballsShot == 0 && this.getTimeSinceStartOfState() > 1000) || (ballsShot == 1 && this.getTimeSinceStartOfState() > 500))
+                if (((ballsShot == 0 && this.getTimeSinceStartOfState() > 500) || (ballsShot == 1 && this.getTimeSinceStartOfState() > 500))
                         && RobotMap.shooter.getClosedLoopError() < 100) {
                     setNextState(TwoBallAutonState.PUNCH1);
                 }

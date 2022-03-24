@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
-		shooter = new Shooter(d -> 611.5 + 2982.5 * Math.log(d));
+		shooter = new Shooter(d -> 1018 + 1984 * Math.log(d));
 
 		intake = new Intake();
 

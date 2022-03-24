@@ -22,19 +22,26 @@ public class Burp extends BaseSequence<BurpState> {
         switch (getState()) {
             case BURP:
                 if(!Buttons.Burp.getButton()){
-                    setNextState(BurpState.NEUTRAL);
+                    setNextState(BurpState.RETRACT);
                 }if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 250) {
                     System.out.println("In state");
                     setNextState(BurpState.PUNCH);
                 }
                 break;
             case PUNCH:
-                if (this.getTimeSinceStartOfState() > 500) {
+                if (this.getTimeSinceStartOfState() > 250) {
                     setNextState(BurpState.RETRACT);
                 }
                 break;
             case RETRACT:
-                if (this.getTimeSinceStartOfState() > 1500) {
+                if(!Buttons.Burp.getButton() && this.getTimeSinceStartOfState() > 250){
+                    setNextState(BurpState.NEUTRAL);
+                }else if (this.getTimeSinceStartOfState() > 250) {
+                    setNextState(BurpState.BOOT);
+                }
+                break;
+            case BOOT:
+                if(this.getTimeSinceStartOfState() > 150){
                     setNextState(BurpState.BURP);
                 }
                 break;
@@ -60,7 +67,8 @@ enum BurpState implements IState {
     NEUTRAL,
     BURP(Robot.shooter),
     PUNCH(Robot.shooter),
-    RETRACT(Robot.shooter);
+    RETRACT(Robot.shooter),
+    BOOT(Robot.shooter);
 
     List<BaseSubsystem> requiredSubsystems;
 

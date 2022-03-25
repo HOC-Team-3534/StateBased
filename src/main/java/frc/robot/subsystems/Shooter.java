@@ -96,7 +96,7 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void burp() {
-        shoot(2000);
+        shoot(1000);
     }
 
     private void punch() {

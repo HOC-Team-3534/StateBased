@@ -94,8 +94,8 @@ public final class Constants {
         public static final double ARM_DEGREES_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR / 360.0;
         public static final double FALCON_TICKS_TO_ARM_DEGREES = 1 / ARM_DEGREES_TO_FALCON_TICKS;
 
-        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 45.0;
-        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 50.0;
+        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 51.0;
+        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 100.0;
         public static final int MAX_ARM_VELOCITY_NATIVE_UNITS = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
 
@@ -151,13 +151,13 @@ public final class Constants {
 
         public static final double MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.25;
 
-        public static final double MIDBAR_GRAB_ANGLE_COMMAND = 90.0;
+        public static final double MIDBAR_GRAB_ANGLE_COMMAND = 94.0;
         public static final double HIGHBAR_GRAB_ANGLE_COMMAND = 265.0; //impossible to actually be at 270
         public static final double TRAVERSALBAR_GRAB_ANGLE_COMMMAND = 445.0; //impossible to actually be at 450
         public static final double SWINGTOREST_ANGLE_COMMAND = 450.0;
 
-        public static final double MIDHIGHBAR_SLOWDOWN_ANGLE = 210.0;
-        public static final double HIGHTRAVERSAL_SLOWDOWN_ANGLE = 390.0;
+        public static final double MIDHIGHBAR_SLOWDOWN_ANGLE = 130.0;
+        public static final double HIGHTRAVERSAL_SLOWDOWN_ANGLE = 290.0;
 
         public static final double MIDHIGHBAR_RECENTER_ANGLE_COMMAND = 220.0; //would be sitting perpendicular to the bars at 180
         public static final double HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND = 400.0; //would be sitting perpendicular to the bars at 360

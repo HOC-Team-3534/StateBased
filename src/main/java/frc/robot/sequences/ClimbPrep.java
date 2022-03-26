@@ -22,13 +22,13 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
         switch (getState()) {
             case PREPCLAW:
-                if (getTimeSinceStartOfState() > 500) {
+                if (getTimeSinceStartOfState() > 50) {
                     setNextState(ClimbPrepState.SWINGARM);
                 }
                 break;
             case SWINGARM:
                 if (getTimeSinceStartOfState() > 500
-                        && (RobotMap.m_l1Switch.get() || RobotMap.m_h2Switch.get())) {
+                        && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
                     setNextState(ClimbPrepState.PREPPEDFORCLIMB);
                 }
                 break;
@@ -70,15 +70,7 @@ enum ClimbPrepState implements IState {
 
     @Override
     public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            if (subsystem.isRequiredByAnother(sequence)) {
-                return false;
-            }
-        }
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            subsystem.require(sequence, this);
-        }
-        return true;
+        return IState.requireSubsystems(sequence, requiredSubsystems, this);
     }
 
     @Override

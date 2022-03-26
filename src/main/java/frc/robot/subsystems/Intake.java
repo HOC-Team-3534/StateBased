@@ -8,7 +8,16 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Intake extends BaseSubsystem {
+
+    String[] autonKickOutStateStrings = {"PICKUPBALL1", "PICKUPBALL2", "WAITFORINTAKE1", "PICKUPBALL3"};
+    String[] autonRetractStateStrings = {"RESETPUNCH1", "RESETPUNCH2", "RESETPUNCH3"};
+    Set<String> autonKickOutStates = new HashSet<>(Arrays.asList(autonKickOutStateStrings));
+    Set<String> autonRetractStates = new HashSet<>(Arrays.asList(autonRetractStateStrings));
 
     public Intake(){
         //makes the graphical number to enter text - have to do a 
@@ -21,10 +30,12 @@ public class Intake extends BaseSubsystem {
 
         super.process();
 
-        if(getStateRequiringName() == "EXTEND"){
+        if(getStateRequiringName() == "EXTEND" || autonKickOutStates.contains(getStateRequiringName())){
             kickOut();
-        }else if(getStateRequiringName() == "RETRACT"){
+        }else if(getStateRequiringName() == "RETRACT" || autonRetractStates.contains(getStateRequiringName())) {
             retract();
+        }else if(getStateRequiringName() == "EXTAKE"){
+            extake();
         }else{
             neutral();
         }
@@ -37,12 +48,20 @@ public class Intake extends BaseSubsystem {
     }
 
     public void kickOut() {
-        setWithADelayToOff(RobotMap.m_intakeKickers, Value.kForward, Constants.DelayToOff.INTAKE_KICKERS.millis);
-        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.60);
+        if(getStateFirstRunThrough()) {
+            setWithADelayToOff(RobotMap.m_intakeKickers, Value.kForward, Constants.DelayToOff.INTAKE_KICKERS.millis);
+            RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.80);
+        }
     }
 
     public void retract() {
-        setWithADelayToOff(RobotMap.m_intakeKickers, Value.kReverse, Constants.DelayToOff.INTAKE_KICKERS.millis);
+        if(getStateFirstRunThrough()) {
+            setWithADelayToOff(RobotMap.m_intakeKickers, Value.kReverse, Constants.DelayToOff.INTAKE_KICKERS.millis);
+        }
+    }
+
+    public void extake(){
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, -0.80);
     }
 
     @Override

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.extras.XboxPlusPOV;
+
 import java.util.concurrent.Callable;
 
 /**
@@ -59,14 +61,33 @@ public class RobotContainer {
 		return value;
 	}
 
-	public static enum Buttons {
+	public enum Buttons {
 
-		Shoot(new Callable<Boolean>(){
+		RAMPSHOOTER(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+
+				return RobotContainer.getController2().getRightBumper();
+			}
+			
+		}),
+		SHOOT(new Callable<Boolean>(){
 
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
 				return RobotContainer.getController2().getRightTriggerAxis() > 0.15;
+			}
+
+		}),
+		Burp(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getLeftTriggerAxis() > 0.15;
 			}
 			
 		}),
@@ -88,12 +109,57 @@ public class RobotContainer {
 			}
 
 		}),
+		Extake(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getRightBumper();
+			}
+
+		}),
 		Climb(new Callable<Boolean>(){
 
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
 				return RobotContainer.getController2().getYButton();
+			}
+			
+		}),
+		MoveClimbArmManually(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getBackButton();
+			}
+			
+		}),
+		MoveClimbArmForward(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getRightBumper();
+			}
+			
+		}),
+		MoveClimbArmBackward(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getLeftBumper();
+			}
+			
+		}),
+		ClimbArmEncoderReset(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getStartButton();
 			}
 			
 		}),
@@ -105,11 +171,20 @@ public class RobotContainer {
 				return RobotContainer.getController2().getAButton();
 			}
 			
+		}),
+		ClimbPrepReset(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getBackButton();
+			}
+			
 		});
 
 		Callable<Boolean> callable;
 
-		private Buttons(Callable<Boolean> callable){
+		Buttons(Callable<Boolean> callable){
 	
 			this.callable = callable;
 	
@@ -130,7 +205,7 @@ public class RobotContainer {
 
 	}
 
-	public static enum Axes {
+	public enum Axes {
 		Drive_ForwardBackward(new Callable<Double>(){
 
 		@Override public Double call()throws Exception{
@@ -149,7 +224,7 @@ public class RobotContainer {
 
 		Callable<Double> callable;
 
-		private Axes(Callable<Double> callable) {
+		Axes(Callable<Double> callable) {
 
 			this.callable = callable;
 

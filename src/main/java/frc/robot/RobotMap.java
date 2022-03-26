@@ -8,14 +8,11 @@ import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.extras.Limelight;
 
 import static frc.robot.Constants.*;
 
@@ -37,10 +34,13 @@ public class RobotMap {
 	public static SwerveModule m_backLeftModule;
 	public static SwerveModule m_backRightModule;
 
+	public static Limelight limelight;
+
 	public static PneumaticsControlModule m_mainPCM;
 	public static PneumaticsControlModule m_climbPCM;
 
 	public static WPI_TalonFX shooter;
+	public static WPI_TalonSRX shooterBoot;
 	public static DoubleSolenoid pusher;
 
 	public static WPI_TalonSRX m_intakeRoller;
@@ -121,7 +121,7 @@ public class RobotMap {
 		// a different configuration or motors
 		// you MUST change it. If you do not, your code will crash on startup.
 		// FIXME Setup motor configuration
-		
+
 		m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
 				// This parameter is optional, but will allow you to see the current state of
 				// the module on the dashboard.
@@ -170,20 +170,29 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_MOTOR,
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
+		if(Constants.ROBOTTYPE == RobotType.PBOT) {
+			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56);
+		}else{
+			limelight = new Limelight(ty -> 0.006367 * Math.pow(ty, 2) - .095 * ty + 3.52);
+		}
 
 		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
 		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
 
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
-		shooter.config_kF(0, 0.05);
-		shooter.config_kP(0, 0.2);
-		shooter.config_kD(0, 3.5);
+		shooter.config_kF(0, 0.0525); // .05
+		shooter.config_kP(0, 0.45);
+		shooter.config_kD(0, 80);
+		shooter.configClosedloopRamp(2.045);
+
+		shooterBoot = new WPI_TalonSRX(Constants.SHOOTER_BOOT);
+		shooterBoot.setInverted(true);
 
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 
 		m_intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
-		m_intakeRoller.setInverted(true);
+		m_intakeRoller.setInverted(ROBOTTYPE == RobotType.PBOT);
 
 		m_intakeKickers = m_mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
 
@@ -201,16 +210,18 @@ public class RobotMap {
 
 		m_climbMotor = new WPI_TalonFX(CLIMB_ARM_MOTOR);
 		m_climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
-				.valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
-						/ Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 * CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		// m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy
+		// .valueOf((int) ((m_climbEncoder.getVoltage() - CLIMB_ANALOG_VOLTAGE_OFFSET)
+		// / Constants.CLIMB_ANALOG_VOLTAGE_TO_DEGREE / 360.0 *
+		// CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS)));
+		m_climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
 		m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
 		m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
-		m_climbMotor.config_kP(0, 0.025);
+		m_climbMotor.config_kP(0, 0.075);
 		m_climbMotor.config_kI(0, 0.0);
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);
 
-		navx = new AHRS(SPI.Port.kMXP);
+		navx = new AHRS(SerialPort.Port.kUSB);
 	}
 }

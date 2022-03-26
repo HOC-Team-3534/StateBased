@@ -21,9 +21,9 @@ public abstract class BaseSubsystem implements ISubsystem {
     Map<DoubleSolenoid, List<Long>> solenoidSetTimes = new HashMap<>();
 
     public boolean isRequiredByAnother(BaseSequence<? extends IState> sequence) {
-        if(sequenceRequiring == sequence){
+        if (sequenceRequiring == sequence) {
             return false;
-        }  
+        }
         return this.required;
     }
 
@@ -41,17 +41,17 @@ public abstract class BaseSubsystem implements ISubsystem {
         }
     }
 
-    public void process(){
+    public void process() {
         isStillRequired();
         checkStateChanged();
         checkToTurnOff();
     }
 
-    private void setSequenceRequiring(BaseSequence<? extends IState> sequence){
+    private void setSequenceRequiring(BaseSequence<? extends IState> sequence) {
         this.sequenceRequiring = sequence;
     }
 
-    private void setStateRequiring(IState state){
+    private void setStateRequiring(IState state) {
         this.stateRequiring = state;
         stateChanged = true;
     }
@@ -67,12 +67,12 @@ public abstract class BaseSubsystem implements ISubsystem {
         }
     }
 
-    private void checkStateChanged(){
+    private void checkStateChanged() {
         stateFirstRunThrough = stateChanged;
         stateChanged = false;
     }
 
-    public boolean getStateFirstRunThrough(){
+    public boolean getStateFirstRunThrough() {
         return this.stateFirstRunThrough;
     }
 
@@ -81,16 +81,16 @@ public abstract class BaseSubsystem implements ISubsystem {
         sequenceRequiring = null;
         stateRequiring = null;
     }
-    
+
     public boolean forceRelease() {
-        if(this.getSequenceRequiring() == null){
+        if (this.getSequenceRequiring() == null) {
             return true;
         }
-        if(this.abort()){
-          if(this.getSequenceRequiring().reset()){
-            release();
-            return true;
-          }
+        if (this.abort()) {
+            if (this.getSequenceRequiring().reset()) {
+                release();
+                return true;
+            }
         }
         return false;
     }
@@ -100,32 +100,32 @@ public abstract class BaseSubsystem implements ISubsystem {
     }
 
     public String getStateRequiringName() {
-        if(stateRequiring == null){
+        if (stateRequiring == null) {
             return "NONE";
         }
         return stateRequiring.getName();
     }
 
-    public void setWithADelayToOff(DoubleSolenoid ds, DoubleSolenoid.Value value, long millisUntilOff){
-        solenoidSetTimes.put(ds, Arrays.asList(System.currentTimeMillis(), millisUntilOff));
+    public void setWithADelayToOff(DoubleSolenoid ds, DoubleSolenoid.Value value, long millisUntilOff) {
+        //solenoidSetTimes.put(ds, Arrays.asList(System.currentTimeMillis(), millisUntilOff));
         ds.set(value);
     }
 
-    private boolean checkToTurnOff(){
+    private boolean checkToTurnOff() {
         List<DoubleSolenoid> removeList = new ArrayList<DoubleSolenoid>();
         boolean setToOff = false;
-        for(DoubleSolenoid ds : solenoidSetTimes.keySet()){
+        for (DoubleSolenoid ds : solenoidSetTimes.keySet()) {
+            System.out.println("I AM SOLENOID");
             List<Long> times = solenoidSetTimes.get(ds);
-            if(ds.get() != DoubleSolenoid.Value.kOff
-                    && System.currentTimeMillis() - times.get(0) >= times.get(1)){
-                ds.set(DoubleSolenoid.Value.kOff);
+            if (ds.get() != DoubleSolenoid.Value.kOff
+                    && System.currentTimeMillis() - times.get(0) >= times.get(1)) {
+                //ds.set(DoubleSolenoid.Value.kOff);
+                System.out.println("SET SOLENOID TO OFF");
                 removeList.add(ds);
                 setToOff = true;
-            }else if(ds.get() == DoubleSolenoid.Value.kOff){
-                removeList.add(ds);
             }
         }
-        for(DoubleSolenoid ds : removeList){
+        for (DoubleSolenoid ds : removeList) {
             solenoidSetTimes.remove(ds);
         }
         return setToOff;

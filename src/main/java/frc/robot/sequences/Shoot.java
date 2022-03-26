@@ -21,21 +21,35 @@ public class Shoot extends BaseSequence<ShootState> {
     public void process() {
         switch (getState()) {
             case WAITNSPIN:
-                if (!Buttons.Shoot.getButton()) {
-                    setNextState(ShootState.NEUTRAL);
+                if (RobotMap.limelight.isValid()) {
+                    RobotMap.limelight.setLockedOn();
                 }
-                if (this.getTimeSinceStartOfState() > 1500 && RobotMap.shooter.getClosedLoopError() < 100) {
+                if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
+                    setNextState(ShootState.RESETPUNCH);
+                }
+                if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && RobotMap.shooter.getClosedLoopError() < 150
+                        && RobotMap.limelight.isLockedOn() && Math.abs(Robot.swerveDrive.getTargetShootRotationError().getDegrees()) < 3.0) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }
                 break;
             case PUNCH:
-                if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(ShootState.RETRACT);
+                if (this.getTimeSinceStartOfState() > 250) {
+                    System.out.println("punching");
+                    setNextState(ShootState.RESETPUNCH);
+
                 }
                 break;
-            case RETRACT:
-                if (this.getTimeSinceStartOfState() > 500) {
+            case RESETPUNCH:
+                if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton() && this.getTimeSinceStartOfState() > 250) {
+                    this.setNextState(ShootState.NEUTRAL);
+                } else if (this.getTimeSinceStartOfState() > 350) {
+                    //System.out.println("resetting");
+                    setNextState(ShootState.BOOT);
+                }
+                break;
+            case BOOT:
+                if (this.getTimeSinceStartOfState() > 150) {
                     setNextState(ShootState.WAITNSPIN);
                 }
                 break;
@@ -59,9 +73,10 @@ public class Shoot extends BaseSequence<ShootState> {
 
 enum ShootState implements IState {
     NEUTRAL,
-    WAITNSPIN(Robot.shooter),
-    PUNCH(Robot.shooter),
-    RETRACT(Robot.shooter);
+    WAITNSPIN(Robot.shooter, Robot.swerveDrive),
+    PUNCH(Robot.shooter, Robot.swerveDrive),
+    RESETPUNCH(Robot.shooter, Robot.swerveDrive),
+    BOOT(Robot.shooter, Robot.swerveDrive);
 
     List<BaseSubsystem> requiredSubsystems;
 
@@ -76,15 +91,7 @@ enum ShootState implements IState {
 
     @Override
     public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            if (subsystem.isRequiredByAnother(sequence)) {
-                return false;
-            }
-        }
-        for (BaseSubsystem subsystem : requiredSubsystems) {
-            subsystem.require(sequence, this);
-        }
-        return true;
+        return IState.requireSubsystems(sequence, requiredSubsystems, this);
     }
 
     @Override

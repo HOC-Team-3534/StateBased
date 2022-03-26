@@ -33,7 +33,7 @@ public class SwerveDrive extends BaseDriveSubsystem {
 		setPathStateController(pathStateController);
 	}
 
-	PIDController limelightPID = new PIDController(0.17, 0.0, 0.0);
+	PIDController limelightPID = new PIDController(0.2, 0.0, 0.0);
 	Rotation2d targetShootRotation = new Rotation2d();
 
 	@Override

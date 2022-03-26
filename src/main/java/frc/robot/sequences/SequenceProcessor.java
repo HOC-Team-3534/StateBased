@@ -50,6 +50,7 @@ public class SequenceProcessor{
         }
         if(Buttons.Shoot.getButton()) {
             shoot.start(Robot.swerveDrive);
+            RobotMap.limelight.resetLimelight();
         }
         if(Buttons.Burp.getButton()){
             burp.start();

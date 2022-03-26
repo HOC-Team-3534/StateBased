@@ -8,6 +8,7 @@ public class Limelight {
     ILimelightAngleToDistanceFunction distanceFunction;
     NetworkTable table;
     boolean isValid;
+    boolean isLockedOn;
     double savedDistance = -999;
     double savedTX = 0;
 
@@ -65,6 +66,20 @@ public class Limelight {
     public boolean isValid() {
         isValid = Math.abs(getSkew() + 45) > 40 && getValidTarget();
         return isValid;
+    }
+
+    public void resetLimelight(){
+        isLockedOn = false;
+        savedDistance = -999;
+        savedTX = 0;
+    }
+
+    private boolean isLockedOn(){
+        return isLockedOn;
+    }
+
+    private void setLockedOn(){
+        isLockedOn = true;
     }
 
 }

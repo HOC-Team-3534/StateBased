@@ -106,6 +106,8 @@ public final class Constants {
         
         public static final int SHOOTER_MOTOR = 13;
 
+        public static final int SHOOTER_BOOT = 18;
+
         public static final int INTAKE_ROLLER = 15;
 
         public static final int INTAKE_EXTEND = 2;

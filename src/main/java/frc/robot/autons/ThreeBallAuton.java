@@ -27,6 +27,7 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
         switch (getState()) {
             case SHOOTBALL1:
                 //THE FOLLOWING IS ONLY IN ORDER TO SET THE CORRECT INITIAL POSITION
+                ballsShot = 0;
                 setInitialPoseFromCurrentPath();
                 if (RobotMap.shooter.getClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
                     setNextState(ThreeBallAutonState.PUNCH1);

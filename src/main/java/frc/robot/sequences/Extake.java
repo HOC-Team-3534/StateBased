@@ -9,9 +9,9 @@ import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.IState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public class IntakeSeq extends BaseSequence<IntakeState> {
+public class Extake extends BaseSequence<ExtakeState> {
 
-    public IntakeSeq (IntakeState neutralState, IntakeState startState) {
+    public Extake (ExtakeState neutralState, ExtakeState startState) {
         super(neutralState, startState);
         //TODO Auto-generated constructor stub
     }
@@ -19,14 +19,9 @@ public class IntakeSeq extends BaseSequence<IntakeState> {
     @Override
     public void process() {
         switch (getState()) {
-            case EXTEND:
-                if (!Buttons.Intake.getButton()) {
-                    setNextState(IntakeState.RETRACT);
-                }
-                break;
-            case RETRACT:
-                if(getTimeSinceStartOfState() > 300){
-                    setNextState(IntakeState.NEUTRAL);
+            case EXTAKE:
+                if (!Buttons.Extake.getButton()) {
+                    setNextState(ExtakeState.NEUTRAL);
                 }
                 break;
             case NEUTRAL:
@@ -47,14 +42,13 @@ public class IntakeSeq extends BaseSequence<IntakeState> {
     
 }
 
-enum IntakeState implements IState {
+enum ExtakeState implements IState {
     NEUTRAL,
-    EXTEND(Robot.intake),
-    RETRACT(Robot.intake);
+    EXTAKE(Robot.intake);
 
     List<BaseSubsystem> requiredSubsystems;
 
-    IntakeState(BaseSubsystem... subsystems) {
+    ExtakeState(BaseSubsystem... subsystems) {
         requiredSubsystems = Arrays.asList(subsystems);
     }
 

@@ -30,8 +30,9 @@ public class Shooter extends BaseSubsystem {
     public Shooter(IDistanceToShooterRPM rpmFunction) {
         // makes the graphical number to enter text - have to do a
         // put to do a get
-        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 105.0);
-        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 105.0);
+        SmartDashboard.putNumber("Manual Testing RPM", 2000.0);
+        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 100.0);
+        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 100.0);
         this.rpmFunction = rpmFunction;
     }
 
@@ -69,6 +70,8 @@ public class Shooter extends BaseSubsystem {
         } else if (getStateRequiringName() == "RESETPUNCH" || getStateRequiringName() == "RETRACT"
                 || autonResetPunchStates.contains(getStateRequiringName())) {
             resetPunch();
+        } else if (getStateRequiringName() == "BOOT") {
+            boot();
         } else {
             neutral();
         }
@@ -78,6 +81,7 @@ public class Shooter extends BaseSubsystem {
         double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
         RobotMap.shooter.set(ControlMode.Velocity, countsPer100MS);
         // System.out.println("Speed is " + countsPer100MS);
+
     }
 
     private void waitNSpin() {
@@ -96,7 +100,7 @@ public class Shooter extends BaseSubsystem {
     }
 
     private void burp() {
-        shoot(2000);
+        shoot(1000);
     }
 
     private void punch() {
@@ -109,16 +113,35 @@ public class Shooter extends BaseSubsystem {
         if (getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
         }
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 100) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, -0.80);
+
+        }
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 200) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
+        }
+
+    }
+
+    private void boot() {
+        if (this.getStateFirstRunThrough()) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.90);
+        }
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 100) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
+        }
     }
 
     @Override
     public void neutral() {
         shoot(0);
+        RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
     }
 
     @Override
     public boolean abort() {
         shoot(0);
+        RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
         return true;
     }
 

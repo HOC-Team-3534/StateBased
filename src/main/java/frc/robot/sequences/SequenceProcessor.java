@@ -17,6 +17,7 @@ public class SequenceProcessor{
     public Shoot shoot;
     public Burp burp;
     public IntakeSeq intake;
+    public Extake extake;
     public ClimbPrep climbPrep;
     public Climb climb;
     public ClimbPrepReset climbPrepReset;
@@ -33,6 +34,7 @@ public class SequenceProcessor{
         shoot = new Shoot(ShootState.NEUTRAL, ShootState.WAITNSPIN);
         burp = new Burp(BurpState.NEUTRAL, BurpState.BURP);
         intake = new IntakeSeq(IntakeState.NEUTRAL, IntakeState.EXTEND);
+        extake = new Extake(ExtakeState.NEUTRAL, ExtakeState.EXTAKE);
         climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
         climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
         climbPrepReset = new ClimbPrepReset(ClimbPrepResetState.NEUTRAL, ClimbPrepResetState.RESETARM);
@@ -56,6 +58,9 @@ public class SequenceProcessor{
         if(Buttons.Intake.getButton()) {
             intake.start();
         }
+        if(Buttons.Extake.getButton()){
+            extake.start();
+        }
         if (Buttons.ClimbPrep.getButton()) { // TODO: in last 35 seconds of match logic
             climbPrep.start();
         }
@@ -75,6 +80,7 @@ public class SequenceProcessor{
         shoot.process();
         burp.process();
         intake.process();
+        extake.process();
         climbPrep.process();
         climbPrepReset.process();
         climb.process();

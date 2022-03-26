@@ -34,6 +34,8 @@ public class Intake extends BaseSubsystem {
             kickOut();
         }else if(getStateRequiringName() == "RETRACT" || autonRetractStates.contains(getStateRequiringName())) {
             retract();
+        }else if(getStateRequiringName() == "EXTAKE"){
+            extake();
         }else{
             neutral();
         }
@@ -56,6 +58,10 @@ public class Intake extends BaseSubsystem {
         if(getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.m_intakeKickers, Value.kReverse, Constants.DelayToOff.INTAKE_KICKERS.millis);
         }
+    }
+
+    public void extake(){
+        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, -0.80);
     }
 
     @Override

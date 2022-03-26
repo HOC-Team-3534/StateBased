@@ -99,6 +99,15 @@ public class RobotContainer {
 			}
 
 		}),
+		Extake(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getRightBumper();
+			}
+
+		}),
 		Climb(new Callable<Boolean>(){
 
 			@Override

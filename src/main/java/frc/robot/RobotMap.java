@@ -40,6 +40,7 @@ public class RobotMap {
 	public static PneumaticsControlModule m_climbPCM;
 
 	public static WPI_TalonFX shooter;
+	public static WPI_TalonSRX shooterBoot;
 	public static DoubleSolenoid pusher;
 
 	public static WPI_TalonSRX m_intakeRoller;
@@ -170,17 +171,20 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
 
-		limelight = new Limelight( ty -> .0045 * Math.pow(ty, 2) - .094 * ty + 3.353);
+		limelight = new Limelight( ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56);
 
 		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
 		m_climbPCM = new PneumaticsControlModule(CLIMB_PCM);
 
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
-		shooter.config_kF(0, 0.05);
+		shooter.config_kF(0, 0.0525); // .05
 		shooter.config_kP(0, 0.45);
 		shooter.config_kD(0, 80);
 		shooter.configClosedloopRamp(2.045);
+
+		shooterBoot = new WPI_TalonSRX(Constants.SHOOTER_BOOT);
+		shooterBoot.setInverted(true);
 
 		pusher = m_mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
 

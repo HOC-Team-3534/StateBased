@@ -22,23 +22,30 @@ public class Shoot extends BaseSequence<ShootState> {
         switch (getState()) {
             case WAITNSPIN:
                 if (!Buttons.Shoot.getButton()) {
-                    setNextState(ShootState.NEUTRAL);
+                    setNextState(ShootState.RESETPUNCH);
                 }
-                if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 100) {
+                if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 150) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }
                 break;
             case PUNCH:
-                if (this.getTimeSinceStartOfState() > 500) {
+                if (this.getTimeSinceStartOfState() > 250) {
                     System.out.println("punching");
                     setNextState(ShootState.RESETPUNCH);
 
                 }
                 break;
             case RESETPUNCH:
-                if (this.getTimeSinceStartOfState() > 500) {
-                    System.out.println("resetting");
+                if(!Buttons.Shoot.getButton() && this.getTimeSinceStartOfState() > 250){
+                    this.setNextState(ShootState.NEUTRAL);
+                }else if (this.getTimeSinceStartOfState() > 350) {
+                    //System.out.println("resetting");
+                    setNextState(ShootState.BOOT);
+                }
+                break;
+            case BOOT:
+                if(this.getTimeSinceStartOfState() > 150){
                     setNextState(ShootState.WAITNSPIN);
                 }
                 break;
@@ -64,7 +71,8 @@ enum ShootState implements IState {
     NEUTRAL,
     WAITNSPIN(Robot.shooter, Robot.swerveDrive),
     PUNCH(Robot.shooter, Robot.swerveDrive),
-    RESETPUNCH(Robot.shooter, Robot.swerveDrive);
+    RESETPUNCH(Robot.shooter, Robot.swerveDrive),
+    BOOT(Robot.shooter, Robot.swerveDrive);
 
     List<BaseSubsystem> requiredSubsystems;
 

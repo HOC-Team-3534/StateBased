@@ -30,8 +30,9 @@ public class Shooter extends BaseSubsystem {
     public Shooter(IDistanceToShooterRPM rpmFunction) {
         // makes the graphical number to enter text - have to do a
         // put to do a get
-        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 105.0);
-        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 105.0);
+        SmartDashboard.putNumber("Manual Testing RPM", 2000.0);
+        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 100.0);
+        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 100.0);
         this.rpmFunction = rpmFunction;
     }
 
@@ -43,8 +44,12 @@ public class Shooter extends BaseSubsystem {
         // TODO add in auton control of shooter once vision branch merged in
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
-            // waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
-            waitNSpin();
+            //waitNSpin(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
+            if (RobotMap.limelight.isLockedOn()) {
+                waitNSpin();
+            } else {
+                waitNSpin(3000);
+            }
         } else if (autonPreShootStates.contains(getStateRequiringName())) {
             if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower() != null) {
                 if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower()
@@ -53,7 +58,7 @@ public class Shooter extends BaseSubsystem {
                 } else {
                     neutral();
                 }
-            }else{
+            } else {
                 neutral();
             }
         } else if (autonShootStates.contains(getStateRequiringName())) {
@@ -65,6 +70,8 @@ public class Shooter extends BaseSubsystem {
         } else if (getStateRequiringName() == "RESETPUNCH" || getStateRequiringName() == "RETRACT"
                 || autonResetPunchStates.contains(getStateRequiringName())) {
             resetPunch();
+        } else if (getStateRequiringName() == "BOOT") {
+            boot();
         } else {
             neutral();
         }
@@ -74,6 +81,15 @@ public class Shooter extends BaseSubsystem {
         double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
         RobotMap.shooter.set(ControlMode.Velocity, countsPer100MS);
         // System.out.println("Speed is " + countsPer100MS);
+
+    }
+
+    public double getRPM(double distance){
+        double output = rpmFunction.getShooterRPM(distance);
+        if(output < 2500){
+            output = 2500;
+        }
+        return output;
     }
 
     private void waitNSpin() {
@@ -87,11 +103,12 @@ public class Shooter extends BaseSubsystem {
 
     private void autonShoot() {
         double autonRPMMultiplier = SmartDashboard.getNumber("AUTON RPM MULTIPLIER (%)", 100.0) / 100.0;
-        shoot(autonRPMMultiplier * rpmFunction.getShooterRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)));
+        shoot(autonRPMMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()
+                /* getRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)*/));
     }
 
     private void burp() {
-        shoot(2000);
+        shoot(1300);
     }
 
     private void punch() {
@@ -104,16 +121,35 @@ public class Shooter extends BaseSubsystem {
         if (getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
         }
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 100) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, -0.80);
+
+        }
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 200) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
+        }
+
+    }
+
+    private void boot() {
+        if (this.getStateFirstRunThrough()) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.90);
+        }
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 100) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
+        }
     }
 
     @Override
     public void neutral() {
         shoot(0);
+        RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
     }
 
     @Override
     public boolean abort() {
         shoot(0);
+        RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
         return true;
     }
 

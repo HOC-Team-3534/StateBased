@@ -21,6 +21,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 
+import java.nio.file.Path;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to
@@ -54,6 +56,7 @@ public class Robot extends TimedRobot {
 	public static PathPlannerFollower corner1TwoBall1;
 	public static PathPlannerFollower corner2OneBall1;
 	public static PathPlannerFollower corner3OneBall1;
+	public static PathPlannerFollower corner4FiveBallPre;
 	public static PathPlannerFollower corner4FiveBall1;
 	public static PathPlannerFollower corner4FiveBall2;
 	public static PathPlannerFollower corner4FiveBall3;
@@ -71,8 +74,11 @@ public class Robot extends TimedRobot {
 
 		swerveDrive = new SwerveDrive();
 
-		shooter = new Shooter(d -> 611.5 + 2982.5 * Math.log(d));
-
+		if(Constants.ROBOTTYPE == Constants.RobotType.PBOT) {
+			shooter = new Shooter(d -> 1018 + 1984 * Math.log(d));
+		}else{
+			shooter = new Shooter(d -> -287 + 2521 * Math.log(d));
+		}
 		intake = new Intake();
 
 		climber = new Climber();
@@ -83,6 +89,7 @@ public class Robot extends TimedRobot {
 		corner1TwoBall1 = new PathPlannerFollower("Corner 1 2 Ball 1");
 		corner2OneBall1 = new PathPlannerFollower("Corner 2 1 Ball 1");
 		corner3OneBall1 = new PathPlannerFollower("Corner 3 1 Ball 1");
+		corner4FiveBallPre = new PathPlannerFollower("Corner 4 5 Ball Pre");
 		corner4FiveBall1 = new PathPlannerFollower("Corner 4 5 Ball 1");
 		corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2");
 		corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3");
@@ -91,8 +98,8 @@ public class Robot extends TimedRobot {
 		Auton.CORNER1_2BALL.setPathPlannerFollowers(corner1TwoBall1);
 		Auton.CORNER2_1BALL.setPathPlannerFollowers(corner2OneBall1);
 		Auton.CORNER3_1BALL.setPathPlannerFollowers(corner3OneBall1);
-		Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBall1);
-		Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
+		Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1);
+		Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
 
 		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
 		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);

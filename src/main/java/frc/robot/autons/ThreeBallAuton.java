@@ -25,9 +25,16 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
     public void process() {
 
         switch (getState()) {
+            case DRIVE1:
+                setPathPlannerFollowerAtStartOfState(true);
+                if(this.getPlannerFollower().isFinished()){
+                    setNextState(ThreeBallAutonState.SHOOTBALL1);
+                }
+                break;
             case SHOOTBALL1:
                 //THE FOLLOWING IS ONLY IN ORDER TO SET THE CORRECT INITIAL POSITION
-                setInitialPoseFromCurrentPath();
+                ballsShot = 0;
+//                setInitialPoseFromCurrentPath();
                 if (RobotMap.shooter.getClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
                     setNextState(ThreeBallAutonState.PUNCH1);
                 }
@@ -85,10 +92,11 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
 
 enum ThreeBallAutonState implements IAutonState {
     NEUTRAL(false, -999),
-    SHOOTBALL1(false, 0, Robot.shooter),
+    DRIVE1(true, 0, Robot.swerveDrive),
+    SHOOTBALL1(false, -999, Robot.shooter),
     PUNCH1(false, -999, Robot.shooter),
     RESETPUNCH1(false, -999, Robot.shooter),
-    PICKUPBALL1(true, 0, Robot.intake, Robot.swerveDrive, Robot.shooter),
+    PICKUPBALL1(true, 1, Robot.intake, Robot.swerveDrive, Robot.shooter),
     SHOOTBALL2(false, -999, Robot.shooter),
     PUNCH2(false, -999, Robot.shooter),
     RESETPUNCH2(false, -999, Robot.shooter,Robot.intake);

@@ -7,6 +7,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
 
+/**
+ * The core of being able to follow a {@link PathPlannerTrajectory} from a .path file from PathPlanner. The path is
+ * generated upon initialization using the {@link #loadPath(String) loadPath(String fileName)} method.
+ * Use the {@link #getInitialPosition()} and {@link #getInitialHolonomic()} in order to see the initial {@link edu.wpi.first.math.kinematics.SwerveDriveOdometry SwerveDriveOdometry}
+ * Make sure to {@link #resetStart()} when ready to follow the path, then {@link #getCurrentState()}
+ */
 public class PathPlannerFollower {
 
     private final String PATH_FILE_NAME;

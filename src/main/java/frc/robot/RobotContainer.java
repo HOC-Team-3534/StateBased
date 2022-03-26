@@ -63,14 +63,24 @@ public class RobotContainer {
 
 	public enum Buttons {
 
-		Shoot(new Callable<Boolean>(){
+		RAMPSHOOTER(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+
+				return RobotContainer.getController2().getRightBumper();
+			}
+			
+		}),
+		SHOOT(new Callable<Boolean>(){
 
 			@Override
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
 				return RobotContainer.getController2().getRightTriggerAxis() > 0.15;
 			}
-			
+
 		}),
 		Burp(new Callable<Boolean>(){
 
@@ -96,6 +106,15 @@ public class RobotContainer {
 			public Boolean call() throws Exception {
 				// TODO Auto-generated method stub
 				return RobotContainer.getController1().getRightTriggerAxis() > 0.15;
+			}
+
+		}),
+		Extake(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController1().getRightBumper();
 			}
 
 		}),

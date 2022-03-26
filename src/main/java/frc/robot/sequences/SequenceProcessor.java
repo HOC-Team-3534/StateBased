@@ -1,7 +1,5 @@
 package frc.robot.sequences;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
@@ -17,6 +15,7 @@ public class SequenceProcessor{
     public Shoot shoot;
     public Burp burp;
     public IntakeSeq intake;
+    public Extake extake;
     public ClimbPrep climbPrep;
     public Climb climb;
     public ClimbPrepReset climbPrepReset;
@@ -33,6 +32,7 @@ public class SequenceProcessor{
         shoot = new Shoot(ShootState.NEUTRAL, ShootState.WAITNSPIN);
         burp = new Burp(BurpState.NEUTRAL, BurpState.BURP);
         intake = new IntakeSeq(IntakeState.NEUTRAL, IntakeState.EXTEND);
+        extake = new Extake(ExtakeState.NEUTRAL, ExtakeState.EXTAKE);
         climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
         climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
         climbPrepReset = new ClimbPrepReset(ClimbPrepResetState.NEUTRAL, ClimbPrepResetState.RESETARM);
@@ -41,21 +41,23 @@ public class SequenceProcessor{
 
     public void process() {
 
-        if(shoot.isNeutral()){
-            Robot.swerveDrive.resetTXOffset();
-        }
-
+        Robot.swerveDrive.resetTXOffset();
+        
         if (climb.isNeutral() && shoot.isNeutral()) {
             drive.start(Robot.swerveDrive);
         }
-        if(Buttons.Shoot.getButton()) {
+        if(Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton()) {
             shoot.start(Robot.swerveDrive);
+            RobotMap.limelight.resetLimelight();
         }
         if(Buttons.Burp.getButton()){
             burp.start();
         }
         if(Buttons.Intake.getButton()) {
             intake.start();
+        }
+        if(Buttons.Extake.getButton()){
+            extake.start();
         }
         if (Buttons.ClimbPrep.getButton()) { // TODO: in last 35 seconds of match logic
             climbPrep.start();
@@ -76,6 +78,7 @@ public class SequenceProcessor{
         shoot.process();
         burp.process();
         intake.process();
+        extake.process();
         climbPrep.process();
         climbPrepReset.process();
         climb.process();

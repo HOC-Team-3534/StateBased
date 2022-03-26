@@ -24,9 +24,16 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonState> {
     public void process() {
 
         switch (getState()) {
+            case DRIVE1:
+                setPathPlannerFollowerAtStartOfState(true);
+                if(this.getPlannerFollower().isFinished()){
+                    setNextState(FiveBallAutonState.SHOOTBALL1);
+                }
+                break;
             case SHOOTBALL1:
                 //THE FOLLOWING IS ONLY IN ORDER TO SET THE CORRECT INITIAL POSITION
-                setInitialPoseFromCurrentPath();
+//                setInitialPoseFromCurrentPath();
+                ballsShot = 0;
                 if (RobotMap.shooter.getClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
                     setNextState(FiveBallAutonState.PUNCH1);
                 }
@@ -121,16 +128,17 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonState> {
 
 enum FiveBallAutonState implements IAutonState {
     NEUTRAL(false, -999),
-    SHOOTBALL1(false, 0, Robot.shooter),
+    DRIVE1(true, 0, Robot.swerveDrive),
+    SHOOTBALL1(false, -999, Robot.shooter),
     PUNCH1(false, -999, Robot.shooter),
     RESETPUNCH1(false, -999, Robot.shooter),
-    PICKUPBALL1(true, 0, Robot.intake, Robot.swerveDrive, Robot.shooter),
+    PICKUPBALL1(true, 1, Robot.intake, Robot.swerveDrive, Robot.shooter),
     SHOOTBALL2(false, -999, Robot.shooter),
     PUNCH2(false, -999, Robot.shooter),
     RESETPUNCH2(false, -999, Robot.shooter, Robot.intake),
-    PICKUPBALL2(true, 1, Robot.intake, Robot.swerveDrive),
+    PICKUPBALL2(true, 2, Robot.intake, Robot.swerveDrive),
     WAITFORINTAKE(false, -999, Robot.intake),
-    PICKUPBALL3(true, 2, Robot.intake, Robot.swerveDrive, Robot.shooter),
+    PICKUPBALL3(true, 3, Robot.intake, Robot.swerveDrive, Robot.shooter),
     SHOOTBALL3(false, -999, Robot.shooter),
     PUNCH3(false, -999, Robot.shooter),
     RESETPUNCH3(false, -999, Robot.shooter, Robot.intake);

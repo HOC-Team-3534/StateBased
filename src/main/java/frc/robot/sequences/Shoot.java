@@ -39,7 +39,7 @@ public class Shoot extends BaseSequence<ShootState> {
             case RESETPUNCH:
                 if(!Buttons.Shoot.getButton() && this.getTimeSinceStartOfState() > 250){
                     this.setNextState(ShootState.NEUTRAL);
-                }else if (this.getTimeSinceStartOfState() > 250) {
+                }else if (this.getTimeSinceStartOfState() > 350) {
                     //System.out.println("resetting");
                     setNextState(ShootState.BOOT);
                 }

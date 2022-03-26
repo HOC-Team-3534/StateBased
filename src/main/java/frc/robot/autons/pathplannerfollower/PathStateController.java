@@ -4,33 +4,65 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import frc.robot.subsystems.parent.IDriveSubsystem;
 
+/**
+ * The middle-man between a {@link PathPlannerFollower} and a {@link frc.robot.subsystems.parent.BaseDriveSubsystem BaseDriveSubsystem},
+ * basically taking the current {@link com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState PathPlannerState} and calculating the
+ * {@link CalculatedDriveVelocities} from the updated {@link SwerveDriveOdometry} and the {@link IDriveSubsystem#getGyroHeading() getGyroHeading()} (which should include the gryo offset).
+ */
 public class PathStateController {
 
     PathPlannerFollower pathPlannerFollower;
     PIDController x_pid, y_pid, rot_pid;
 
+    /**
+     * Creates the PathStateController, which can be used to calculate velocities
+     * based on the current path using the {@link #getVelocitiesAtCurrentState(SwerveDriveOdometry, Rotation2d) getVelocitiesAtCurrentState} method
+     *
+     * @param x_pid to correct position error in the x direction
+     * @param y_pid to correct position error in the y direction
+     * @param rot_pid to correct heading error
+     */
     public PathStateController(PIDController x_pid, PIDController y_pid, PIDController rot_pid){
         this.x_pid = x_pid;
         this.y_pid = y_pid;
         this.rot_pid = rot_pid;
     }
 
+    /**
+     * @param pathPlannerFollower the follower with the path for the {@link PathStateController} to follow
+     */
     public void setPathPlannerFollower(PathPlannerFollower pathPlannerFollower){
         this.pathPlannerFollower = pathPlannerFollower;
         resetPIDs();
     }
 
+    /**
+     * @return the pathfollower with the {@link PathPlannerTrajectory} to be followed when in a pathfollowing autonomous state
+     */
     public PathPlannerFollower getPathPlannerFollower(){
         return this.pathPlannerFollower;
     }
 
+    /**
+     * Reset the PID controllers
+     */
     private void resetPIDs(){
         x_pid.reset();
         y_pid.reset();
         rot_pid.reset();
     }
 
+    /**
+     * Based on the current {@link com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState PathPlannerState}, {@param odometry}, {@param currentOrientation},
+     * the current {@link SwerveDriveOdometry} is compared to the expected position from the {@link com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState PathPlannerState}
+     * and those are used to correct for the base velocities given at the current part of the path
+     *
+     * @param odometry the current position and direction of the motion of the robot
+     * @param currentOrientation the current holonomic heading of the robot
+     * @return the x, y, and angular velocity (in meters per second and radians per second)
+     */
     public CalculatedDriveVelocities getVelocitiesAtCurrentState(SwerveDriveOdometry odometry, Rotation2d currentOrientation){
         PathPlannerTrajectory.PathPlannerState pathState = this.pathPlannerFollower.getCurrentState();
         double fwd_back_position = pathState.poseMeters.getX(); //going down field, closer or farther from driver station

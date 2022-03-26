@@ -25,7 +25,7 @@ public class IntakeSeq extends BaseSequence<IntakeState> {
                 }
                 break;
             case RETRACT:
-                if(getTimeSinceStartOfState() > 1000){
+                if(getTimeSinceStartOfState() > 300){
                     setNextState(IntakeState.NEUTRAL);
                 }
                 break;

@@ -1,7 +1,5 @@
 package frc.robot.sequences;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
@@ -48,7 +46,7 @@ public class SequenceProcessor{
         if (climb.isNeutral() && shoot.isNeutral()) {
             drive.start(Robot.swerveDrive);
         }
-        if(Buttons.Shoot.getButton()) {
+        if(Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton()) {
             shoot.start(Robot.swerveDrive);
             RobotMap.limelight.resetLimelight();
         }

@@ -23,10 +23,10 @@ public enum Auton {
             OneBallAutonState.DRIVE1, Robot.swerveDrive)),
     CORNER4_5BALL(new FiveBallAuton(
             FiveBallAutonState.NEUTRAL,
-            FiveBallAutonState.SHOOTBALL1, Robot.swerveDrive)),
+            FiveBallAutonState.DRIVE1, Robot.swerveDrive)),
     CORNER4_3BALL(new ThreeBallAuton(
             ThreeBallAutonState.NEUTRAL,
-            ThreeBallAutonState.SHOOTBALL1, Robot.swerveDrive)),
+            ThreeBallAutonState.DRIVE1, Robot.swerveDrive)),
     NO_OP(new NoOpAuton(
             NoOpAutonState.NEUTRAL,
             NoOpAutonState.NEUTRAL, Robot.swerveDrive));

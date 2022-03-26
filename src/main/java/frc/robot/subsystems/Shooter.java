@@ -44,7 +44,7 @@ public class Shooter extends BaseSubsystem {
         // TODO add in auton control of shooter once vision branch merged in
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
-            // waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
+            //waitNSpin(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
             if (RobotMap.limelight.isLockedOn()) {
                 waitNSpin();
             } else {
@@ -84,6 +84,14 @@ public class Shooter extends BaseSubsystem {
 
     }
 
+    public double getRPM(double distance){
+        double output = rpmFunction.getShooterRPM(distance);
+        if(output < 2500){
+            output = 2500;
+        }
+        return output;
+    }
+
     private void waitNSpin() {
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
         shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
@@ -95,12 +103,12 @@ public class Shooter extends BaseSubsystem {
 
     private void autonShoot() {
         double autonRPMMultiplier = SmartDashboard.getNumber("AUTON RPM MULTIPLIER (%)", 100.0) / 100.0;
-        shoot(autonRPMMultiplier
-                * rpmFunction.getShooterRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)));
+        shoot(autonRPMMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()
+                /* getRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)*/));
     }
 
     private void burp() {
-        shoot(1000);
+        shoot(1300);
     }
 
     private void punch() {

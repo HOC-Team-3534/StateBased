@@ -21,13 +21,14 @@ public class Shoot extends BaseSequence<ShootState> {
     public void process() {
         switch (getState()) {
             case WAITNSPIN:
-                if(RobotMap.limelight.isValid()){
+                if (RobotMap.limelight.isValid()) {
                     RobotMap.limelight.setLockedOn();
                 }
-                if (!Buttons.Shoot.getButton()) {
+                if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
                     setNextState(ShootState.RESETPUNCH);
                 }
-                if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 150) {
+                if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && RobotMap.shooter.getClosedLoopError() < 150
+                        && RobotMap.limelight.isLockedOn() && Math.abs(Robot.swerveDrive.getTargetShootRotationError().getDegrees()) < 2.0) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }
@@ -40,15 +41,15 @@ public class Shoot extends BaseSequence<ShootState> {
                 }
                 break;
             case RESETPUNCH:
-                if(!Buttons.Shoot.getButton() && this.getTimeSinceStartOfState() > 250){
+                if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton() && this.getTimeSinceStartOfState() > 250) {
                     this.setNextState(ShootState.NEUTRAL);
-                }else if (this.getTimeSinceStartOfState() > 350) {
+                } else if (this.getTimeSinceStartOfState() > 350) {
                     //System.out.println("resetting");
                     setNextState(ShootState.BOOT);
                 }
                 break;
             case BOOT:
-                if(this.getTimeSinceStartOfState() > 150){
+                if (this.getTimeSinceStartOfState() > 150) {
                     setNextState(ShootState.WAITNSPIN);
                 }
                 break;

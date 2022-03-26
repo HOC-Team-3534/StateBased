@@ -25,7 +25,7 @@ public class Climb extends BaseSequence<ClimbState> {
 
         switch (getState()) {
             case GRIPMIDBAR:
-                if (getTimeSinceStartOfState() > 1000) {
+                if (getTimeSinceStartOfState() > 500) {
                     setNextState(ClimbState.SWINGMIDHIGH1);
                 }
                 break;
@@ -48,7 +48,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case GRIPHIGHBAR:
-                if (getTimeSinceStartOfState() > 1000 && (!RobotMap.m_l3Switch.get() || !RobotMap.m_h4Switch.get())) {
+                if (getTimeSinceStartOfState() > 500 && (!RobotMap.m_l3Switch.get() || !RobotMap.m_h4Switch.get())) {
                     setNextState(ClimbState.RECENTERMIDHIGHBAR);
                 }else if((RobotMap.m_l3Switch.get() && RobotMap.m_h4Switch.get())){
                     limitSwitchLoopCounter++;
@@ -106,7 +106,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case GRIPTRAVERSALBAR:
-                if (getTimeSinceStartOfState() > 1000 && (!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get())) {
+                if (getTimeSinceStartOfState() > 500 && (!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get())) {
                     setNextState(ClimbState.RECENTERHIGHTRAVERSALBAR);
                 }else if((RobotMap.m_h2Switch.get() && RobotMap.m_l1Switch.get())){
                     limitSwitchLoopCounter++;

@@ -115,7 +115,7 @@ public class Climber extends BaseSubsystem {
             setWithADelayToOff(RobotMap.m_l3Claw, Value.kForward, DelayToOff.CLIMB_CLAWS.millis);
             setClimbArmDegree(HIGHBAR_GRAB_ANGLE_COMMAND);
             RobotMap.m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
-            RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+            RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW, 20);
         }
     }
 
@@ -151,8 +151,8 @@ public class Climber extends BaseSubsystem {
 
         if(this.getStateFirstRunThrough()){
             setClimbArmDegree(MIDHIGHBAR_RECENTER_ANGLE_COMMAND);
-            RobotMap.m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW, 20);
-            RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW, 20);
+            RobotMap.m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+            RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
         }
     }
 
@@ -209,8 +209,8 @@ public class Climber extends BaseSubsystem {
 
         if(this.getStateFirstRunThrough()){
             setClimbArmDegree(HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND);
-            RobotMap.m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW, 20);
-            RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW, 20);
+            RobotMap.m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+            RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
         }
     }
 

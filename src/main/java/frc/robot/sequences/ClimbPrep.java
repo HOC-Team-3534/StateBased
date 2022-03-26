@@ -22,7 +22,7 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 
         switch (getState()) {
             case PREPCLAW:
-                if (getTimeSinceStartOfState() > 500) {
+                if (getTimeSinceStartOfState() > 50) {
                     setNextState(ClimbPrepState.SWINGARM);
                 }
                 break;

@@ -44,7 +44,11 @@ public class Shooter extends BaseSubsystem {
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
             // waitNSpin(SmartDashboard.getNumber("RPM: ", 0.0));
-            waitNSpin();
+            if (RobotMap.limelight.isLockedOn()) {
+                waitNSpin();
+            } else {
+                waitNSpin(3000);
+            }
         } else if (autonPreShootStates.contains(getStateRequiringName())) {
             if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower() != null) {
                 if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower()
@@ -53,7 +57,7 @@ public class Shooter extends BaseSubsystem {
                 } else {
                     neutral();
                 }
-            }else{
+            } else {
                 neutral();
             }
         } else if (autonShootStates.contains(getStateRequiringName())) {
@@ -87,7 +91,8 @@ public class Shooter extends BaseSubsystem {
 
     private void autonShoot() {
         double autonRPMMultiplier = SmartDashboard.getNumber("AUTON RPM MULTIPLIER (%)", 100.0) / 100.0;
-        shoot(autonRPMMultiplier * rpmFunction.getShooterRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)));
+        shoot(autonRPMMultiplier
+                * rpmFunction.getShooterRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)));
     }
 
     private void burp() {

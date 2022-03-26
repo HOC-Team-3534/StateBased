@@ -74,11 +74,11 @@ public class Limelight {
         savedTX = 0;
     }
 
-    private boolean isLockedOn(){
+    public boolean isLockedOn(){
         return isLockedOn;
     }
 
-    private void setLockedOn(){
+    public void setLockedOn(){
         isLockedOn = true;
     }
 

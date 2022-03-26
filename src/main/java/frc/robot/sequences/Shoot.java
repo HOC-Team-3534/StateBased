@@ -21,6 +21,9 @@ public class Shoot extends BaseSequence<ShootState> {
     public void process() {
         switch (getState()) {
             case WAITNSPIN:
+                if(RobotMap.limelight.isValid()){
+                    RobotMap.limelight.setLockedOn();
+                }
                 if (!Buttons.Shoot.getButton()) {
                     setNextState(ShootState.NEUTRAL);
                 }

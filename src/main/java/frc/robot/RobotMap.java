@@ -29,6 +29,16 @@ public class RobotMap {
 	 * PCM A, CHANNEL 0, 1
 	 */
 
+	private static WPI_TalonFX frontLeftDrive;
+	private static WPI_TalonFX frontRightDrive;
+	private static WPI_TalonFX backLeftDrive;
+	private static WPI_TalonFX backRightDrive;
+
+	private static WPI_TalonFX frontLeftTurn;
+	private static WPI_TalonFX frontRightTurn;
+	private static WPI_TalonFX backLeftTurn;
+	private static WPI_TalonFX backRightTurn;
+
 	public static SwerveModule m_frontLeftModule;
 	public static SwerveModule m_frontRightModule;
 	public static SwerveModule m_backLeftModule;
@@ -122,6 +132,16 @@ public class RobotMap {
 		// you MUST change it. If you do not, your code will crash on startup.
 		// FIXME Setup motor configuration
 
+		frontLeftDrive = new WPI_TalonFX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
+		frontRightDrive = new WPI_TalonFX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
+		backLeftDrive = new WPI_TalonFX(BACK_LEFT_MODULE_DRIVE_MOTOR);
+		backRightDrive = new WPI_TalonFX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
+
+		frontLeftTurn = new WPI_TalonFX(FRONT_LEFT_MODULE_STEER_MOTOR);
+		frontRightTurn = new WPI_TalonFX(FRONT_RIGHT_MODULE_STEER_MOTOR);
+		backLeftTurn = new WPI_TalonFX(BACK_LEFT_MODULE_STEER_MOTOR);
+		backRightTurn = new WPI_TalonFX(BACK_RIGHT_MODULE_STEER_MOTOR);
+
 		m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
 				// This parameter is optional, but will allow you to see the current state of
 				// the module on the dashboard.
@@ -139,6 +159,7 @@ public class RobotMap {
 				// This is how much the steer encoder is offset from true zero (In our case,
 				// zero is facing straight forward)
 				FRONT_LEFT_MODULE_STEER_OFFSET);
+
 
 		// We will do the same for the other modules
 		m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(

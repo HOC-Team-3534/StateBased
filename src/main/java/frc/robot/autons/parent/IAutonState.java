@@ -1,13 +1,11 @@
 package frc.robot.autons.parent;
 
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 
-public interface IAutonState extends IState {
+public interface IAutonState extends ISequenceState {
 
     PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence);
-
-    boolean isPathFollowing();
 
     static PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence, int pathIndex){
         if(pathIndex >= 0 && pathIndex < sequence.getPaths().size()){

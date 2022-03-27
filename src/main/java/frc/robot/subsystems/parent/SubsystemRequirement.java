@@ -1,29 +1,23 @@
-package frc.robot.sequences.parent;
+package frc.robot.subsystems.parent;
 
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.ISubsystemState;
 
-import java.util.InputMismatchException;
+public abstract class SubsystemRequirement<BaseS extends BaseSubsystem, SsS extends ISubsystemState<BaseS>> {
 
-public class SubsystemRequirement<BaseS extends BaseSubsystem, SsS extends ISubsystemState<BaseS>> {
-
-    BaseSubsystem<? extends ISubsystemState> subsystem;
-    ISubsystemState subsystemState;
+    BaseS subsystem;
+    SsS subsystemState;
 
     public SubsystemRequirement(BaseS subsystem, SsS subsystemState) {
         this.subsystem = subsystem;
         this.subsystemState = subsystemState;
-
-        if(!subsystemState.getAssociatedSubsystem().equals(subsystem)){
-            throw new InputMismatchException(String.format("The subsystem state: %s, does not belong to the desired subsystem"));
-        }
     }
 
-    public BaseSubsystem<? extends ISubsystemState> getSubsystem() {
+    public BaseS getSubsystem() {
         return subsystem;
     }
 
-    public ISubsystemState getSubsystemState() {
+    public SsS getSubsystemState() {
         return subsystemState;
     }
 }

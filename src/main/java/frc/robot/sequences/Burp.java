@@ -2,13 +2,17 @@ package frc.robot.sequences;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+import frc.robot.subsystems.requirements.ShooterReq;
+import frc.robot.subsystems.states.ShooterState;
 
 public class Burp extends BaseSequence<BurpState> {
 
@@ -22,7 +26,7 @@ public class Burp extends BaseSequence<BurpState> {
         switch (getState()) {
             case BURP:
                 if(!Buttons.Burp.getButton()){
-                    setNextState(BurpState.RETRACT);
+                    setNextState(BurpState.RESETPUNCH);
                 }if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 250) {
                     System.out.println("In state");
                     setNextState(BurpState.PUNCH);
@@ -30,10 +34,10 @@ public class Burp extends BaseSequence<BurpState> {
                 break;
             case PUNCH:
                 if (this.getTimeSinceStartOfState() > 250) {
-                    setNextState(BurpState.RETRACT);
+                    setNextState(BurpState.RESETPUNCH);
                 }
                 break;
-            case RETRACT:
+            case RESETPUNCH:
                 if(!Buttons.Burp.getButton() && this.getTimeSinceStartOfState() > 250){
                     setNextState(BurpState.NEUTRAL);
                 }else if (this.getTimeSinceStartOfState() > 250) {
@@ -63,31 +67,29 @@ public class Burp extends BaseSequence<BurpState> {
 
 }
 
-enum BurpState implements IState {
+enum BurpState implements ISequenceState {
     NEUTRAL,
-    BURP(Robot.shooter),
-    PUNCH(Robot.shooter),
-    RETRACT(Robot.shooter),
-    BOOT(Robot.shooter);
+    BURP(new ShooterReq(ShooterState.BURP)),
+    PUNCH(new ShooterReq(ShooterState.PUNCH)),
+    RESETPUNCH(new ShooterReq(ShooterState.RESETPUNCH)),
+    BOOT(new ShooterReq(ShooterState.BOOT));
 
-    List<BaseSubsystem> requiredSubsystems;
+    Set<BaseSubsystem> requiredSubsystems;
+    List<SubsystemRequirement> subsystemRequirements;
 
-    BurpState(BaseSubsystem... subsystems) {
-        requiredSubsystems = Arrays.asList(subsystems);
+    BurpState(SubsystemRequirement... requirements) {
+        subsystemRequirements = Arrays.asList(requirements);
+        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
 
     @Override
-    public List<BaseSubsystem> getRequiredSubsystems() {
+    public Set<BaseSubsystem> getRequiredSubsystems() {
         return requiredSubsystems;
     }
 
     @Override
-    public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        return IState.requireSubsystems(sequence, requiredSubsystems, this);
+    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
+        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
     }
 
-    @Override
-    public String getName() {
-        return this.name();
-    }
 }

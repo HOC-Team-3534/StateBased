@@ -2,12 +2,15 @@ package frc.robot.sequences;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import frc.robot.Robot;
-import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.subsystems.requirements.SwerveDriveReq;
+import frc.robot.subsystems.states.SwerveDriveState;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
 
 public class Drive extends BaseSequence<DriveState> {
 
@@ -20,14 +23,6 @@ public class Drive extends BaseSequence<DriveState> {
 
         switch (getState()) {
             case DRIVE:
-                if(Buttons.Creep.getButton()){
-                    setNextState(DriveState.CREEP);
-                }
-                break;
-            case CREEP:
-                if(!Buttons.Creep.getButton()){
-                    setNextState(DriveState.DRIVE);
-                }
                 break;
             case NEUTRAL:
                 break;
@@ -46,29 +41,26 @@ public class Drive extends BaseSequence<DriveState> {
 
 }
 
-enum DriveState implements IState {
+enum DriveState implements ISequenceState {
     NEUTRAL,
-    DRIVE(Robot.swerveDrive),
-    CREEP(Robot.swerveDrive);
+    DRIVE(new SwerveDriveReq(SwerveDriveState.DRIVE));
 
-    List<BaseSubsystem> requiredSubsystems;
+    Set<BaseSubsystem> requiredSubsystems;
+    List<SubsystemRequirement> subsystemRequirements;
 
-    DriveState(BaseSubsystem... subsystems) {
-        requiredSubsystems = Arrays.asList(subsystems);
+    DriveState(SubsystemRequirement... requirements) {
+        subsystemRequirements = Arrays.asList(requirements);
+        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
 
     @Override
-    public List<BaseSubsystem> getRequiredSubsystems() {
+    public Set<BaseSubsystem> getRequiredSubsystems() {
         return requiredSubsystems;
     }
 
     @Override
-    public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        return IState.requireSubsystems(sequence, requiredSubsystems, this);
+    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
+        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
     }
 
-    @Override
-    public String getName() {
-        return this.name();
-    }
 }

@@ -29,9 +29,9 @@ public class SequenceProcessor{
 
         drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
         
-        shoot = new Shoot(ShootState.NEUTRAL, ShootState.WAITNSPIN);
+        shoot = new Shoot(ShootState.NEUTRAL, ShootState.UPTOSPEED);
         burp = new Burp(BurpState.NEUTRAL, BurpState.BURP);
-        intake = new IntakeSeq(IntakeState.NEUTRAL, IntakeState.EXTEND);
+        intake = new IntakeSeq(IntakeSeqState.NEUTRAL, IntakeSeqState.EXTEND);
         extake = new Extake(ExtakeState.NEUTRAL, ExtakeState.EXTAKE);
         climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
         climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
@@ -63,7 +63,7 @@ public class SequenceProcessor{
             climbPrep.start();
         }
         if (Buttons.Climb.getButton()
-                && Robot.climber.getSequenceRequiring().getState().getName() == "PREPPEDFORCLIMB"
+                && Robot.climber.getSequenceRequiring().getState().equals(ClimbPrepState.PREPPEDFORCLIMB)
                 && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
             climb.start(Robot.climber, Robot.swerveDrive);
         }
@@ -83,7 +83,7 @@ public class SequenceProcessor{
         climbPrepReset.process();
         climb.process();
         climbReset.process();
-        SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getState().getName() == "PREPPEDFORCLIMB");
-        SmartDashboard.putString("Climb State", climb.getState().getName());
+        SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getState().name() == "PREPPEDFORCLIMB");
+        SmartDashboard.putString("Climb State", climb.getState().name());
     }
 }

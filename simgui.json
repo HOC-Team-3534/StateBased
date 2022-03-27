@@ -1,13 +1,20 @@
 {
   "HALProvider": {
-    "Solenoids": {
-      "16": {
+    "Other Devices": {
+      "Talon FX[10]/Integrated Sensor": {
+        "name": "Back Right Drive"
+      },
+      "Talon FX[1]/Integrated Sensor": {
         "header": {
           "open": true
-        }
+        },
+        "name": "Front Left Drive"
       },
-      "window": {
-        "visible": true
+      "Talon FX[4]/Integrated Sensor": {
+        "name": "Front Right Drive"
+      },
+      "Talon FX[7]/Integrated Sensor": {
+        "name": "Back Left Drive"
       }
     }
   },
@@ -22,12 +29,31 @@
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/Talon FX [10]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [12]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [13]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [14]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [3]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [4]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [6]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [7]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [9]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon SRX [15]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon SRX [18]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[2]": "Gyro",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
+    }
+  },
+  "NetworkTables": {
+    "Shuffleboard": {
+      "Drivetrain": {
+        "Back Left Module": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
     }
   }
 }

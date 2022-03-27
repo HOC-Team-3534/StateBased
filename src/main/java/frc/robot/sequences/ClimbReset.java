@@ -2,15 +2,16 @@ package frc.robot.sequences;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import frc.robot.subsystems.Climber;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
-import frc.robot.RobotMap;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+import frc.robot.subsystems.requirements.ClimberReq;
+import frc.robot.subsystems.states.ClimberState;
 
 public class ClimbReset extends BaseSequence<ClimbResetState> {
 
@@ -46,28 +47,27 @@ public class ClimbReset extends BaseSequence<ClimbResetState> {
 
 }
 
-enum ClimbResetState implements IState {
+enum ClimbResetState implements ISequenceState {
     NEUTRAL,
-    MOVEARMMANUALLY(Robot.climber);
+    MOVEARMMANUALLY(new ClimberReq(ClimberState.MOVEARMMANUALLY));
 
-    List<BaseSubsystem> requiredSubsystems;
+    Set<BaseSubsystem> requiredSubsystems;
+    List<SubsystemRequirement> subsystemRequirements;
 
-    ClimbResetState(BaseSubsystem... subsystems) {
-        requiredSubsystems = Arrays.asList(subsystems);
+    ClimbResetState(SubsystemRequirement... requirements) {
+        subsystemRequirements = Arrays.asList(requirements);
+        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
 
     @Override
-    public List<BaseSubsystem> getRequiredSubsystems() {
+    public Set<BaseSubsystem> getRequiredSubsystems() {
         return requiredSubsystems;
     }
 
     @Override
-    public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        return IState.requireSubsystems(sequence, requiredSubsystems, this);
+    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
+        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
     }
 
-    @Override
-    public String getName() {
-        return this.name();
-    }
 }
+

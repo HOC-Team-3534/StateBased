@@ -100,23 +100,29 @@ public class Limelight {
 
     public void updateLimelightShootProjection(){
 
+        // Known Variables
         double straightLineDistance = getDistance();
         Rotation2d offset = getHorizontalAngleOffset();
-
         Translation2d targetLocation = new Translation2d(straightLineDistance, offset);
-
         Vector2d targetMotion = Robot.swerveDrive.getTargetOrientedVelocity();
 
+        /*
+         * - Find the vector of the average velocity of the game piece, if shot straight towards target, no motion, aligned.
+         * - Combine the motion of the average velocity of the game piece with the relative motion of the target
+         * - Back calculate the distance for that overall average velocity
+         */
         Vector2d baseAvgVel = Utils.createVector2d(distanceToAverageShootVelocityFunction.getAverageVelocity(straightLineDistance), offset);
-
         Vector2d desiredAverageVelocity = Utils.getCombinedMotion(baseAvgVel, targetMotion);
-
         double projectedDistance = averageShootVelocityToDistanceFunction.getDistance(desiredAverageVelocity.magnitude());
 
+        /*
+         * - Find the time elapsed during the shot
+         * - Find the projection location of the target using its current position and the integral of
+         *   velocity using the calculated total time elapsed during flight
+         * - Generate the offset angle from the "imaginary" location
+         */
         double totalTime = projectedDistance / desiredAverageVelocity.magnitude();
-
         Translation2d projectedLocation = Utils.getPositionAfterMotion(targetLocation, targetMotion, totalTime);
-
         Rotation2d projectedOffset = new Rotation2d(projectedLocation.getX(), projectedLocation.getY());
 
         limelightShootProjection = new LimelightShootProjection(projectedDistance, projectedOffset);

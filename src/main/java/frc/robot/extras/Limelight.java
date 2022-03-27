@@ -1,20 +1,31 @@
 package frc.robot.extras;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.drive.Vector2d;
+import frc.robot.Robot;
 
 public class Limelight {
 
     ILimelightAngleToDistanceFunction distanceFunction;
+    IDistanceToAverageShootVelocityFunction distanceToAverageShootVelocityFunction;
+    IAverageShootVelocityToDistanceFunction averageShootVelocityToDistanceFunction;
     NetworkTable table;
-    boolean isValid;
     boolean isTargetAcquired;
     double savedDistance = -999;
     double savedTX = 0;
 
-    public Limelight(ILimelightAngleToDistanceFunction distanceFunction) {
+    long lastTimeTableSet = 0;
+
+    LimelightShootProjection limelightShootProjection;
+
+    public Limelight(ILimelightAngleToDistanceFunction distanceFunction, IDistanceToAverageShootVelocityFunction distanceToAverageVelocityFunction, IAverageShootVelocityToDistanceFunction averageShootVelocityToDistanceFunction) {
 
         this.distanceFunction = distanceFunction;
+        this.distanceToAverageShootVelocityFunction = distanceToAverageVelocityFunction;
+        this.averageShootVelocityToDistanceFunction = averageShootVelocityToDistanceFunction;
         getTable();
 
     }
@@ -23,55 +34,50 @@ public class Limelight {
         table = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
-    public double getHorizontalAngleOffset() {
-        getTable();
-        if (isValid()) {
-            savedTX = table.getEntry("tx").getDouble(0.0);
+    public Rotation2d getHorizontalAngleOffset() {
+        if(System.currentTimeMillis() - lastTimeTableSet > 20){
+            lastTimeTableSet = System.currentTimeMillis();
+            getTable();
         }
-        return savedTX;
+        if (isValid()) {
+            savedTX = -table.getEntry("tx").getDouble(0.0);
+        }
+        return new Rotation2d(savedTX / 180.0 * Math.PI);
     }
 
     private double getPixelAngle() {
-        getTable();
         return table.getEntry("ty").getDouble(0.0);
     }
 
-    public double getHeight() {
-        getTable();
-        return table.getEntry("tvert").getDouble(0.0);
-    }
-
-    public double getWidth() {
-        getTable();
-        return table.getEntry("thor").getDouble(0.0);
-    }
-
-    public double getSkew() {
-        getTable();
-        return table.getEntry("ts").getDouble(0.0);
-    }
-
     public double getDistance() {
+        if(System.currentTimeMillis() - lastTimeTableSet > 20){
+            lastTimeTableSet = System.currentTimeMillis();
+            getTable();
+        }
         if (isValid()) {
-            savedDistance = distanceFunction.getDistance(getPixelAngle());
+            savedDistance = distanceFunction.getDistance(getPixelAngle()) / getHorizontalAngleOffset().getCos();
         }
         return savedDistance;
     }
 
-    private boolean getValidTarget() {
-        getTable();
-        return table.getEntry("tv").getDouble(0.0) == 1;
+    public double getHeight() {
+        return table.getEntry("tvert").getDouble(0.0);
+    }
+
+    public double getWidth() {
+        return table.getEntry("thor").getDouble(0.0);
+    }
+
+    public double getSkew() {
+        return table.getEntry("ts").getDouble(0.0);
     }
 
     public boolean isValid() {
-        isValid = getValidTarget();
-        return isValid;
-    }
-
-    public void resetLimelightGlobalValues(){
-        isTargetAcquired = false;
-        savedDistance = -999;
-        savedTX = 0;
+        if(System.currentTimeMillis() - lastTimeTableSet > 20){
+            lastTimeTableSet = System.currentTimeMillis();
+            getTable();
+        }
+        return table.getEntry("tv").getDouble(0.0) == 1;
     }
 
     public boolean isTargetAcquired(){
@@ -80,6 +86,41 @@ public class Limelight {
 
     public void setTargetAcquired(){
         isTargetAcquired = true;
+    }
+
+    public void resetLimelightGlobalValues(){
+        isTargetAcquired = false;
+        savedDistance = -999;
+        savedTX = 0;
+    }
+
+    public LimelightShootProjection getLimelightShootProjection(){
+        return limelightShootProjection;
+    }
+
+    public void updateLimelightShootProjection(){
+
+        double straightLineDistance = getDistance();
+        Rotation2d offset = getHorizontalAngleOffset();
+
+        Translation2d targetLocation = new Translation2d(straightLineDistance, offset);
+
+        Vector2d targetMotion = Robot.swerveDrive.getTargetOrientedVelocity();
+
+        Vector2d baseAvgVel = Utils.createVector2d(distanceToAverageShootVelocityFunction.getAverageVelocity(straightLineDistance), offset);
+
+        Vector2d desiredAverageVelocity = Utils.getCombinedMotion(baseAvgVel, targetMotion);
+
+        double projectedDistance = averageShootVelocityToDistanceFunction.getDistance(desiredAverageVelocity.magnitude());
+
+        double totalTime = projectedDistance / desiredAverageVelocity.magnitude();
+
+        Translation2d projectedLocation = Utils.getPositionAfterMotion(targetLocation, targetMotion, totalTime);
+
+        Rotation2d projectedOffset = new Rotation2d(projectedLocation.getX(), projectedLocation.getY());
+
+        limelightShootProjection = new LimelightShootProjection(projectedDistance, projectedOffset);
+
     }
 
 }

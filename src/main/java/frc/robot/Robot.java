@@ -128,7 +128,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		log();
 	}
 
 	@Override
@@ -139,8 +138,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		log();
-
 		isAutonomous = this.isAutonomous();
 
 		long prevLoopTime = 0;
@@ -181,8 +178,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-
-		log();
 
 		isAutonomous = this.isAutonomous();
 
@@ -235,9 +230,11 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
 			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
-			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorizontalAngleOffset());
-			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
+			SmartDashboard.putNumber("tx (inverted)", RobotMap.limelight.getHorizontalAngleOffset().getDegrees());
 			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
+
+			SmartDashboard.putNumber("Moving Target Angle Offset", RobotMap.limelight.getLimelightShootProjection().getOffset().getDegrees());
+			SmartDashboard.putNumber("Moving Target Distance", RobotMap.limelight.getLimelightShootProjection().getDistance());
 
 			SmartDashboard.putNumber("Odometry X", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getX());
 			SmartDashboard.putNumber("Odometry Y", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getY());

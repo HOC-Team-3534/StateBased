@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.Constants;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.RobotContainer.Axes;
@@ -88,9 +90,19 @@ public class SwerveDrive extends BaseDriveSubsystem {
 		}
 	}
 
-	public void setTargetShootRotationAngle() {
-		Rotation2d limelightOffset = new Rotation2d(RobotMap.limelight.getHorizontalAngleOffset() / 180 * Math.PI);
-		this.targetShootRotationAngle = getGyroHeading().minus(limelightOffset);
+	public Vector2d getRobotCentricVelocity(){
+		ChassisSpeeds chassisSpeeds = this.getSwerveDriveKinematics().toChassisSpeeds(this.getSwerveModuleStates());
+		return new Vector2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+	}
+
+	public Vector2d getTargetOrientedVelocity(){
+		Vector2d robotCentricVelocity = getRobotCentricVelocity();
+		robotCentricVelocity.rotate(180.0);
+		return robotCentricVelocity;
+	}
+
+	public void setTargetShootRotationAngle() {;
+		this.targetShootRotationAngle = getGyroHeading().plus(RobotMap.limelight.getLimelightShootProjection().getOffset());
 	}
 
 	public Rotation2d getTargetShootRotationAngleError(){ return targetShootRotationAngle.minus(getGyroHeading()); }

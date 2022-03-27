@@ -19,6 +19,9 @@ public class Shoot extends BaseSequence<ShootState> {
 
     @Override
     public void process() {
+
+        RobotMap.limelight.updateLimelightShootProjection();
+
         switch (getState()) {
             case WAITNSPIN:
                 if (RobotMap.limelight.isValid()) {

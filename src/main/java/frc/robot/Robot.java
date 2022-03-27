@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,8 +19,6 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
-
-import java.nio.file.Path;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -238,11 +235,9 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
 			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
-			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorOffset());
+			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorizontalAngleOffset());
 			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
 			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
-
-			SmartDashboard.putNumber("target rotation", swerveDrive.getTargetShootRotation().getRadians());
 
 			SmartDashboard.putNumber("Odometry X", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getX());
 			SmartDashboard.putNumber("Odometry Y", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getY());

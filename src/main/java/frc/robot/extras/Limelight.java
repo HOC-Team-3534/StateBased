@@ -8,14 +8,14 @@ public class Limelight {
     ILimelightAngleToDistanceFunction distanceFunction;
     NetworkTable table;
     boolean isValid;
-    boolean isLockedOn;
+    boolean isTargetAcquired;
     double savedDistance = -999;
     double savedTX = 0;
 
     public Limelight(ILimelightAngleToDistanceFunction distanceFunction) {
 
         this.distanceFunction = distanceFunction;
-        this.table = NetworkTableInstance.getDefault().getTable("limelight");
+        getTable();
 
     }
 
@@ -23,7 +23,7 @@ public class Limelight {
         table = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
-    public double getHorOffset() {
+    public double getHorizontalAngleOffset() {
         getTable();
         if (isValid()) {
             savedTX = table.getEntry("tx").getDouble(0.0);
@@ -31,7 +31,7 @@ public class Limelight {
         return savedTX;
     }
 
-    public double getPixelAngle() {
+    private double getPixelAngle() {
         getTable();
         return table.getEntry("ty").getDouble(0.0);
     }
@@ -64,22 +64,22 @@ public class Limelight {
     }
 
     public boolean isValid() {
-        isValid = Math.abs(getSkew() + 45) > 40 && getValidTarget();
+        isValid = getValidTarget();
         return isValid;
     }
 
-    public void resetLimelight(){
-        isLockedOn = false;
+    public void resetLimelightGlobalValues(){
+        isTargetAcquired = false;
         savedDistance = -999;
         savedTX = 0;
     }
 
-    public boolean isLockedOn(){
-        return isLockedOn;
+    public boolean isTargetAcquired(){
+        return isTargetAcquired;
     }
 
-    public void setLockedOn(){
-        isLockedOn = true;
+    public void setTargetAcquired(){
+        isTargetAcquired = true;
     }
 
 }

@@ -45,7 +45,7 @@ public class Shooter extends BaseSubsystem {
         if (getStateRequiringName() == "WAITNSPIN") {
             // grabs the number from SmartDashboard
             //waitNSpin(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
-            if (RobotMap.limelight.isLockedOn()) {
+            if (RobotMap.limelight.isTargetAcquired()) {
                 waitNSpin();
             } else {
                 waitNSpin(3000);

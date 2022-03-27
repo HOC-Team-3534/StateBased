@@ -22,13 +22,13 @@ public class Shoot extends BaseSequence<ShootState> {
         switch (getState()) {
             case WAITNSPIN:
                 if (RobotMap.limelight.isValid()) {
-                    RobotMap.limelight.setLockedOn();
+                    RobotMap.limelight.setTargetAcquired();
                 }
                 if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
                     setNextState(ShootState.RESETPUNCH);
                 }
                 if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && RobotMap.shooter.getClosedLoopError() < 150
-                        && RobotMap.limelight.isLockedOn() && Math.abs(Robot.swerveDrive.getTargetShootRotationError().getDegrees()) < 3.0) {
+                        && RobotMap.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }

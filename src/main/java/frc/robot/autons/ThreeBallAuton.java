@@ -33,6 +33,8 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
     public void process() {
 
         switch (getState()) {
+            case NEUTRAL:
+                break;
             case DRIVE1:
                 setPathPlannerFollowerAtStartOfState(true);
                 if(this.getPlannerFollower().isFinished()){
@@ -80,12 +82,14 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
                 if(ballsShot == 3){
                     setNextState(ThreeBallAutonState.NEUTRAL);
                 }else if(this.getTimeSinceStartOfState() > 500){
+                    setNextState(ThreeBallAutonState.BOOT1);
+                }
+                break;
+            case BOOT1:
+                if(this.getTimeSinceStartOfState() > 150){
                     setNextState(ThreeBallAutonState.SHOOTBALL2);
                 }
                 break;
-            case NEUTRAL:
-                break;
-
         }
         updateState();
     }
@@ -107,7 +111,8 @@ enum ThreeBallAutonState implements IAutonState {
     PICKUPBALL1( 1, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new IntakeReq(IntakeState.KICKOUT), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
     SHOOTBALL2( -999, new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION)),
     PUNCH2( -999, new ShooterReq(ShooterState.PUNCH), new IntakeReq(IntakeState.RETRACT)),
-    RESETPUNCH2( -999, new ShooterReq(ShooterState.RESETPUNCH));
+    RESETPUNCH2( -999, new ShooterReq(ShooterState.RESETPUNCH)),
+    BOOT1(-999, new ShooterReq(ShooterState.BOOT));
 
     int pathIndex;
     Set<BaseSubsystem> requiredSubsystems;

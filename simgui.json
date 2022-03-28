@@ -9,11 +9,6 @@
       "Talon FX[10]/Integrated Sensor": {
         "name": "Back Right Drive"
       },
-      "Talon FX[14]/Integrated Sensor": {
-        "header": {
-          "open": true
-        }
-      },
       "Talon FX[1]/Integrated Sensor": {
         "header": {
           "open": true

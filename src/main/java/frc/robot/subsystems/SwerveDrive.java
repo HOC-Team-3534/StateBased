@@ -14,8 +14,9 @@ import frc.robot.RobotMap;
 import frc.robot.autons.pathplannerfollower.CalculatedDriveVelocities;
 import frc.robot.autons.pathplannerfollower.PathStateController;
 import frc.robot.subsystems.parent.BaseDriveSubsystem;
+import frc.robot.subsystems.states.SwerveDriveState;
 
-public class SwerveDrive extends BaseDriveSubsystem {
+public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 
 	private double frontLeft_stateAngle = 0.0,
 			frontRight_stateAngle = 0.0,
@@ -30,7 +31,7 @@ public class SwerveDrive extends BaseDriveSubsystem {
 
 	public SwerveDrive() {
 		super(RobotMap.m_frontLeftModule, RobotMap.m_frontRightModule, RobotMap.m_backLeftModule,
-				RobotMap.m_backRightModule);
+				RobotMap.m_backRightModule, SwerveDriveState.NEUTRAL);
 		setPathStateController(pathStateController);
 	}
 
@@ -41,52 +42,42 @@ public class SwerveDrive extends BaseDriveSubsystem {
 	public void process() {
 
 		super.process();
+
 		setTargetShootRotationAngle();
 
-		if (getStateRequiringName() == "DRIVE") {
-			drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-					true);
-		} else if (getStateRequiringName() == "CREEP") {
-			drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
-					true);
-		} else if (getStateRequiringName() == "WAITNSPIN" || getStateRequiringName() == "PUNCH"
-				|| getStateRequiringName() == "RETRACT") {
-			if (RobotMap.limelight.isTargetAcquired() && Buttons.SHOOT.getButton()) {
-				double normalizedAngleError = getTargetShootRotationAngleError().getDegrees() % 3.0;
-				double pidOutput = limelightPID.calculate(-normalizedAngleError,0.0);
-				drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-						Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-						pidOutput * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
-						true);
-			}else{
-				if(Buttons.Creep.getButton()){
-					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-							Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-							Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
-							true);
-				}else{
-					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-							Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-							Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-							true);
+		switch(getCurrentSubsystemState()){
+			case NEUTRAL:
+				neutral();
+				break;
+			case DRIVE:
+				if ((Buttons.Creep.getButton())) {
+					creep();
+				} else {
+					drive();
 				}
-			}
-		} else if (isStatePathFollowing()) {
-			if (getStateFirstRunThrough()) {
-				// TODO check if the start of the path is near current odometry for safety
-			}
-			if (this.getPathStateController().getPathPlannerFollower() != null) {
-				driveOnPath();
-			} else {
-				System.out.println(
-						"DRIVE PATH NOT SET. MUST CREATE PATHPLANNERFOLLOWER IN AUTON AND SET IN SWERVEDRIVE SUBSYSTEM");
-			}
-		} else {
-			neutral();
+				break;
+			case AIM:
+				if (RobotMap.limelight.isTargetAcquired() && Buttons.SHOOT.getButton()) {
+					aim();
+				}else{
+					if(Buttons.Creep.getButton()){
+						creep();
+					}else{
+						drive();
+					}
+				}
+				break;
+			case DRIVE_AUTONOMOUSLY:
+				if (getStateFirstRunThrough()) {
+					// TODO check if the start of the path is near current odometry for safety
+				}
+				if (this.getPathStateController().getPathPlannerFollower() != null) {
+					driveOnPath();
+				} else {
+					System.out.println(
+							"DRIVE PATH NOT SET. MUST CREATE PATHPLANNERFOLLOWER IN AUTON AND SET IN SWERVEDRIVE SUBSYSTEM");
+				}
+				break;
 		}
 	}
 
@@ -115,6 +106,29 @@ public class SwerveDrive extends BaseDriveSubsystem {
 	@Override
 	public void resetGyro() {
 		RobotMap.navx.reset();
+	}
+
+	private void drive(){
+		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+				Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+				Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+				true);
+	}
+
+	private void creep(){
+		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
+				true);
+	}
+
+	private void aim(){
+		double normalizedAngleError = getTargetShootRotationAngleError().getDegrees() % 3.0;
+		double pidOutput = limelightPID.calculate(-normalizedAngleError,0.0);
+		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				pidOutput * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
+				true);
 	}
 
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -202,3 +216,4 @@ public class SwerveDrive extends BaseDriveSubsystem {
 		return true;
 	}
 }
+

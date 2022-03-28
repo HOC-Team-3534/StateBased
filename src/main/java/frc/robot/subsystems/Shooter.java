@@ -9,25 +9,14 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.IDistanceToShooterRPM;
+import frc.robot.subsystems.states.ShooterState;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-public class Shooter extends BaseSubsystem {
-
-    String[] autonPreShootStateStrings = { "PICKUPBALL1", "PICKUPBALL3" };
-    String[] autonShootStateStrings = { "SHOOTBALL1", "SHOOTBALL2", "SHOOTBALL3" };
-    String[] autonPunchStateStrings = { "PUNCH1", "PUNCH2", "PUNCH3" };
-    String[] autonResetPunchStateStrings = { "RESETPUNCH1", "RESETPUNCH2", "RESETPUNCH3" };
-    Set<String> autonPreShootStates = new HashSet<>(Arrays.asList(autonPreShootStateStrings));
-    Set<String> autonShootStates = new HashSet<>(Arrays.asList(autonShootStateStrings));
-    Set<String> autonPunchStates = new HashSet<>(Arrays.asList(autonPunchStateStrings));
-    Set<String> autonResetPunchStates = new HashSet<>(Arrays.asList(autonResetPunchStateStrings));
+public class Shooter extends BaseSubsystem<ShooterState> {
 
     IDistanceToShooterRPM rpmFunction;
 
     public Shooter(IDistanceToShooterRPM rpmFunction) {
+        super(ShooterState.NEUTRAL);
         // makes the graphical number to enter text - have to do a
         // put to do a get
         SmartDashboard.putNumber("Manual Testing RPM", 2000.0);
@@ -41,71 +30,59 @@ public class Shooter extends BaseSubsystem {
 
         super.process();
 
-        // TODO add in auton control of shooter once vision branch merged in
-        if (getStateRequiringName() == "WAITNSPIN") {
-            // grabs the number from SmartDashboard
-            //waitNSpin(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
-            if (RobotMap.limelight.isTargetAcquired()) {
-                waitNSpin();
-            } else {
-                waitNSpin(3000);
-            }
-        } else if (autonPreShootStates.contains(getStateRequiringName())) {
-            if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower() != null) {
-                if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower()
-                        .getRemainingTimeSeconds() < 1.0) {
-                    autonShoot();
+        switch (getCurrentSubsystemState()) {
+            case NEUTRAL:
+                neutral();
+                break;
+            case AUTONPREUPTOSPEED:
+                if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower() != null) {
+                    if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower()
+                            .getRemainingTimeSeconds() < 2.0) {
+                        upToSpeed(3000);
+                    } else {
+                        neutral();
+                    }
                 } else {
                     neutral();
                 }
-            } else {
-                neutral();
-            }
-        } else if (autonShootStates.contains(getStateRequiringName())) {
-            autonShoot();
-        } else if (getStateRequiringName() == "BURP") {
-            burp();
-        } else if (getStateRequiringName() == "PUNCH" || autonPunchStates.contains(getStateRequiringName())) {
-            punch();
-        } else if (getStateRequiringName() == "RESETPUNCH" || getStateRequiringName() == "RETRACT"
-                || autonResetPunchStates.contains(getStateRequiringName())) {
-            resetPunch();
-        } else if (getStateRequiringName() == "BOOT") {
-            boot();
-        } else {
-            neutral();
+                break;
+            case UPTOSPEED:
+                // grabs the number from SmartDashboard
+                //waitNSpin(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
+                if (RobotMap.limelight.isTargetAcquired()) {
+                    upToSpeed();
+                } else {
+                    upToSpeed(3000);
+                }
+                break;
+            case BURP:
+                burp();
+                break;
+            case PUNCH:
+                punch();
+                break;
+            case RESETPUNCH:
+                resetPunch();
+                break;
+            case BOOT:
+                boot();
+                break;
         }
     }
 
     public void shoot(double rpm) {
         double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
         RobotMap.shooter.set(ControlMode.Velocity, countsPer100MS);
-        // System.out.println("Speed is " + countsPer100MS);
-
     }
 
-    public double getRPM(double distance){
-        double output = rpmFunction.getShooterRPM(distance);
-        if(output < 2500){
-            output = 2500;
-        }
-        return output;
-    }
-
-    private void waitNSpin() {
+    private void upToSpeed() {
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
         //shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
         shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getLimelightShootProjection().getDistance()));
     }
 
-    private void waitNSpin(double rpm) {
+    private void upToSpeed(double rpm) {
         shoot(rpm);
-    }
-
-    private void autonShoot() {
-        double autonRPMMultiplier = SmartDashboard.getNumber("AUTON RPM MULTIPLIER (%)", 100.0) / 100.0;
-        shoot(autonRPMMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()
-                /* getRPM(Robot.swerveDrive.getMetersFromLocation(Constants.HUB_LOCATION)*/));
     }
 
     private void burp() {
@@ -155,3 +132,4 @@ public class Shooter extends BaseSubsystem {
     }
 
 }
+

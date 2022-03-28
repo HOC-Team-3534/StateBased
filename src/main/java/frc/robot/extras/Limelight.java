@@ -123,7 +123,7 @@ public class Limelight {
          */
         double totalTime = projectedDistance / desiredAverageVelocity.magnitude();
         Translation2d projectedLocation = Utils.getPositionAfterMotion(targetLocation, targetMotion, totalTime);
-        Rotation2d projectedOffset = new Rotation2d(projectedLocation.getX(), projectedLocation.getY());
+        Rotation2d projectedOffset = new Rotation2d(Math.atan(projectedLocation.getY() / projectedLocation.getX()));
 
         limelightShootProjection = new LimelightShootProjection(projectedDistance, projectedOffset);
 

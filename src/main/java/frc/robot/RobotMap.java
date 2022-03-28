@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -28,16 +29,6 @@ public class RobotMap {
 	 * EXAMPLE public static DoubleSolenoid elevatorCylinderOne; //first value ->
 	 * PCM A, CHANNEL 0, 1
 	 */
-
-	private static WPI_TalonFX frontLeftDrive;
-	private static WPI_TalonFX frontRightDrive;
-	private static WPI_TalonFX backLeftDrive;
-	private static WPI_TalonFX backRightDrive;
-
-	private static WPI_TalonFX frontLeftTurn;
-	private static WPI_TalonFX frontRightTurn;
-	private static WPI_TalonFX backLeftTurn;
-	private static WPI_TalonFX backRightTurn;
 
 	public static SwerveModule m_frontLeftModule;
 	public static SwerveModule m_frontRightModule;
@@ -131,16 +122,6 @@ public class RobotMap {
 		// a different configuration or motors
 		// you MUST change it. If you do not, your code will crash on startup.
 		// FIXME Setup motor configuration
-
-		frontLeftDrive = new WPI_TalonFX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
-		frontRightDrive = new WPI_TalonFX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
-		backLeftDrive = new WPI_TalonFX(BACK_LEFT_MODULE_DRIVE_MOTOR);
-		backRightDrive = new WPI_TalonFX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
-
-		frontLeftTurn = new WPI_TalonFX(FRONT_LEFT_MODULE_STEER_MOTOR);
-		frontRightTurn = new WPI_TalonFX(FRONT_RIGHT_MODULE_STEER_MOTOR);
-		backLeftTurn = new WPI_TalonFX(BACK_LEFT_MODULE_STEER_MOTOR);
-		backRightTurn = new WPI_TalonFX(BACK_RIGHT_MODULE_STEER_MOTOR);
 
 		m_frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
 				// This parameter is optional, but will allow you to see the current state of

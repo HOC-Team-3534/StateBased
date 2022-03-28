@@ -1,8 +1,18 @@
 {
   "HALProvider": {
+    "DIO": {
+      "window": {
+        "visible": true
+      }
+    },
     "Other Devices": {
       "Talon FX[10]/Integrated Sensor": {
         "name": "Back Right Drive"
+      },
+      "Talon FX[14]/Integrated Sensor": {
+        "header": {
+          "open": true
+        }
       },
       "Talon FX[1]/Integrated Sensor": {
         "header": {
@@ -48,9 +58,6 @@
   "NetworkTables": {
     "Shuffleboard": {
       "Drivetrain": {
-        "Back Left Module": {
-          "open": true
-        },
         "open": true
       },
       "open": true

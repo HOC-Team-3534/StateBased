@@ -55,7 +55,7 @@ public class Limelight {
             getTable();
         }
         if (isValid()) {
-            savedDistance = distanceFunction.getDistance(getPixelAngle()) / getHorizontalAngleOffset().getCos();
+            savedDistance = distanceFunction.getDistance(getPixelAngle()); // getHorizontalAngleOffset().getCos();
         }
         return savedDistance;
     }

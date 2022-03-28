@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.RobotContainer.Axes;
 import frc.robot.RobotMap;
@@ -56,6 +57,8 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 				break;
 			case AIM:
 				if (RobotMap.limelight.isTargetAcquired() && Buttons.SHOOT.getButton()) {
+					aim();
+				}else if(RobotMap.limelight.isTargetAcquired() && Robot.isAutonomous){
 					aim();
 				}else{
 					if(Buttons.Creep.getButton()){

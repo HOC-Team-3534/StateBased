@@ -1,5 +1,6 @@
 package frc.robot.autons;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
@@ -31,6 +32,8 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
 
     @Override
     public void process() {
+
+        Robot.swerveDrive.setTargetShootRotationAngle();
 
         switch (getState()) {
             case NEUTRAL:
@@ -64,10 +67,15 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
                 setPathPlannerFollowerAtStartOfState(false);
                 if(this.getPlannerFollower().isFinished()){
                     setNextState(ThreeBallAutonState.SHOOTBALL2);
+                    RobotMap.limelight.resetLimelightGlobalValues();
                 }
                 break;
             case SHOOTBALL2:
-                if ((ballsShot == 1 || (ballsShot == 2 && this.getTimeSinceStartOfState() > 500))
+                if (RobotMap.limelight.isValid()) {
+                    RobotMap.limelight.setTargetAcquired();
+                }
+                if ((ballsShot == 1 || (ballsShot == 2 && this.getTimeSinceStartOfState() > 500
+                        && RobotMap.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0))
                         && RobotMap.shooter.getClosedLoopError() < 100) {
                     setNextState(ThreeBallAutonState.PUNCH2);
                 }
@@ -109,7 +117,7 @@ enum ThreeBallAutonState implements IAutonState {
     PUNCH1(-999, new ShooterReq(ShooterState.PUNCH)),
     RESETPUNCH1( -999, new ShooterReq(ShooterState.RESETPUNCH)),
     PICKUPBALL1( 1, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new IntakeReq(IntakeState.KICKOUT), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
-    SHOOTBALL2( -999, new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION)),
+    SHOOTBALL2( -999, new SwerveDriveReq(SwerveDriveState.AIM), new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION)),
     PUNCH2( -999, new ShooterReq(ShooterState.PUNCH), new IntakeReq(IntakeState.RETRACT)),
     RESETPUNCH2( -999, new ShooterReq(ShooterState.RESETPUNCH)),
     BOOT1(-999, new ShooterReq(ShooterState.BOOT));

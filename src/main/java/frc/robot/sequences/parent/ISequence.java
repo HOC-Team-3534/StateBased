@@ -1,10 +1,10 @@
 package frc.robot.sequences.parent;
 
-public interface ISequence<S extends IState> {
+public interface ISequence<SeqS extends ISequenceState> {
 
     void process();
 
-    S getState();
+    SeqS getState();
 
     /**
      * 

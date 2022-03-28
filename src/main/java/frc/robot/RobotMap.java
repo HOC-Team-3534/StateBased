@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -139,6 +140,7 @@ public class RobotMap {
 				// This is how much the steer encoder is offset from true zero (In our case,
 				// zero is facing straight forward)
 				FRONT_LEFT_MODULE_STEER_OFFSET);
+
 
 		// We will do the same for the other modules
 		m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(

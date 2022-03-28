@@ -1,17 +1,25 @@
 package frc.robot.autons;
 
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseDriveSubsystem;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+import frc.robot.subsystems.requirements.IntakeReq;
+import frc.robot.subsystems.requirements.ShooterReq;
+import frc.robot.subsystems.requirements.SwerveDriveReq;
+import frc.robot.subsystems.states.IntakeState;
+import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.states.SwerveDriveState;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
 
@@ -69,44 +77,34 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
 }
 
 enum TwoBallAutonState implements IAutonState {
-    NEUTRAL(false, -999),
-    PICKUPBALL1(true, 0, Robot.intake, Robot.swerveDrive, Robot.shooter),
-    SHOOTBALL1(false, -999, Robot.shooter),
-    PUNCH1(false, -999, Robot.shooter),
-    RESETPUNCH1(false, -999, Robot.shooter,Robot.intake);
+    NEUTRAL(-999),
+    PICKUPBALL1( 0, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new IntakeReq(IntakeState.KICKOUT), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
+    SHOOTBALL1( -999, new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION)),
+    PUNCH1( -999, new ShooterReq(ShooterState.PUNCH), new IntakeReq(IntakeState.RETRACT)),
+    RESETPUNCH1( -999, new ShooterReq(ShooterState.RESETPUNCH));
 
-    boolean isPathFollowing;
     int pathIndex;
-    List<BaseSubsystem> requiredSubsystems;
+    Set<BaseSubsystem> requiredSubsystems;
+    List<SubsystemRequirement> subsystemRequirements;
 
-    TwoBallAutonState(boolean isPathFollowing, int pathIndex, BaseSubsystem... subsystems) {
-        this.isPathFollowing = isPathFollowing;
+    TwoBallAutonState(int pathIndex, SubsystemRequirement... requirements) {
         this.pathIndex = pathIndex;
-        requiredSubsystems = Arrays.asList(subsystems);
+        subsystemRequirements = Arrays.asList(requirements);
+        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
 
     @Override
-    public List<BaseSubsystem> getRequiredSubsystems() {
+    public Set<BaseSubsystem> getRequiredSubsystems() {
         return requiredSubsystems;
     }
 
     @Override
-    public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        return IState.requireSubsystems(sequence, requiredSubsystems, this);
-    }
-
-    @Override
-    public String getName() {
-        return this.name();
+    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
+        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
     }
 
     @Override
     public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence) {
         return IAutonState.getPath(sequence, pathIndex);
-    }
-
-    @Override
-    public boolean isPathFollowing() {
-        return isPathFollowing;
     }
 }

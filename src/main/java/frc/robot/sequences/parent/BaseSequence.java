@@ -3,19 +3,19 @@ package frc.robot.sequences.parent;
 
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public abstract class BaseSequence<S extends IState> implements ISequence<S> {
+public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequence<SeqS> {
 
-    S state = null;
-    S nextState = null;
-    S neutralState = null;
-    S startState = null;
+    SeqS state = null;
+    SeqS nextState = null;
+    SeqS neutralState = null;
+    SeqS startState = null;
 
     long timeAtStartOfSequence = 0;
     long timeAtStartOfState = 0;
 
     boolean stateFirstRunThrough = false;
 
-    public BaseSequence(S neutralState, S startState) {
+    public BaseSequence(SeqS neutralState, SeqS startState) {
         setNeutralState(neutralState);
         setStartState(startState);
         setNextState(neutralState);
@@ -59,7 +59,7 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         return getState() == getNeutralState();
     }
 
-    boolean setState(S state) {
+    boolean setState(SeqS state) {
         if (state.requireSubsystems(this)) {
             this.state = state;
             updateStateStartTime();
@@ -69,31 +69,31 @@ public abstract class BaseSequence<S extends IState> implements ISequence<S> {
         return false;
     }
 
-    public S getState() {
+    public SeqS getState() {
         return this.state;
     }
 
-    protected void setNextState(S state) {
+    protected void setNextState(SeqS state) {
         nextState = state;
     }
 
-    S getNextState() {
+    SeqS getNextState() {
         return nextState;
     }
 
-    void setNeutralState(S state) {
+    void setNeutralState(SeqS state) {
         neutralState = state;
     }
 
-    public S getNeutralState() {
+    public SeqS getNeutralState() {
         return neutralState;
     }
 
-    void setStartState(S state) {
+    void setStartState(SeqS state) {
         startState = state;
     }
 
-    S getStartState() {
+    SeqS getStartState() {
         return startState;
     }
 

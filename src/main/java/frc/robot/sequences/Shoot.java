@@ -28,6 +28,7 @@ public class Shoot extends BaseSequence<ShootState> {
     public void process() {
 
         RobotMap.limelight.updateLimelightShootProjection();
+        Robot.swerveDrive.setTargetShootRotationAngle();
 
         switch (getState()) {
             case UPTOSPEED:

@@ -40,13 +40,16 @@ public class SequenceProcessor{
     }
 
     public void process() {
+
+        if(shoot.isNeutral()){
+            RobotMap.limelight.resetLimelightGlobalValues();
+        }
         
         if (climb.isNeutral() && shoot.isNeutral()) {
             drive.start(Robot.swerveDrive);
         }
         if(Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton()) {
             shoot.start(Robot.swerveDrive);
-            RobotMap.limelight.resetLimelightGlobalValues();
         }
         if(Buttons.Burp.getButton()){
             burp.start();

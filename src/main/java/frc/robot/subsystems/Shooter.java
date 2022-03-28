@@ -77,8 +77,8 @@ public class Shooter extends BaseSubsystem<ShooterState> {
 
     private void upToSpeed() {
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
-        //shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
-        shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getLimelightShootProjection().getDistance()));
+        shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
+        //shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getLimelightShootProjection().getDistance()));
     }
 
     private void upToSpeed(double rpm) {

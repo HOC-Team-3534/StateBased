@@ -43,8 +43,6 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 
 		super.process();
 
-		setTargetShootRotationAngle();
-
 		switch(getCurrentSubsystemState()){
 			case NEUTRAL:
 				neutral();
@@ -93,7 +91,8 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 	}
 
 	public void setTargetShootRotationAngle() {;
-		this.targetShootRotationAngle = getGyroHeading().plus(RobotMap.limelight.getLimelightShootProjection().getOffset());
+		//this.targetShootRotationAngle = getGyroHeading().plus(RobotMap.limelight.getLimelightShootProjection().getOffset());
+		this.targetShootRotationAngle = getGyroHeading().plus(RobotMap.limelight.getHorizontalAngleOffset());
 	}
 
 	public Rotation2d getTargetShootRotationAngleError(){ return targetShootRotationAngle.minus(getGyroHeading()); }
@@ -123,6 +122,7 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 	}
 
 	private void aim(){
+		System.out.println("I am aiming");
 		double normalizedAngleError = getTargetShootRotationAngleError().getDegrees() % 3.0;
 		double pidOutput = limelightPID.calculate(-normalizedAngleError,0.0);
 		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,

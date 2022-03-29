@@ -107,6 +107,11 @@ public abstract class BaseDriveSubsystem<SsS extends ISubsystemState> extends Ba
         return this.gyroOffset;
     }
 
+    public void setGyroOffset(Rotation2d offset){
+        this.gyroOffset = offset;
+    }
+
+
     public double getMetersFromLocation(Translation2d location){
         return getSwerveDriveOdometry().getPoseMeters().getTranslation().getDistance(location);
     }

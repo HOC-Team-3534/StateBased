@@ -180,6 +180,15 @@ public class RobotContainer {
 				return RobotContainer.getController1().getBackButton();
 			}
 			
+		}),
+		GyroReset(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getRightStickButton();
+			}
+
 		});
 
 		Callable<Boolean> callable;

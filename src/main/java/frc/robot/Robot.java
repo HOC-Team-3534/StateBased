@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
 	private int logCounter = 0;
 
 	public static double designatedLoopPeriod = 20;
+	private static long autonStartTime;
 
 	public static BaseAutonSequence<? extends IAutonState> chosenAuton;
 	private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
@@ -99,6 +100,8 @@ public class Robot extends TimedRobot {
 		Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1);
 		Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
 
+		SmartDashboard.putNumber("Auton Time Delay(ms)", 0.0);
+
 		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
 		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);
 
@@ -112,6 +115,7 @@ public class Robot extends TimedRobot {
 		sendableChooser.addOption("NO AUTON (MUST BE STRAIGHT ALIGNED)", Auton.NO_OP);
 
 		SmartDashboard.putData(sendableChooser);
+
 	}
 	
 
@@ -135,6 +139,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		chosenAuton = sendableChooser.getSelected().getAuton();
 		chosenAuton.start();
+		autonStartTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -155,7 +160,9 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-				chosenAuton.process();
+				if(currentTime - autonStartTime > SmartDashboard.getNumber("Auton Time Delay(ms)", 0.0)) {
+					chosenAuton.process();
+				}
 				// run processes
 
 				/** Run subsystem process methods here */

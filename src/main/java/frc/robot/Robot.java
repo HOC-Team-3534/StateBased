@@ -129,6 +129,27 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
+
+		long prevLoopTime = 0;
+
+		while(this.isDisabled()){
+
+			log();
+
+			long currentTime = System.currentTimeMillis();
+
+			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+
+				loopPeriod = (int) (currentTime - prevLoopTime);
+				prevLoopTime = currentTime;
+				loopCnt++;
+
+				swerveDrive.neutral();
+			}
+
+			Timer.delay(0.001);
+
+		}
 	}
 
 	@Override

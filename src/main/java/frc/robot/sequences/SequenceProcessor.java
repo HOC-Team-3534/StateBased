@@ -20,6 +20,7 @@ public class SequenceProcessor{
     public Climb climb;
     public ClimbPrepReset climbPrepReset;
     public ClimbReset climbReset;
+    public GyroReset gyroReset;
 
     public SequenceProcessor() {
 
@@ -37,6 +38,7 @@ public class SequenceProcessor{
         climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
         climbPrepReset = new ClimbPrepReset(ClimbPrepResetState.NEUTRAL, ClimbPrepResetState.RESETARM);
         climbReset = new ClimbReset(ClimbResetState.NEUTRAL, ClimbResetState.MOVEARMMANUALLY);
+        gyroReset = new GyroReset(GyroResetState.NEUTRAL, GyroResetState.RESET);
     }
 
     public void process() {
@@ -71,6 +73,9 @@ public class SequenceProcessor{
         if(Buttons.ClimbPrepReset.getButton() && !climbPrep.isNeutral()){
             climbPrepReset.start(Robot.climber);
         }
+        if(Buttons.GyroReset.getButton()){
+            gyroReset.start();
+        }
         if(Buttons.MoveClimbArmManually.getButton()){
             climbReset.start();
         }
@@ -84,6 +89,7 @@ public class SequenceProcessor{
         climbPrepReset.process();
         climb.process();
         climbReset.process();
+        gyroReset.process();
         SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getState().name() == "PREPPEDFORCLIMB");
         SmartDashboard.putString("Climb State", climb.getState().name());
     }

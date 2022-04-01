@@ -75,6 +75,15 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         RobotMap.shooter.set(ControlMode.Velocity, countsPer100MS);
     }
 
+    private double getShooterRPM(){
+        return RobotMap.shooter.getSelectedSensorVelocity() / Constants.RPM_TO_COUNTS_PER_100MS;
+    }
+
+    public double getCalculatedRPMError(){
+        double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
+        return Math.abs(getShooterRPM() - rpmMultiplier * rpmFunction.getShooterRPM((RobotMap.limelight.getDistance())));
+    }
+
     private void upToSpeed() {
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
         shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getDistance()));
@@ -103,7 +112,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
             RobotMap.shooterBoot.set(ControlMode.PercentOutput, -0.80);
 
         }
-        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 200) {
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 160) {
             RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
         }
 
@@ -113,7 +122,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         if (this.getStateFirstRunThrough()) {
             RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.90);
         }
-        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 100) {
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 140) {
             RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
         }
     }

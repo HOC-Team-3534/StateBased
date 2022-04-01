@@ -194,7 +194,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         if (this.getStateFirstRunThrough()) {
             setClimbArmDegree(MIDHIGHBAR_RECENTER_ANGLE_COMMAND);
             setHighVelocity();
-            setHighAcceleration();
+            setLowAcceleration();
         }
     }
 
@@ -252,7 +252,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         if (this.getStateFirstRunThrough()) {
             setClimbArmDegree(HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND);
             setHighVelocity();
-            setHighAcceleration();
+            setLowAcceleration();
         }
     }
 
@@ -263,7 +263,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
             setH4(Value.kReverse);
             setClimbArmDegree(SWINGTOREST_ANGLE_COMMAND);
             setHighVelocity();
-            setHighAcceleration();
+            setLowAcceleration();
         }
     }
 

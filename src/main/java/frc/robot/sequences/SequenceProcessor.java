@@ -16,11 +16,13 @@ public class SequenceProcessor{
     public Burp burp;
     public IntakeSeq intake;
     public Extake extake;
+    public RollIn rollIn;
     public ClimbPrep climbPrep;
     public Climb climb;
     public ClimbPrepReset climbPrepReset;
     public ClimbReset climbReset;
     public GyroReset gyroReset;
+
 
     public SequenceProcessor() {
 
@@ -34,11 +36,13 @@ public class SequenceProcessor{
         burp = new Burp(BurpState.NEUTRAL, BurpState.BURP);
         intake = new IntakeSeq(IntakeSeqState.NEUTRAL, IntakeSeqState.EXTEND);
         extake = new Extake(ExtakeState.NEUTRAL, ExtakeState.EXTAKE);
+        rollIn = new RollIn(RollInState.NEUTRAL, RollInState.ROLLIN);
         climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
         climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
         climbPrepReset = new ClimbPrepReset(ClimbPrepResetState.NEUTRAL, ClimbPrepResetState.RESETARM);
         climbReset = new ClimbReset(ClimbResetState.NEUTRAL, ClimbResetState.MOVEARMMANUALLY);
         gyroReset = new GyroReset(GyroResetState.NEUTRAL, GyroResetState.RESET);
+
     }
 
     public void process() {
@@ -61,6 +65,9 @@ public class SequenceProcessor{
         }
         if(Buttons.Extake.getButton()){
             extake.start();
+        }
+        if(Buttons.RollIn.getButton() && !Buttons.MoveClimbArmManually.getButton()){
+            rollIn.start();
         }
         if (Buttons.ClimbPrep.getButton()) { // TODO: in last 35 seconds of match logic
             climbPrep.start();
@@ -85,6 +92,7 @@ public class SequenceProcessor{
         burp.process();
         intake.process();
         extake.process();
+        rollIn.process();
         climbPrep.process();
         climbPrepReset.process();
         climb.process();

@@ -32,6 +32,9 @@ public class Intake extends BaseSubsystem<IntakeState> {
             case EXTAKE:
                 extake();
                 break;
+            case ROLLIN:
+                rollIn();
+                break;
             case HOLDPOSITION:
                 break;
         }
@@ -56,9 +59,9 @@ public class Intake extends BaseSubsystem<IntakeState> {
         }
     }
 
-    public void extake(){
-        RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, -0.80);
-    }
+    public void extake(){ RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, -0.80); }
+
+    public void rollIn(){ RobotMap.m_intakeRoller.set(ControlMode.PercentOutput, 0.80); }
 
     @Override
     public boolean abort() {

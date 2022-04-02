@@ -95,7 +95,7 @@ public final class Constants {
         public static final double FALCON_TICKS_TO_ARM_DEGREES = 1 / ARM_DEGREES_TO_FALCON_TICKS;
 
         public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 51.0;
-        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 100.0;
+        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 80.0;
         public static final int MAX_ARM_VELOCITY_NATIVE_UNITS = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
 

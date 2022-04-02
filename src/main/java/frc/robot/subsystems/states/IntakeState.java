@@ -9,6 +9,7 @@ public enum IntakeState implements ISubsystemState<Intake> {
     KICKOUT,
     RETRACT,
     EXTAKE,
+    ROLLIN,
     HOLDPOSITION;
 
     @Override

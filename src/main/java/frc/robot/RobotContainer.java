@@ -117,6 +117,14 @@ public class RobotContainer {
 				return RobotContainer.getController1().getRightBumper();
 			}
 
+		}),RollIn(new Callable<Boolean>(){
+
+			@Override
+			public Boolean call() throws Exception {
+				// TODO Auto-generated method stub
+				return RobotContainer.getController2().getLeftBumper();
+			}
+
 		}),
 		Climb(new Callable<Boolean>(){
 

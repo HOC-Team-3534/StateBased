@@ -108,11 +108,11 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         if (getStateFirstRunThrough()) {
             setWithADelayToOff(RobotMap.pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
         }
-        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 100) {
-            RobotMap.shooterBoot.set(ControlMode.PercentOutput, -0.80);
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 50) {
+            RobotMap.shooterBoot.set(ControlMode.PercentOutput, -0.70);
 
         }
-        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 160) {
+        if (this.getSequenceRequiring().getTimeSinceStartOfState() > 240) {
             RobotMap.shooterBoot.set(ControlMode.PercentOutput, 0.0);
         }
 

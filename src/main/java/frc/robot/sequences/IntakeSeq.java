@@ -32,7 +32,7 @@ public class IntakeSeq extends BaseSequence<IntakeSeqState> {
                 if(Buttons.Intake.getButton()){
                     setNextState(IntakeSeqState.EXTEND);
                 }
-                if(getTimeSinceStartOfState() > 600){
+                if(getTimeSinceStartOfState() > 700){
                     setNextState(IntakeSeqState.NEUTRAL);
                 }
                 break;

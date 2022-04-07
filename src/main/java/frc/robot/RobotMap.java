@@ -184,10 +184,14 @@ public class RobotMap {
 
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
-		shooter.config_kF(0, 0.0525); // .05
-		shooter.config_kP(0, 0.45);
-		shooter.config_kD(0, 80);
-		shooter.configClosedloopRamp(2.045);
+		shooter.selectProfileSlot(0, 0);
+		shooter.config_kF(0, 0.0552); // .05
+		shooter.config_kP(0, 0.15);
+		shooter.config_kD(0, 15);
+		shooter.config_kF(1, 0.06); // .05
+		shooter.config_kP(1, 0.1);
+		shooter.config_kD(1, 5);
+		shooter.configClosedloopRamp(0.5);
 
 		shooterBoot = new WPI_TalonSRX(Constants.SHOOTER_BOOT);
 		shooterBoot.setInverted(true);

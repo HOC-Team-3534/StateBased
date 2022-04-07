@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 
 		RobotMap.init();
+		RobotMap.pigeon.reset();
 
 		// PortForwarder.add(5800, "limelight.local", 5800);
 		// PortForwarder.add(5801, "limelight.local", 5801);

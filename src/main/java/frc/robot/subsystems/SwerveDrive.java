@@ -125,8 +125,13 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 	}
 
 	private void aim(){
-		double normalizedAngleError = getTargetShootRotationAngleError().getDegrees() % 3.0;
-		double pidOutput = limelightPID.calculate(-normalizedAngleError,0.0);
+		double angleError = getTargetShootRotationAngleError().getDegrees();
+		if(angleError > 2.0){
+			angleError = 2.0;
+		}else if(angleError < -2.0){
+			angleError = -2.0;
+		}
+		double pidOutput = limelightPID.calculate(-angleError,0.0);
 		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
 				Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
 				pidOutput * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,

@@ -29,7 +29,10 @@ public class IntakeSeq extends BaseSequence<IntakeSeqState> {
                 }
                 break;
             case RETRACT:
-                if(getTimeSinceStartOfState() > 300){
+                if(Buttons.Intake.getButton()){
+                    setNextState(IntakeSeqState.EXTEND);
+                }
+                if(getTimeSinceStartOfState() > 600){
                     setNextState(IntakeSeqState.NEUTRAL);
                 }
                 break;

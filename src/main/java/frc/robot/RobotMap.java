@@ -186,7 +186,7 @@ public class RobotMap {
 		shooter.setInverted(true);
 		shooter.selectProfileSlot(0, 0);
 		shooter.config_kF(0, 0.0552); // .05
-		shooter.config_kP(0, 0.15);
+		shooter.config_kP(0, 0.13);
 		shooter.config_kD(0, 15);
 		shooter.config_kF(1, 0.06); // .05
 		shooter.config_kP(1, 0.1);

@@ -5,7 +5,8 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -61,7 +62,7 @@ public class RobotMap {
 
 	public static WPI_TalonFX m_climbMotor;
 
-	public static AHRS navx;
+	public static WPI_Pigeon2 pigeon;
 
 	public static final double spikeCurrent = 7.0;
 
@@ -224,6 +225,6 @@ public class RobotMap {
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);
 
-		navx = new AHRS(SerialPort.Port.kUSB);
+		pigeon = new WPI_Pigeon2(PIGEON_2);
 	}
 }

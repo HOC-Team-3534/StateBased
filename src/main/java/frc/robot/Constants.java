@@ -64,6 +64,8 @@ public final class Constants {
                                                                                             // back
                                                                                             // right steer offset
 
+        public static final int PIGEON_2 = 19;
+
         public static final int L1_EXTEND = 0;
         public static final int L1_RETRACT = 1;
 

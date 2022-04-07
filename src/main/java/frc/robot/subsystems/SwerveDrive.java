@@ -102,12 +102,12 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 
 	@Override
 	public Rotation2d getGyroHeading() {
-		return RobotMap.navx.getRotation2d().plus(this.getGyroOffset());
+		return RobotMap.pigeon.getRotation2d().plus(this.getGyroOffset());
 	}
 
 	@Override
 	public void resetGyro() {
-		RobotMap.navx.reset();
+		RobotMap.pigeon.reset();
 	}
 
 	private void drive(){

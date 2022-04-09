@@ -1,5 +1,6 @@
 package frc.robot.autons;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
@@ -32,6 +33,8 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
     @Override
     public void process() {
 
+        Robot.swerveDrive.setTargetShootRotationAngle();
+
         switch (getState()) {
             case PICKUPBALL1:
                 setPathPlannerFollowerAtStartOfState(true);
@@ -41,8 +44,12 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
                 }
                 break;
             case SHOOTBALL1:
+                if (RobotMap.limelight.isValid()) {
+                    RobotMap.limelight.setTargetAcquired();
+                }
                 if (((ballsShot == 0 && this.getTimeSinceStartOfState() > 500) || (ballsShot == 1 && this.getTimeSinceStartOfState() > 500))
-                        && RobotMap.shooter.getClosedLoopError() < 100) {
+                        && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0 &&
+                        RobotMap.shooter.getClosedLoopError() < 100 && RobotMap.limelight.isTargetAcquired()) {
                     setNextState(TwoBallAutonState.PUNCH1);
                 }
                 break;
@@ -79,7 +86,7 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
 enum TwoBallAutonState implements IAutonState {
     NEUTRAL(-999),
     PICKUPBALL1( 0, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new IntakeReq(IntakeState.KICKOUT), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
-    SHOOTBALL1( -999, new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION)),
+    SHOOTBALL1( -999, new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION), new SwerveDriveReq((SwerveDriveState.AIM))),
     PUNCH1( -999, new ShooterReq(ShooterState.PUNCH), new IntakeReq(IntakeState.RETRACT)),
     RESETPUNCH1( -999, new ShooterReq(ShooterState.RESETPUNCH));
 

@@ -87,7 +87,7 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
                 }
                 break;
             case RESETPUNCH2:
-                if(ballsShot == 3){
+                if(ballsShot == 3 && this.getTimeSinceStartOfState() > 500){
                     setNextState(ThreeBallAutonState.NEUTRAL);
                 }else if(this.getTimeSinceStartOfState() > 500){
                     setNextState(ThreeBallAutonState.BOOT1);

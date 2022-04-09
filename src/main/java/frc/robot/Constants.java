@@ -136,7 +136,7 @@ public final class Constants {
 
         public static final double MAX_VELOCITY_METERS_PER_SECOND = PHYSICAL_MAX_VELOCITY * .02;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS = 2.0;
+        public static final double MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS = 2.2;
 
         public static final double AUTON_MAX_VELOCITY_RATIO = MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS / PHYSICAL_MAX_VELOCITY;
 

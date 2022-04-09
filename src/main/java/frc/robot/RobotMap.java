@@ -176,7 +176,7 @@ public class RobotMap {
 		if(Constants.ROBOTTYPE == RobotType.PBOT) {
 			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3, vel -> 3);
 		}else{
-			limelight = new Limelight(ty -> 0.006367 * Math.pow(ty, 2) - .095 * ty + 3.52, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225/52);
+			limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225/52);
 		}
 
 		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
@@ -185,9 +185,9 @@ public class RobotMap {
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
 		shooter.selectProfileSlot(0, 0);
-		shooter.config_kF(0, 0.0552); // .05
-		shooter.config_kP(0, 0.13);
-		shooter.config_kD(0, 15);
+		shooter.config_kF(0, 0.0553); // .05
+		shooter.config_kP(0, 0.17);
+		shooter.config_kD(0, 3);
 		shooter.config_kF(1, 0.06); // .05
 		shooter.config_kP(1, 0.1);
 		shooter.config_kD(1, 5);

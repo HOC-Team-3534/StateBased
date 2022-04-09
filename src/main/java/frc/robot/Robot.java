@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
 		if(Constants.ROBOTTYPE == Constants.RobotType.PBOT) {
 			shooter = new Shooter(d -> 1018 + 1984 * Math.log(d));
 		}else{
-			shooter = new Shooter(d -> -287 + 2521 * Math.log(d));
+			shooter = new Shooter(d -> 1755 + 938 * Math.log(d));
 		}
 		intake = new Intake();
 
@@ -261,6 +261,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
 			SmartDashboard.putNumber("tx (inverted)", RobotMap.limelight.getHorizontalAngleOffset().getDegrees());
+			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
 			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
 
 			//SmartDashboard.putNumber("Moving Target Angle Offset", RobotMap.limelight.getLimelightShootProjection().getOffset().getDegrees());

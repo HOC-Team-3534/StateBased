@@ -45,7 +45,7 @@ public class Limelight {
         return new Rotation2d(savedTX / 180.0 * Math.PI);
     }
 
-    private double getPixelAngle() {
+    public double getPixelAngle() {
         return table.getEntry("ty").getDouble(0.0);
     }
 

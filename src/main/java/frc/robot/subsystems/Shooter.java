@@ -51,6 +51,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
                 //waitNSpin(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
                 if (RobotMap.limelight.isTargetAcquired()) {
                     upToSpeed();
+                    //upToSpeed(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
                 } else {
                     upToSpeed(3000);
                 }
@@ -82,6 +83,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
     public double getCalculatedRPMError(){
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
         return Math.abs(getShooterRPM() - rpmMultiplier * rpmFunction.getShooterRPM((RobotMap.limelight.getDistance())));
+        //return Math.abs(getShooterRPM() - rpmMultiplier * SmartDashboard.getNumber("Manual Testing RPM", 0.0));
     }
 
     private void upToSpeed() {

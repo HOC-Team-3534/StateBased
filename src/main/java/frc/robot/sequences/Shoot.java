@@ -38,7 +38,7 @@ public class Shoot extends BaseSequence<ShootState> {
                 if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
                     setNextState(ShootState.RESETPUNCH);
                 }
-                if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && Robot.shooter.getCalculatedRPMError() < 40
+                if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && Robot.shooter.getCalculatedRPMError() < 35
                         && RobotMap.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);

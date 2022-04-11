@@ -75,9 +75,9 @@ public class Robot extends TimedRobot {
 		swerveDrive = new SwerveDrive();
 
 		if(Constants.ROBOTTYPE == Constants.RobotType.PBOT) {
-			shooter = new Shooter(d -> 1018 + 1984 * Math.log(d));
+			shooter = new Shooter(d -> 1018.0 + 1984.0 * Math.log(d));
 		}else{
-			shooter = new Shooter(d -> 1755 + 938 * Math.log(d));
+			shooter = new Shooter(d -> 1781.0 + 1003.6 * Math.log(d));
 		}
 		intake = new Intake();
 

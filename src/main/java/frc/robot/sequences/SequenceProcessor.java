@@ -54,7 +54,7 @@ public class SequenceProcessor{
         if (climb.isNeutral() && shoot.isNeutral()) {
             drive.start(Robot.swerveDrive);
         }
-        if(Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton()) {
+        if((Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton()) && !Buttons.MoveClimbArmManually.getButton()) {
             shoot.start(Robot.swerveDrive);
         }
         if(Buttons.Burp.getButton()){

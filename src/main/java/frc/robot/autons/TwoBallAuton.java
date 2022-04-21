@@ -47,7 +47,7 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
                 if (RobotMap.limelight.isValid()) {
                     RobotMap.limelight.setTargetAcquired();
                 }
-                if (((ballsShot == 0 && this.getTimeSinceStartOfState() > 2000) || (ballsShot == 1 && this.getTimeSinceStartOfState() > 500))
+                if (((ballsShot == 0 && this.getTimeSinceStartOfState() > 2000) || (ballsShot >= 1 && this.getTimeSinceStartOfState() > 500))
                         && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0 &&
                         RobotMap.shooter.getClosedLoopError() < 100 && RobotMap.limelight.isTargetAcquired()) {
                     setNextState(TwoBallAutonState.PUNCH1);
@@ -61,16 +61,20 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
                 break;
             case RESETPUNCH1:
                 if (this.getTimeSinceStartOfState() > 1500) {
-                    if(ballsShot == 2){
+                    if(ballsShot == 3){
                         setNextState(TwoBallAutonState.NEUTRAL);
                     }else{
-                        setNextState(TwoBallAutonState.SHOOTBALL1);
+                        setNextState(TwoBallAutonState.BOOT1);
                     }
+                }
+                break;
+            case BOOT1:
+                if(this.getTimeSinceStartOfState() > 150){
+                    setNextState(TwoBallAutonState.SHOOTBALL1);
                 }
                 break;
             case NEUTRAL:
                 break;
-
         }
         updateState();
     }
@@ -88,7 +92,8 @@ enum TwoBallAutonState implements IAutonState {
     PICKUPBALL1( 0, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new IntakeReq(IntakeState.KICKOUT), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
     SHOOTBALL1( -999, new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION), new SwerveDriveReq((SwerveDriveState.AIM))),
     PUNCH1( -999, new ShooterReq(ShooterState.PUNCH), new IntakeReq(IntakeState.HOLDPOSITION)),
-    RESETPUNCH1( -999, new ShooterReq(ShooterState.RESETPUNCH), new IntakeReq(IntakeState.RETRACT));
+    RESETPUNCH1( -999, new ShooterReq(ShooterState.RESETPUNCH), new IntakeReq(IntakeState.RETRACT)),
+    BOOT1(-999, new ShooterReq(ShooterState.BOOT));
 
     int pathIndex;
     Set<BaseSubsystem> requiredSubsystems;

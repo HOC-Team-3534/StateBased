@@ -33,7 +33,6 @@ import frc.robot.subsystems.SwerveDrive;
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
 	public static Shooter shooter;
-	public static Burp burp;
 	public static Intake intake;
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;

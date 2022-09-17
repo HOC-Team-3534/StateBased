@@ -63,132 +63,25 @@ public class RobotContainer {
 
 	public enum Buttons {
 
-		RAMPSHOOTER(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-
-				return RobotContainer.getController2().getRightBumper();
-			}
-			
-		}),
-		SHOOT(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getRightTriggerAxis() > 0.15;
-			}
-
-		}),
-		Burp(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getLeftTriggerAxis() > 0.15;
-			}
-			
-		}),
-		Creep(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController1().getLeftTriggerAxis() > 0.15;
-			}
-			
-		}),
-		Intake(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController1().getRightTriggerAxis() > 0.15;
-			}
-
-		}),
-		Extake(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController1().getRightBumper();
-			}
-
-		}),
-		Climb(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getYButton();
-			}
-			
-		}),
-		MoveClimbArmManually(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getBackButton();
-			}
-			
-		}),
-		MoveClimbArmForward(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getRightBumper();
-			}
-			
-		}),
-		MoveClimbArmBackward(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getLeftBumper();
-			}
-			
-		}),
-		ClimbArmEncoderReset(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getStartButton();
-			}
-			
-		}),
-		ClimbPrep(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController2().getAButton();
-			}
-			
-		}),
-		ClimbPrepReset(new Callable<Boolean>(){
-
-			@Override
-			public Boolean call() throws Exception {
-				// TODO Auto-generated method stub
-				return RobotContainer.getController1().getBackButton();
-			}
-			
-		});
+		RAMPSHOOTER(() -> RobotContainer.getController2().getRightBumper()),
+		SHOOT(() -> RobotContainer.getController2().getRightTriggerAxis() > 0.15),
+		Burp(() -> RobotContainer.getController2().getLeftTriggerAxis() > 0.15),
+		Creep(() -> RobotContainer.getController1().getLeftTriggerAxis() > 0.15),
+		Intake(() -> RobotContainer.getController1().getRightTriggerAxis() > 0.15),
+		Extake(() -> RobotContainer.getController1().getRightBumper()),
+		RollIn(() -> RobotContainer.getController2().getLeftBumper()),
+		Climb(() -> RobotContainer.getController2().getYButton()),
+		MoveClimbArmManually(() -> RobotContainer.getController2().getBackButton()),
+		MoveClimbArmForward(() -> RobotContainer.getController2().getRightBumper()),
+		MoveClimbArmBackward(() -> RobotContainer.getController2().getLeftBumper()),
+		ClimbArmEncoderReset(() -> RobotContainer.getController2().getStartButton()),
+		ClimbPrep(() -> RobotContainer.getController2().getAButton()),
+		ClimbPrepReset(() -> RobotContainer.getController1().getBackButton()),
+		GyroReset(() -> RobotContainer.getController2().getRightStickButton());
 
 		Callable<Boolean> callable;
 
-		Buttons(Callable<Boolean> callable){
-	
-			this.callable = callable;
-	
-		}
+		Buttons(Callable<Boolean> callable){ this.callable = callable; }
 	
 		public boolean getButton(){
 	
@@ -206,29 +99,13 @@ public class RobotContainer {
 	}
 
 	public enum Axes {
-		Drive_ForwardBackward(new Callable<Double>(){
-
-		@Override public Double call()throws Exception{
-
-		return -modifyAxis(RobotContainer.getController1().getLeftY());}
-
-		}),
-		Drive_LeftRight(new Callable<Double>(){
-
-		@Override public Double call()throws Exception{
-
-		return -modifyAxis(RobotContainer.getController1().getLeftX());}}),
-		Drive_Rotation(new Callable<Double>(){@Override public Double call()throws Exception{
-
-		return -modifyAxis(RobotContainer.getController1().getRightX());}});
+		Drive_ForwardBackward(() -> -modifyAxis(RobotContainer.getController1().getLeftY())),
+		Drive_LeftRight(() -> -modifyAxis(RobotContainer.getController1().getLeftX())),
+		Drive_Rotation(() -> -modifyAxis(RobotContainer.getController1().getRightX()));
 
 		Callable<Double> callable;
 
-		Axes(Callable<Double> callable) {
-
-			this.callable = callable;
-
-		}
+		Axes(Callable<Double> callable) { this.callable = callable; }
 
 		public double getAxis() {
 

@@ -14,14 +14,10 @@ import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.autons.pathplannerfollower.PathStateController;
 
-public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDriveSubsystem{
+public abstract class BaseDriveSubsystem<SsS extends ISubsystemState> extends BaseSubsystem<SsS> implements IDriveSubsystem{
+
 
     final SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
-
-    Rotation2d gyroOffset = new Rotation2d(0);
-
-    PathStateController pathStateController;
-
     // Locations for the swerve drive modules relative to the robot center.
     private final SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(
             // Front left
@@ -36,39 +32,41 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
             // Back right
             new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
                     -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
-
+    Rotation2d gyroOffset = new Rotation2d(0);
+    PathStateController pathStateController;
     SwerveDriveOdometry swerveDriveOdometry = new SwerveDriveOdometry(this.swerveDriveKinematics,
             getGyroHeading(), new Pose2d(0.0, 0.0, getGyroHeading()));
 
-    public BaseDriveSubsystem(SwerveModule frontLeftModule, SwerveModule frontRightModule, SwerveModule backLeftModule, SwerveModule backRightModule){
+    public BaseDriveSubsystem(SwerveModule frontLeftModule, SwerveModule frontRightModule, SwerveModule backLeftModule, SwerveModule backRightModule, SsS neutralState){
+        super(neutralState);
         this.frontLeftModule = frontLeftModule;
         this.frontRightModule = frontRightModule;
         this.backLeftModule = backLeftModule;
         this.backRightModule = backRightModule;
     }
 
-    public void process(){
+    public void process() {
         super.process();
         updateOdometry();
-    }
-
-    protected void setPathStateController(PathStateController psc){
-        this.pathStateController = psc;
     }
 
     public PathStateController getPathStateController() {
         return pathStateController;
     }
 
-    public void setPathPlannerFollower(PathPlannerFollower ppf, boolean setInitialPosition){
+    protected void setPathStateController(PathStateController psc) {
+        this.pathStateController = psc;
+    }
+
+    public void setPathPlannerFollower(PathPlannerFollower ppf, boolean setInitialPosition) {
         this.getPathStateController().setPathPlannerFollower(ppf);
-        if(setInitialPosition){
+        if (setInitialPosition) {
             setInitalPoseFromFirstPathPlannerFollower(ppf);
         }
     }
 
-    public void setInitalPoseFromFirstPathPlannerFollower(PathPlannerFollower ppf){
-        gyroOffset = ppf.getInitialHolonomic().minus(RobotMap.navx.getRotation2d());
+    public void setInitalPoseFromFirstPathPlannerFollower(PathPlannerFollower ppf) {
+        gyroOffset = ppf.getInitialHolonomic().minus(RobotMap.pigeon.getRotation2d());
         resetOdometry(ppf.getInitialPosition());
         System.out.println("Initial Translation of Path (should match following odometry: " + ppf.getInitialPosition().toString());
         System.out.println("Initial Odometry Set to: " + getSwerveDriveOdometry().getPoseMeters().toString());
@@ -78,7 +76,7 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
         return swerveDriveKinematics;
     }
 
-    public SwerveDriveOdometry getSwerveDriveOdometry(){
+    public SwerveDriveOdometry getSwerveDriveOdometry() {
         return swerveDriveOdometry;
     }
 
@@ -86,6 +84,11 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
 
         getSwerveDriveOdometry().update(
                 getGyroHeading(),
+                getSwerveModuleStates());
+    }
+
+    public SwerveModuleState[] getSwerveModuleStates() {
+        return new SwerveModuleState[]{
                 new SwerveModuleState(this.frontLeftModule.getDriveVelocity(),
                         new Rotation2d(this.frontLeftModule.getSteerAngle())),
                 new SwerveModuleState(this.frontRightModule.getDriveVelocity(),
@@ -93,23 +96,21 @@ public abstract class BaseDriveSubsystem extends BaseSubsystem implements IDrive
                 new SwerveModuleState(this.backLeftModule.getDriveVelocity(),
                         new Rotation2d(this.backLeftModule.getSteerAngle())),
                 new SwerveModuleState(this.backRightModule.getDriveVelocity(),
-                        new Rotation2d(this.backRightModule.getSteerAngle())));
+                        new Rotation2d(this.backRightModule.getSteerAngle()))};
     }
 
-    public void resetOdometry(Translation2d position){
+    public void resetOdometry(Translation2d position) {
         getSwerveDriveOdometry().resetPosition(new Pose2d(position.getX(), position.getY(), getGyroHeading()), getGyroHeading());
     }
 
-    public Rotation2d getGyroOffset(){
+    public Rotation2d getGyroOffset() {
         return this.gyroOffset;
     }
 
-    protected boolean isStatePathFollowing(){
-        if(Robot.isAutonomous && required){
-            return ((IAutonState)this.stateRequiring).isPathFollowing();
-        }
-        return false;
+    public void setGyroOffset(Rotation2d offset){
+        this.gyroOffset = offset;
     }
+
 
     public double getMetersFromLocation(Translation2d location){
         return getSwerveDriveOdometry().getPoseMeters().getTranslation().getDistance(location);

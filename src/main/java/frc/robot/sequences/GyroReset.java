@@ -1,28 +1,32 @@
 package frc.robot.sequences;
 
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Robot;
+import frc.robot.RobotMap;
+import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.robot.subsystems.states.SwerveDriveState;
-import frc.robot.subsystems.parent.BaseSubsystem;
-import frc.robot.subsystems.parent.SubsystemRequirement;
+public class GyroReset extends BaseSequence<GyroResetState>{
 
-public class Drive extends BaseSequence<DriveState> {
-
-    public Drive(DriveState neutralState, DriveState startState) {
+    public GyroReset(GyroResetState neutralState, GyroResetState startState) {
         super(neutralState, startState);
+        //TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-
         switch (getState()) {
-            case DRIVE:
+            case RESET:
+                Robot.swerveDrive.setGyroOffset(new Rotation2d().minus(RobotMap.pigeon.getRotation2d()));
+                setNextState(GyroResetState.NEUTRAL);
                 break;
             case NEUTRAL:
                 break;
@@ -31,6 +35,7 @@ public class Drive extends BaseSequence<DriveState> {
 
         }
         updateState();
+
     }
 
     @Override
@@ -41,14 +46,14 @@ public class Drive extends BaseSequence<DriveState> {
 
 }
 
-enum DriveState implements ISequenceState {
+enum GyroResetState implements ISequenceState {
     NEUTRAL,
-    DRIVE(new SwerveDriveReq(SwerveDriveState.DRIVE));
+    RESET;
 
     Set<BaseSubsystem> requiredSubsystems;
     List<SubsystemRequirement> subsystemRequirements;
 
-    DriveState(SubsystemRequirement... requirements) {
+    GyroResetState(SubsystemRequirement... requirements) {
         subsystemRequirements = Arrays.asList(requirements);
         requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
@@ -64,3 +69,4 @@ enum DriveState implements ISequenceState {
     }
 
 }
+

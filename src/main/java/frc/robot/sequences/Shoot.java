@@ -2,13 +2,20 @@ package frc.robot.sequences;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+import frc.robot.subsystems.requirements.ShooterReq;
+import frc.robot.subsystems.requirements.SwerveDriveReq;
+import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.states.SwerveDriveState;
 
 public class Shoot extends BaseSequence<ShootState> {
 
@@ -19,16 +26,20 @@ public class Shoot extends BaseSequence<ShootState> {
 
     @Override
     public void process() {
+
+        RobotMap.limelight.updateLimelightShootProjection();
+        Robot.swerveDrive.setTargetShootRotationAngle();
+
         switch (getState()) {
-            case WAITNSPIN:
+            case UPTOSPEED:
                 if (RobotMap.limelight.isValid()) {
-                    RobotMap.limelight.setLockedOn();
+                    RobotMap.limelight.setTargetAcquired();
                 }
                 if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
                     setNextState(ShootState.RESETPUNCH);
                 }
-                if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && RobotMap.shooter.getClosedLoopError() < 150
-                        && RobotMap.limelight.isLockedOn() && Math.abs(Robot.swerveDrive.getTargetShootRotationError().getDegrees()) < 3.0) {
+                if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && Robot.shooter.getCalculatedRPMError() < 35
+                        && RobotMap.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }
@@ -50,7 +61,7 @@ public class Shoot extends BaseSequence<ShootState> {
                 break;
             case BOOT:
                 if (this.getTimeSinceStartOfState() > 150) {
-                    setNextState(ShootState.WAITNSPIN);
+                    setNextState(ShootState.UPTOSPEED);
                 }
                 break;
             case NEUTRAL:
@@ -71,31 +82,29 @@ public class Shoot extends BaseSequence<ShootState> {
 
 }
 
-enum ShootState implements IState {
+enum ShootState implements ISequenceState {
     NEUTRAL,
-    WAITNSPIN(Robot.shooter, Robot.swerveDrive),
-    PUNCH(Robot.shooter, Robot.swerveDrive),
-    RESETPUNCH(Robot.shooter, Robot.swerveDrive),
-    BOOT(Robot.shooter, Robot.swerveDrive);
+    UPTOSPEED(new ShooterReq(ShooterState.UPTOSPEED), new SwerveDriveReq(SwerveDriveState.AIM)),
+    PUNCH(new ShooterReq(ShooterState.PUNCH), new SwerveDriveReq(SwerveDriveState.AIM)),
+    RESETPUNCH(new ShooterReq(ShooterState.RESETPUNCH), new SwerveDriveReq(SwerveDriveState.AIM)),
+    BOOT(new ShooterReq(ShooterState.BOOT), new SwerveDriveReq(SwerveDriveState.AIM));
 
-    List<BaseSubsystem> requiredSubsystems;
+    Set<BaseSubsystem> requiredSubsystems;
+    List<SubsystemRequirement> subsystemRequirements;
 
-    ShootState(BaseSubsystem... subsystems) {
-        requiredSubsystems = Arrays.asList(subsystems);
+    ShootState(SubsystemRequirement... requirements) {
+        subsystemRequirements = Arrays.asList(requirements);
+        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
 
     @Override
-    public List<BaseSubsystem> getRequiredSubsystems() {
+    public Set<BaseSubsystem> getRequiredSubsystems() {
         return requiredSubsystems;
     }
 
     @Override
-    public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        return IState.requireSubsystems(sequence, requiredSubsystems, this);
+    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
+        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
     }
 
-    @Override
-    public String getName() {
-        return this.name();
-    }
 }

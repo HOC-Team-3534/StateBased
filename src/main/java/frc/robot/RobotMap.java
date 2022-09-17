@@ -1,10 +1,12 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -60,7 +62,7 @@ public class RobotMap {
 
 	public static WPI_TalonFX m_climbMotor;
 
-	public static AHRS navx;
+	public static WPI_Pigeon2 pigeon;
 
 	public static final double spikeCurrent = 7.0;
 
@@ -140,6 +142,7 @@ public class RobotMap {
 				// zero is facing straight forward)
 				FRONT_LEFT_MODULE_STEER_OFFSET);
 
+
 		// We will do the same for the other modules
 		m_frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
 				tab.getLayout("Front Right Module", BuiltInLayouts.kList)
@@ -171,9 +174,9 @@ public class RobotMap {
 				BACK_RIGHT_MODULE_STEER_ENCODER,
 				BACK_RIGHT_MODULE_STEER_OFFSET);
 		if(Constants.ROBOTTYPE == RobotType.PBOT) {
-			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56);
+			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3, vel -> 3);
 		}else{
-			limelight = new Limelight(ty -> 0.006367 * Math.pow(ty, 2) - .095 * ty + 3.52);
+			limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225/52);
 		}
 
 		m_mainPCM = new PneumaticsControlModule(MAIN_PCM);
@@ -181,10 +184,14 @@ public class RobotMap {
 
 		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
 		shooter.setInverted(true);
-		shooter.config_kF(0, 0.0525); // .05
-		shooter.config_kP(0, 0.45);
-		shooter.config_kD(0, 80);
-		shooter.configClosedloopRamp(2.045);
+		shooter.selectProfileSlot(0, 0);
+		shooter.config_kF(0, 0.0553); // .05
+		shooter.config_kP(0, 0.17);
+		shooter.config_kD(0, 3);
+		shooter.config_kF(1, 0.06); // .05
+		shooter.config_kP(1, 0.1);
+		shooter.config_kD(1, 5);
+		shooter.configClosedloopRamp(0.5);
 
 		shooterBoot = new WPI_TalonSRX(Constants.SHOOTER_BOOT);
 		shooterBoot.setInverted(true);
@@ -222,6 +229,6 @@ public class RobotMap {
 		m_climbMotor.config_kD(0, 0.0);
 		m_climbMotor.config_kF(0, 0.0);
 
-		navx = new AHRS(SerialPort.Port.kUSB);
+		pigeon = new WPI_Pigeon2(PIGEON_2);
 	}
 }

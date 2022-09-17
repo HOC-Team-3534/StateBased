@@ -1,20 +1,23 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.Robot;
+import frc.robot.RobotContainer.Buttons;
 import frc.robot.RobotContainer.Axes;
 import frc.robot.RobotMap;
 import frc.robot.autons.pathplannerfollower.CalculatedDriveVelocities;
 import frc.robot.autons.pathplannerfollower.PathStateController;
 import frc.robot.subsystems.parent.BaseDriveSubsystem;
+import frc.robot.subsystems.states.SwerveDriveState;
 
-public class SwerveDrive extends BaseDriveSubsystem {
+public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 
 	private double frontLeft_stateAngle = 0.0,
 			frontRight_stateAngle = 0.0,
@@ -29,86 +32,110 @@ public class SwerveDrive extends BaseDriveSubsystem {
 
 	public SwerveDrive() {
 		super(RobotMap.m_frontLeftModule, RobotMap.m_frontRightModule, RobotMap.m_backLeftModule,
-				RobotMap.m_backRightModule);
+				RobotMap.m_backRightModule, SwerveDriveState.NEUTRAL);
 		setPathStateController(pathStateController);
 	}
 
-	PIDController limelightPID = new PIDController(0.2, 0.0, 0.0);
-	Rotation2d targetShootRotation = new Rotation2d();
+	PIDController limelightPID = new PIDController(0.185, 0.0, 0.0);
+	Rotation2d targetShootRotationAngle = new Rotation2d();
 
 	@Override
 	public void process() {
 
 		super.process();
 
-		SmartDashboard.putNumber("Aim current position", -targetShootRotation.minus(getGyroHeading()).getDegrees());
-
-		if (getStateRequiringName() == "DRIVE") {
-			drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-					true);
-		} else if (getStateRequiringName() == "CREEP") {
-			drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-					Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-					Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
-					true);
-		} else if (getStateRequiringName() == "WAITNSPIN" || getStateRequiringName() == "PUNCH"
-				|| getStateRequiringName() == "RETRACT") {
-			if (RobotMap.limelight.isLockedOn() && RobotContainer.Buttons.SHOOT.getButton()) {
-				double normalizedAngleError = getTargetShootRotationError().getDegrees() % 3.0;
-				double pidOutput = limelightPID.calculate(-normalizedAngleError,0.0);
-				drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-						Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-						pidOutput * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
-						true);
-			}else{
-				if(RobotContainer.Buttons.Creep.getButton()){
-					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-							Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
-							Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
-							true);
-				}else{
-					drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-							Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-							Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-							true);
+		switch(getCurrentSubsystemState()){
+			case NEUTRAL:
+				neutral();
+				break;
+			case DRIVE:
+				if ((Buttons.Creep.getButton())) {
+					creep();
+				} else {
+					drive();
 				}
-			}
-		} else if (isStatePathFollowing()) {
-			if (getStateFirstRunThrough()) {
-				// TODO check if the start of the path is near current odometry for safety
-			}
-			if (this.getPathStateController().getPathPlannerFollower() != null) {
-				driveOnPath();
-			} else {
-				System.out.println(
-						"DRIVE PATH NOT SET. MUST CREATE PATHPLANNERFOLLOWER IN AUTON AND SET IN SWERVEDRIVE SUBSYSTEM");
-			}
-		} else {
-			neutral();
+				break;
+			case AIM:
+				if (RobotMap.limelight.isTargetAcquired() && Buttons.SHOOT.getButton()) {
+					aim();
+				}else if(RobotMap.limelight.isTargetAcquired() && Robot.isAutonomous){
+					aim();
+				}else{
+					if(Buttons.Creep.getButton()){
+						creep();
+					}else{
+						drive();
+					}
+				}
+				break;
+			case DRIVE_AUTONOMOUSLY:
+				if (getStateFirstRunThrough()) {
+					// TODO check if the start of the path is near current odometry for safety
+				}
+				if (this.getPathStateController().getPathPlannerFollower() != null) {
+					driveOnPath();
+				} else {
+					System.out.println(
+							"DRIVE PATH NOT SET. MUST CREATE PATHPLANNERFOLLOWER IN AUTON AND SET IN SWERVEDRIVE SUBSYSTEM");
+				}
+				break;
 		}
 	}
 
-	public void resetTXOffset() {
-		Rotation2d limelightOffset = new Rotation2d(RobotMap.limelight.getHorOffset() / 180 * Math.PI);
-		this.targetShootRotation = getGyroHeading().minus(limelightOffset);
+	public Vector2d getRobotCentricVelocity(){
+		ChassisSpeeds chassisSpeeds = this.getSwerveDriveKinematics().toChassisSpeeds(this.getSwerveModuleStates());
+		return new Vector2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
 	}
 
-	public Rotation2d getTargetShootRotation() {
-		return targetShootRotation;
+	public Vector2d getTargetOrientedVelocity(){
+		Vector2d robotCentricVelocity = getRobotCentricVelocity();
+		robotCentricVelocity.rotate(180.0);
+		return robotCentricVelocity;
 	}
 
-	public Rotation2d getTargetShootRotationError(){ return targetShootRotation.minus(getGyroHeading()); }
+	public void setTargetShootRotationAngle() {;
+		//this.targetShootRotationAngle = getGyroHeading().plus(RobotMap.limelight.getLimelightShootProjection().getOffset());
+		this.targetShootRotationAngle = getGyroHeading().plus(RobotMap.limelight.getHorizontalAngleOffset());
+	}
+
+	public Rotation2d getTargetShootRotationAngleError(){ return targetShootRotationAngle.minus(getGyroHeading()); }
 
 	@Override
 	public Rotation2d getGyroHeading() {
-		return RobotMap.navx.getRotation2d().plus(this.getGyroOffset());
+		return RobotMap.pigeon.getRotation2d().plus(this.getGyroOffset());
 	}
 
 	@Override
 	public void resetGyro() {
-		RobotMap.navx.reset();
+		RobotMap.pigeon.reset();
+	}
+
+	private void drive(){
+		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+				Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+				Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+				true);
+	}
+
+	private void creep(){
+		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				Axes.Drive_Rotation.getAxis() * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
+				true);
+	}
+
+	private void aim(){
+		double angleError = getTargetShootRotationAngleError().getDegrees();
+		if(angleError > 2.0){
+			angleError = 2.0;
+		}else if(angleError < -2.0){
+			angleError = -2.0;
+		}
+		double pidOutput = limelightPID.calculate(-angleError,0.0);
+		drive(Axes.Drive_ForwardBackward.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				Axes.Drive_LeftRight.getAxis() * Constants.MAX_VELOCITY_CREEP_METERS_PER_SECOND,
+				pidOutput * Constants.MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND,
+				true);
 	}
 
 	public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -196,3 +223,4 @@ public class SwerveDrive extends BaseDriveSubsystem {
 		return true;
 	}
 }
+

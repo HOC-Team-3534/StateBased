@@ -2,14 +2,21 @@ package frc.robot.sequences;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+import frc.robot.subsystems.requirements.ClimberReq;
+import frc.robot.subsystems.requirements.SwerveDriveReq;
+import frc.robot.subsystems.states.ClimberState;
+import frc.robot.subsystems.states.SwerveDriveState;
 
 public class Climb extends BaseSequence<ClimbState> {
 
@@ -177,42 +184,40 @@ public class Climb extends BaseSequence<ClimbState> {
 
 }
 
-enum ClimbState implements IState {
+enum ClimbState implements ISequenceState {
     NEUTRAL,
-    PAUSED(Robot.climber, Robot.swerveDrive),
-    GRIPMIDBAR(Robot.climber, Robot.swerveDrive),
-    SWINGMIDHIGH1(Robot.climber, Robot.swerveDrive),
-    SWINGMIDHIGH2(Robot.climber, Robot.swerveDrive),
-    GRIPHIGHBAR(Robot.climber, Robot.swerveDrive),
-    RETRYHIGHBAR(Robot.climber, Robot.swerveDrive),
-    RECENTERMIDHIGHBAR(Robot.climber, Robot.swerveDrive),
-    RELEASEMIDBAR(Robot.climber, Robot.swerveDrive),
-    SWINGHIGHTRAVERSAL1(Robot.climber, Robot.swerveDrive),
-    SWINGHIGHTRAVERSAL2(Robot.climber, Robot.swerveDrive),
-    GRIPTRAVERSALBAR(Robot.climber, Robot.swerveDrive),
-    RETRYTRAVERSALBAR(Robot.climber, Robot.swerveDrive),
-    RECENTERHIGHTRAVERSALBAR(Robot.climber, Robot.swerveDrive),
-    RELEASEHIGHBAR(Robot.climber, Robot.swerveDrive),
-    SWINGTOREST(Robot.climber, Robot.swerveDrive);
+    PAUSED(new ClimberReq(ClimberState.NEUTRAL), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    GRIPMIDBAR(new ClimberReq(ClimberState.GRIPMIDBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    SWINGMIDHIGH1(new ClimberReq(ClimberState.SWINGMIDHIGH1), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    SWINGMIDHIGH2(new ClimberReq(ClimberState.SWINGMIDHIGH2), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    GRIPHIGHBAR(new ClimberReq(ClimberState.GRIPHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    RETRYHIGHBAR(new ClimberReq(ClimberState.RETRYHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    RECENTERMIDHIGHBAR(new ClimberReq(ClimberState.RECENTERMIDHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    RELEASEMIDBAR(new ClimberReq(ClimberState.RELEASEMIDBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    SWINGHIGHTRAVERSAL1(new ClimberReq(ClimberState.SWINGHIGHTRAVERSAL1), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    SWINGHIGHTRAVERSAL2(new ClimberReq(ClimberState.SWINGHIGHTRAVERSAL2), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    GRIPTRAVERSALBAR(new ClimberReq(ClimberState.GRIPTRAVERSALBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    RETRYTRAVERSALBAR(new ClimberReq(ClimberState.RETRYTRAVERSALBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    RECENTERHIGHTRAVERSALBAR(new ClimberReq(ClimberState.RECENTERHIGHTRAVERSALBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    RELEASEHIGHBAR(new ClimberReq(ClimberState.RELEASEHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
+    SWINGTOREST(new ClimberReq(ClimberState.SWINGTOREST), new SwerveDriveReq(SwerveDriveState.NEUTRAL));
 
-    List<BaseSubsystem> requiredSubsystems;
+    Set<BaseSubsystem> requiredSubsystems;
+    List<SubsystemRequirement> subsystemRequirements;
 
-    ClimbState(BaseSubsystem... subsystems) {
-        requiredSubsystems = Arrays.asList(subsystems);
+    ClimbState(SubsystemRequirement... requirements) {
+        subsystemRequirements = Arrays.asList(requirements);
+        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
 
     @Override
-    public List<BaseSubsystem> getRequiredSubsystems() {
+    public Set<BaseSubsystem> getRequiredSubsystems() {
         return requiredSubsystems;
     }
 
     @Override
-    public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        return IState.requireSubsystems(sequence, requiredSubsystems, this);
+    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
+        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
     }
 
-    @Override
-    public String getName() {
-        return this.name();
-    }
 }

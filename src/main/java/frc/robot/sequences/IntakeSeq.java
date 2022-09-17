@@ -2,16 +2,20 @@ package frc.robot.sequences;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+import frc.robot.subsystems.requirements.IntakeReq;
+import frc.robot.subsystems.states.IntakeState;
 
-public class IntakeSeq extends BaseSequence<IntakeState> {
+public class IntakeSeq extends BaseSequence<IntakeSeqState> {
 
-    public IntakeSeq (IntakeState neutralState, IntakeState startState) {
+    public IntakeSeq (IntakeSeqState neutralState, IntakeSeqState startState) {
         super(neutralState, startState);
         //TODO Auto-generated constructor stub
     }
@@ -21,12 +25,15 @@ public class IntakeSeq extends BaseSequence<IntakeState> {
         switch (getState()) {
             case EXTEND:
                 if (!Buttons.Intake.getButton()) {
-                    setNextState(IntakeState.RETRACT);
+                    setNextState(IntakeSeqState.RETRACT);
                 }
                 break;
             case RETRACT:
-                if(getTimeSinceStartOfState() > 300){
-                    setNextState(IntakeState.NEUTRAL);
+                if(Buttons.Intake.getButton()){
+                    setNextState(IntakeSeqState.EXTEND);
+                }
+                if(getTimeSinceStartOfState() > 700){
+                    setNextState(IntakeSeqState.NEUTRAL);
                 }
                 break;
             case NEUTRAL:
@@ -47,29 +54,28 @@ public class IntakeSeq extends BaseSequence<IntakeState> {
     
 }
 
-enum IntakeState implements IState {
+enum IntakeSeqState implements ISequenceState {
     NEUTRAL,
-    EXTEND(Robot.intake),
-    RETRACT(Robot.intake);
+    EXTEND(new IntakeReq(IntakeState.KICKOUT)),
+    RETRACT(new IntakeReq(IntakeState.RETRACT));
 
-    List<BaseSubsystem> requiredSubsystems;
+    Set<BaseSubsystem> requiredSubsystems;
+    List<SubsystemRequirement> subsystemRequirements;
 
-    IntakeState(BaseSubsystem... subsystems) {
-        requiredSubsystems = Arrays.asList(subsystems);
+    IntakeSeqState(SubsystemRequirement... requirements) {
+        subsystemRequirements = Arrays.asList(requirements);
+        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
 
     @Override
-    public List<BaseSubsystem> getRequiredSubsystems() {
+    public Set<BaseSubsystem> getRequiredSubsystems() {
         return requiredSubsystems;
     }
 
     @Override
-    public boolean requireSubsystems(BaseSequence<? extends IState> sequence) {
-        return IState.requireSubsystems(sequence, requiredSubsystems, this);
+    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
+        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
     }
 
-    @Override
-    public String getName() {
-        return this.name();
-    }
 }
+

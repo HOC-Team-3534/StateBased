@@ -1,36 +1,37 @@
 package frc.robot.sequences;
 
+import frc.robot.RobotContainer;
+import frc.robot.sequences.parent.BaseSequence;
+import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.parent.SubsystemRequirement;
+import frc.robot.subsystems.requirements.IntakeReq;
+import frc.robot.subsystems.states.IntakeState;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.robot.subsystems.states.SwerveDriveState;
-import frc.robot.subsystems.parent.BaseSubsystem;
-import frc.robot.subsystems.parent.SubsystemRequirement;
-
-public class Drive extends BaseSequence<DriveState> {
-
-    public Drive(DriveState neutralState, DriveState startState) {
+public class RollIn extends BaseSequence<RollInState> {
+    public RollIn (RollInState neutralState, RollInState startState) {
         super(neutralState, startState);
+        //TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-
         switch (getState()) {
-            case DRIVE:
-                break;
             case NEUTRAL:
                 break;
-            default:
+            case ROLLIN:
+                if(!RobotContainer.Buttons.RollIn.getButton()) {
+                    setNextState(RollInState.NEUTRAL);
+                }
                 break;
-
         }
         updateState();
+
     }
 
     @Override
@@ -41,14 +42,14 @@ public class Drive extends BaseSequence<DriveState> {
 
 }
 
-enum DriveState implements ISequenceState {
+enum RollInState implements ISequenceState {
     NEUTRAL,
-    DRIVE(new SwerveDriveReq(SwerveDriveState.DRIVE));
+    ROLLIN(new IntakeReq(IntakeState.ROLLIN));
 
     Set<BaseSubsystem> requiredSubsystems;
     List<SubsystemRequirement> subsystemRequirements;
 
-    DriveState(SubsystemRequirement... requirements) {
+    RollInState(SubsystemRequirement... requirements) {
         subsystemRequirements = Arrays.asList(requirements);
         requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
@@ -64,3 +65,4 @@ enum DriveState implements ISequenceState {
     }
 
 }
+

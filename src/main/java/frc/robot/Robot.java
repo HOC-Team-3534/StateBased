@@ -4,9 +4,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -21,8 +21,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 
-import java.nio.file.Path;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to
@@ -35,7 +33,6 @@ import java.nio.file.Path;
 public class Robot extends TimedRobot {
 	public static SwerveDrive swerveDrive;
 	public static Shooter shooter;
-	public static Burp burp;
 	public static Intake intake;
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
@@ -48,6 +45,7 @@ public class Robot extends TimedRobot {
 	private int logCounter = 0;
 
 	public static double designatedLoopPeriod = 20;
+	private static long autonStartTime;
 
 	public static BaseAutonSequence<? extends IAutonState> chosenAuton;
 	private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
@@ -65,6 +63,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 
 		RobotMap.init();
+		RobotMap.pigeon.reset();
 
 		// PortForwarder.add(5800, "limelight.local", 5800);
 		// PortForwarder.add(5801, "limelight.local", 5801);
@@ -75,9 +74,9 @@ public class Robot extends TimedRobot {
 		swerveDrive = new SwerveDrive();
 
 		if(Constants.ROBOTTYPE == Constants.RobotType.PBOT) {
-			shooter = new Shooter(d -> 1018 + 1984 * Math.log(d));
+			shooter = new Shooter(d -> 1018.0 + 1984.0 * Math.log(d));
 		}else{
-			shooter = new Shooter(d -> -287 + 2521 * Math.log(d));
+			shooter = new Shooter(d -> 1781.0 + 1003.6 * Math.log(d));
 		}
 		intake = new Intake();
 
@@ -101,6 +100,8 @@ public class Robot extends TimedRobot {
 		Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1);
 		Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
 
+		SmartDashboard.putNumber("Auton Time Delay(ms)", 0.0);
+
 		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
 		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);
 
@@ -114,6 +115,7 @@ public class Robot extends TimedRobot {
 		sendableChooser.addOption("NO AUTON (MUST BE STRAIGHT ALIGNED)", Auton.NO_OP);
 
 		SmartDashboard.putData(sendableChooser);
+
 	}
 	
 
@@ -131,19 +133,38 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		log();
+
+		long prevLoopTime = 0;
+
+		while(this.isDisabled()){
+
+			log();
+
+			long currentTime = System.currentTimeMillis();
+
+			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+
+				loopPeriod = (int) (currentTime - prevLoopTime);
+				prevLoopTime = currentTime;
+				loopCnt++;
+
+				swerveDrive.neutral();
+			}
+
+			Timer.delay(0.001);
+
+		}
 	}
 
 	@Override
 	public void autonomousInit() {
 		chosenAuton = sendableChooser.getSelected().getAuton();
 		chosenAuton.start();
+		autonStartTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		log();
-
 		isAutonomous = this.isAutonomous();
 
 		long prevLoopTime = 0;
@@ -160,7 +181,9 @@ public class Robot extends TimedRobot {
 				prevLoopTime = currentTime;
 				loopCnt++;
 
-				chosenAuton.process();
+				if(currentTime - autonStartTime > SmartDashboard.getNumber("Auton Time Delay(ms)", 0.0)) {
+					chosenAuton.process();
+				}
 				// run processes
 
 				/** Run subsystem process methods here */
@@ -184,8 +207,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-
-		log();
 
 		isAutonomous = this.isAutonomous();
 
@@ -238,14 +259,23 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
 			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
-			SmartDashboard.putNumber("tx", RobotMap.limelight.getHorOffset());
+			SmartDashboard.putNumber("tx (inverted)", RobotMap.limelight.getHorizontalAngleOffset().getDegrees());
 			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
 			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
 
-			SmartDashboard.putNumber("target rotation", swerveDrive.getTargetShootRotation().getRadians());
+			//SmartDashboard.putNumber("Moving Target Angle Offset", RobotMap.limelight.getLimelightShootProjection().getOffset().getDegrees());
+			//SmartDashboard.putNumber("Moving Target Distance", RobotMap.limelight.getLimelightShootProjection().getDistance());
 
 			SmartDashboard.putNumber("Odometry X", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getX());
 			SmartDashboard.putNumber("Odometry Y", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getY());
+
+			Vector2d targetVectorVelocity = swerveDrive.getTargetOrientedVelocity();
+
+			SmartDashboard.putString("Target Velocity Vector", String.format("X: %.2f, Y: %.2f", targetVectorVelocity.x, targetVectorVelocity.y));
+
+			SmartDashboard.putBoolean("Target Acquired", RobotMap.limelight.isTargetAcquired());
+
+			SmartDashboard.putNumber("Target Angle Error", swerveDrive.getTargetShootRotationAngleError().getDegrees());
 
 			logCounter = 0;
 		}

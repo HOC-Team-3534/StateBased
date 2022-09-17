@@ -1,40 +1,46 @@
 package frc.robot.subsystems.parent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.IState;
+import frc.robot.sequences.parent.ISequenceState;
 
-public abstract class BaseSubsystem implements ISubsystem {
+public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISubsystem {
 
     boolean required;
-    BaseSequence<? extends IState> sequenceRequiring;
-    IState stateRequiring;
+    BaseSequence<? extends ISequenceState> sequenceRequiring;
     boolean stateChanged;
     boolean stateFirstRunThrough;
 
+    SsS neutralState;
+    SsS currentSubsystemState;
+
     Map<DoubleSolenoid, List<Long>> solenoidSetTimes = new HashMap<>();
 
-    public boolean isRequiredByAnother(BaseSequence<? extends IState> sequence) {
+    public BaseSubsystem(SsS neutralState){
+        this.neutralState = neutralState;
+        this.currentSubsystemState = neutralState;
+    }
+
+    public boolean isRequiredByAnother(BaseSequence<? extends ISequenceState> sequence) {
         if (sequenceRequiring == sequence) {
             return false;
         }
         return this.required;
     }
 
-    public boolean require(BaseSequence<? extends IState> sequence, IState state) {
+    public boolean require(BaseSequence<? extends ISequenceState> sequence, SsS subsystemState) {
         if (!isRequiredByAnother(sequence)) {
             required = true;
             setSequenceRequiring(sequence);
-            setStateRequiring(state);
+            setCurrentSubsystemState(subsystemState);
             return true;
         } else if (sequenceRequiring == sequence) {
-            setStateRequiring(state);
+            setCurrentSubsystemState(subsystemState);
             return true;
         } else {
             return false;
@@ -47,13 +53,8 @@ public abstract class BaseSubsystem implements ISubsystem {
         checkToTurnOff();
     }
 
-    private void setSequenceRequiring(BaseSequence<? extends IState> sequence) {
+    private void setSequenceRequiring(BaseSequence<? extends ISequenceState> sequence) {
         this.sequenceRequiring = sequence;
-    }
-
-    private void setStateRequiring(IState state) {
-        this.stateRequiring = state;
-        stateChanged = true;
     }
 
     private boolean isStillRequired() {
@@ -79,7 +80,7 @@ public abstract class BaseSubsystem implements ISubsystem {
     void release() {
         required = false;
         sequenceRequiring = null;
-        stateRequiring = null;
+        setCurrentSubsystemState(neutralState);
     }
 
     public boolean forceRelease() {
@@ -95,15 +96,8 @@ public abstract class BaseSubsystem implements ISubsystem {
         return false;
     }
 
-    public BaseSequence<? extends IState> getSequenceRequiring() {
+    public BaseSequence<? extends ISequenceState> getSequenceRequiring() {
         return sequenceRequiring;
-    }
-
-    public String getStateRequiringName() {
-        if (stateRequiring == null) {
-            return "NONE";
-        }
-        return stateRequiring.getName();
     }
 
     public void setWithADelayToOff(DoubleSolenoid ds, DoubleSolenoid.Value value, long millisUntilOff) {
@@ -129,5 +123,14 @@ public abstract class BaseSubsystem implements ISubsystem {
             solenoidSetTimes.remove(ds);
         }
         return setToOff;
+    }
+
+    private void setCurrentSubsystemState(SsS state){
+        stateChanged = true;
+        this.currentSubsystemState = state;
+    }
+
+    public SsS getCurrentSubsystemState(){
+        return this.currentSubsystemState;
     }
 }

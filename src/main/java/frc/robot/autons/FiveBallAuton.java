@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
@@ -42,7 +42,7 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonState> {
                 //THE FOLLOWING IS ONLY IN ORDER TO SET THE CORRECT INITIAL POSITION
 //                setInitialPoseFromCurrentPath();
                 ballsShot = 0;
-                if (RobotMap.shooter.getClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
+                if (Robot.shooter.getShooterClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
                     setNextState(FiveBallAutonState.PUNCH1);
                 }
                 break;
@@ -65,7 +65,7 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonState> {
                 break;
             case SHOOTBALL2:
                 if ((ballsShot == 1 || (ballsShot == 2 && this.getTimeSinceStartOfState() > 500))
-                        && RobotMap.shooter.getClosedLoopError() < 100) {
+                        && Robot.shooter.getShooterClosedLoopError() < 100) {
                     setNextState(FiveBallAutonState.PUNCH2);
                 }
                 break;
@@ -100,7 +100,7 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonState> {
                 break;
             case SHOOTBALL3:
                 if ((ballsShot == 3 || (ballsShot == 4 && this.getTimeSinceStartOfState() > 500))
-                        && RobotMap.shooter.getClosedLoopError() < 100) {
+                        && Robot.shooter.getShooterClosedLoopError() < 100) {
                     setNextState(FiveBallAutonState.PUNCH3);
                 }
                 break;

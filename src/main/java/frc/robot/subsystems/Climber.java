@@ -1,20 +1,59 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+import static frc.robot.Constants.*;
 import frc.robot.RobotContainer.Buttons;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.states.ClimberState;
 
-import static frc.robot.Constants.*;
-
 public class Climber extends BaseSubsystem<ClimberState> {
+
+    static WPI_TalonFX climbMotor;
+
+    static PneumaticsControlModule climbPCM;
+
+    static DoubleSolenoid l1Claw;
+    static DoubleSolenoid h2Claw;
+    static DoubleSolenoid l3Claw;
+    static DoubleSolenoid h4Claw;
+
+    public static DigitalInput l1Switch;
+    public static DigitalInput h2Switch;
+    public static DigitalInput l3Switch;
+    public static DigitalInput h4Switch;
 
     public Climber() {
         super(ClimberState.NEUTRAL);
+
+        climbMotor = new WPI_TalonFX(CLIMB_ARM_MOTOR);
+        climbMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        climbMotor.configIntegratedSensorInitializationStrategy(SensorInitializationStrategy.BootToZero);
+        climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+        climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+        climbMotor.config_kP(0, 0.075);
+        climbMotor.config_kI(0, 0.0);
+        climbMotor.config_kD(0, 0.0);
+        climbMotor.config_kF(0, 0.0);
+
+        climbPCM = new PneumaticsControlModule(CLIMB_PCM);
+
+        l1Claw = climbPCM.makeDoubleSolenoid(L1_EXTEND, L1_RETRACT);
+        h2Claw = climbPCM.makeDoubleSolenoid(H2_EXTEND, H2_RETRACT);
+        l3Claw = climbPCM.makeDoubleSolenoid(L3_EXTEND, L3_RETRACT);
+        h4Claw = climbPCM.makeDoubleSolenoid(H4_EXTEND, H4_RETRACT);
+
+        l1Switch = new DigitalInput(L1_SWITCH);
+        h2Switch = new DigitalInput(H2_SWITCH);
+        l3Switch = new DigitalInput(L3_SWITCH);
+        h4Switch = new DigitalInput(H4_SWITCH);
     }
 
     @Override
@@ -22,7 +61,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
 
         super.process();
 
-        SmartDashboard.putNumber("Arm Encoder Position", RobotMap.m_climbMotor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Arm Encoder Position", climbMotor.getSelectedSensorPosition());
 
         switch (getCurrentSubsystemState()) {
             case NEUTRAL:
@@ -86,43 +125,43 @@ public class Climber extends BaseSubsystem<ClimberState> {
     }
 
     public double getClimbArmDegree() {
-        return RobotMap.m_climbMotor.getSelectedSensorPosition() * Constants.FALCON_TICKS_TO_ARM_DEGREES;
+        return climbMotor.getSelectedSensorPosition() * FALCON_TICKS_TO_ARM_DEGREES;
     }
 
     public void setClimbArmDegree(double degree) {
-        RobotMap.m_climbMotor.set(ControlMode.MotionMagic, degree * Constants.ARM_DEGREES_TO_FALCON_TICKS);
+        climbMotor.set(ControlMode.MotionMagic, degree * ARM_DEGREES_TO_FALCON_TICKS);
     }
 
     private void setL1(Value value) {
-        setWithADelayToOff(RobotMap.m_l1Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        setWithADelayToOff(l1Claw, value, DelayToOff.CLIMB_CLAWS.millis);
     }
 
     private void setH2(Value value) {
-        setWithADelayToOff(RobotMap.m_h2Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        setWithADelayToOff(h2Claw, value, DelayToOff.CLIMB_CLAWS.millis);
     }
 
     private void setL3(Value value) {
-        setWithADelayToOff(RobotMap.m_l3Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        setWithADelayToOff(l3Claw, value, DelayToOff.CLIMB_CLAWS.millis);
     }
 
     private void setH4(Value value) {
-        setWithADelayToOff(RobotMap.m_h4Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        setWithADelayToOff(h4Claw, value, DelayToOff.CLIMB_CLAWS.millis);
     }
 
     private void setHighVelocity() {
-        RobotMap.m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
+        climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS, 20);
     }
 
     private void setHighAcceleration() {
-        RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
+        climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS, 20);
     }
 
     private void setLowVelocity() {
-        RobotMap.m_climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW, 20);
+        climbMotor.configMotionCruiseVelocity(MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW, 20);
     }
 
     private void setLowAcceleration() {
-        RobotMap.m_climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW, 20);
+        climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW, 20);
     }
 
     public void prepClaw() {
@@ -284,33 +323,33 @@ public class Climber extends BaseSubsystem<ClimberState> {
 
     public void moveArmManually() {
         if (Buttons.MoveClimbArmForward.getButton()) {
-            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.30);
+            climbMotor.set(ControlMode.PercentOutput, 0.30);
         } else if (Buttons.MoveClimbArmBackward.getButton()) {
-            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, -0.30);
+            climbMotor.set(ControlMode.PercentOutput, -0.30);
         } else if (Buttons.ClimbArmEncoderReset.getButton()) {
-            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
-            RobotMap.m_climbMotor.setSelectedSensorPosition(0.0);
+            climbMotor.set(ControlMode.PercentOutput, 0.0);
+            climbMotor.setSelectedSensorPosition(0.0);
         } else {
-            RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
+            climbMotor.set(ControlMode.PercentOutput, 0.0);
         }
     }
 
     @Override
     public void neutral() {
-        RobotMap.m_l1Claw.set(Value.kOff);
-        RobotMap.m_h2Claw.set(Value.kOff);
-        RobotMap.m_l3Claw.set(Value.kOff);
-        RobotMap.m_h4Claw.set(Value.kOff);
-        RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
+        l1Claw.set(Value.kOff);
+        h2Claw.set(Value.kOff);
+        l3Claw.set(Value.kOff);
+        h4Claw.set(Value.kOff);
+        climbMotor.set(ControlMode.PercentOutput, 0.0);
     }
 
     @Override
     public boolean abort() {
-        RobotMap.m_l1Claw.set(Value.kOff);
-        RobotMap.m_h2Claw.set(Value.kOff);
-        RobotMap.m_l3Claw.set(Value.kOff);
-        RobotMap.m_h4Claw.set(Value.kOff);
-        RobotMap.m_climbMotor.set(ControlMode.PercentOutput, 0.0);
+        l1Claw.set(Value.kOff);
+        h2Claw.set(Value.kOff);
+        l3Claw.set(Value.kOff);
+        h4Claw.set(Value.kOff);
+        climbMotor.set(ControlMode.PercentOutput, 0.0);
         return true;
     }
 }

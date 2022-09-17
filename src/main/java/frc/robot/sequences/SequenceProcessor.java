@@ -3,7 +3,6 @@ package frc.robot.sequences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
-import frc.robot.RobotMap;
 
 public class SequenceProcessor{
 
@@ -48,7 +47,7 @@ public class SequenceProcessor{
     public void process() {
 
         if(shoot.isNeutral()){
-            RobotMap.limelight.resetLimelightGlobalValues();
+            Robot.limelight.resetLimelightGlobalValues();
         }
         
         if (climb.isNeutral() && shoot.isNeutral()) {
@@ -74,7 +73,7 @@ public class SequenceProcessor{
         }
         if (Buttons.Climb.getButton()
                 && Robot.climber.getSequenceRequiring().getState().equals(ClimbPrepState.PREPPEDFORCLIMB)
-                && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
+                && (!Robot.climber.l1Switch.get() || !Robot.climber.h2Switch.get())) {
             climb.start(Robot.climber, Robot.swerveDrive);
         }
         if(Buttons.ClimbPrepReset.getButton() && !climbPrep.isNeutral()){

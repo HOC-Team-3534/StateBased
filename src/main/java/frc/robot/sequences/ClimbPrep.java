@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
@@ -30,7 +30,7 @@ public class ClimbPrep extends BaseSequence<ClimbPrepState> {
                 break;
             case SWINGARM:
                 if (getTimeSinceStartOfState() > 500
-                        && (!RobotMap.m_l1Switch.get() || !RobotMap.m_h2Switch.get())) {
+                        && (!Robot.climber.l1Switch.get() || !Robot.climber.h2Switch.get())) {
                     setNextState(ClimbPrepState.PREPPEDFORCLIMB);
                 }
                 break;

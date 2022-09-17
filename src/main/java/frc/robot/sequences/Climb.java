@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
@@ -46,7 +45,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGMIDHIGH2:
-                if(!RobotMap.m_l3Switch.get() || !RobotMap.m_h4Switch.get()) {
+                if(!Robot.climber.l3Switch.get() || !Robot.climber.h4Switch.get()) {
                     setNextState(ClimbState.GRIPHIGHBAR);
                 }
                 if(!Buttons.Climb.getButton()){
@@ -55,9 +54,9 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case GRIPHIGHBAR:
-                if (getTimeSinceStartOfState() > 500 && (!RobotMap.m_l3Switch.get() || !RobotMap.m_h4Switch.get())) {
+                if (getTimeSinceStartOfState() > 500 && (!Robot.climber.l3Switch.get() || !Robot.climber.h4Switch.get())) {
                     setNextState(ClimbState.RECENTERMIDHIGHBAR);
-                }else if((RobotMap.m_l3Switch.get() && RobotMap.m_h4Switch.get())){
+                }else if((Robot.climber.l3Switch.get() && Robot.climber.h4Switch.get())){
                     limitSwitchLoopCounter++;
                     if(limitSwitchLoopCounter >= 10) {
                         limitSwitchLoopCounter = 0;
@@ -104,7 +103,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGHIGHTRAVERSAL2:
-                if(!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get()){
+                if(!Robot.climber.h2Switch.get() || !Robot.climber.l1Switch.get()){
                     setNextState(ClimbState.GRIPTRAVERSALBAR);
                 }
                 if(!Buttons.Climb.getButton()){
@@ -113,9 +112,9 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case GRIPTRAVERSALBAR:
-                if (getTimeSinceStartOfState() > 500 && (!RobotMap.m_h2Switch.get() || !RobotMap.m_l1Switch.get())) {
+                if (getTimeSinceStartOfState() > 500 && (!Robot.climber.h2Switch.get() || !Robot.climber.l1Switch.get())) {
                     setNextState(ClimbState.RECENTERHIGHTRAVERSALBAR);
-                }else if((RobotMap.m_h2Switch.get() && RobotMap.m_l1Switch.get())){
+                }else if((Robot.climber.h2Switch.get() && Robot.climber.l1Switch.get())){
                     limitSwitchLoopCounter++;
                     if(limitSwitchLoopCounter >= 10) {
                         limitSwitchLoopCounter = 0;
@@ -151,7 +150,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGTOREST:
-                if(RobotMap.m_climbMotor.getSelectedSensorPosition() >= 445){
+                if(Robot.climber.getClimbArmDegree() >= 445){
                     System.out.println("Hooray!");
                 }
                 if(!Buttons.Climb.getButton()){

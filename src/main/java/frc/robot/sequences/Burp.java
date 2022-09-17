@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
@@ -27,7 +27,7 @@ public class Burp extends BaseSequence<BurpState> {
             case BURP:
                 if(!Buttons.Burp.getButton()){
                     setNextState(BurpState.RESETPUNCH);
-                }if (this.getTimeSinceStartOfState() > 500 && RobotMap.shooter.getClosedLoopError() < 250) {
+                }if (this.getTimeSinceStartOfState() > 500 && Robot.shooter.getShooterClosedLoopError() < 250) {
                     System.out.println("In state");
                     setNextState(BurpState.PUNCH);
                 }

@@ -1,7 +1,6 @@
 package frc.robot.autons;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
@@ -44,12 +43,12 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonState> {
                 }
                 break;
             case SHOOTBALL1:
-                if (RobotMap.limelight.isValid()) {
-                    RobotMap.limelight.setTargetAcquired();
+                if (Robot.limelight.isValid()) {
+                    Robot.limelight.setTargetAcquired();
                 }
                 if (((ballsShot == 0 && this.getTimeSinceStartOfState() > 2000) || (ballsShot >= 1 && this.getTimeSinceStartOfState() > 500))
                         && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0 &&
-                        RobotMap.shooter.getClosedLoopError() < 100 && RobotMap.limelight.isTargetAcquired()) {
+                        Robot.shooter.getShooterClosedLoopError() < 100 && Robot.limelight.isTargetAcquired()) {
                     setNextState(TwoBallAutonState.PUNCH1);
                 }
                 break;

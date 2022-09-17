@@ -1,7 +1,6 @@
 package frc.robot.autons;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
@@ -48,7 +47,7 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
                 //THE FOLLOWING IS ONLY IN ORDER TO SET THE CORRECT INITIAL POSITION
                 ballsShot = 0;
 //                setInitialPoseFromCurrentPath();
-                if (RobotMap.shooter.getClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
+                if (Robot.shooter.getShooterClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
                     setNextState(ThreeBallAutonState.PUNCH1);
                 }
                 break;
@@ -67,16 +66,16 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
                 setPathPlannerFollowerAtStartOfState(false);
                 if(this.getPlannerFollower().isFinished()){
                     setNextState(ThreeBallAutonState.SHOOTBALL2);
-                    RobotMap.limelight.resetLimelightGlobalValues();
+                    Robot.limelight.resetLimelightGlobalValues();
                 }
                 break;
             case SHOOTBALL2:
-                if (RobotMap.limelight.isValid()) {
-                    RobotMap.limelight.setTargetAcquired();
+                if (Robot.limelight.isValid()) {
+                    Robot.limelight.setTargetAcquired();
                 }
                 if ((ballsShot == 1 || (ballsShot == 2 && this.getTimeSinceStartOfState() > 500
-                        && RobotMap.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0))
-                        && RobotMap.shooter.getClosedLoopError() < 100) {
+                        && Robot.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0))
+                        && Robot.shooter.getShooterClosedLoopError() < 100) {
                     setNextState(ThreeBallAutonState.PUNCH2);
                 }
                 break;

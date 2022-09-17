@@ -1,6 +1,6 @@
 package frc.robot.autons;
 
-import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
@@ -37,7 +37,7 @@ public class OneBallAuton extends BaseAutonSequence<OneBallAutonState> {
                 break;
             case SHOOTBALL1:
                 if ((this.getTimeSinceStartOfState() > 1000)
-                        && RobotMap.shooter.getClosedLoopError() < 100) {
+                        && Robot.shooter.getShooterClosedLoopError() < 100) {
                     setNextState(OneBallAutonState.PUNCH1);
                 }
                 break;

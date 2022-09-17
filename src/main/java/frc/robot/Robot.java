@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.Vector2d;
@@ -14,12 +16,14 @@ import frc.robot.autons.*;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
-import frc.robot.sequences.Burp;
+import frc.robot.extras.Limelight;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
+
+import static frc.robot.Constants.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -37,6 +41,10 @@ public class Robot extends TimedRobot {
 	public static Climber climber;
 	public static SequenceProcessor sequenceProcessor;
 	public static RobotContainer robotContainer;
+
+	public static WPI_Pigeon2 pigeon;
+	public static Limelight limelight;
+	public static PneumaticsControlModule mainPCM;
 
 	public static boolean isAutonomous = false;
 
@@ -62,8 +70,15 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 
-		RobotMap.init();
-		RobotMap.pigeon.reset();
+		pigeon = new WPI_Pigeon2(PIGEON_2);
+		if(ROBOTTYPE == RobotType.PBOT) {
+			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3, vel -> 3);
+		}else{
+			limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225/52);
+		}
+		mainPCM = new PneumaticsControlModule(MAIN_PCM);
+
+		pigeon.reset();
 
 		// PortForwarder.add(5800, "limelight.local", 5800);
 		// PortForwarder.add(5801, "limelight.local", 5801);
@@ -252,16 +267,15 @@ public class Robot extends TimedRobot {
 
 		if (logCounter > 5) {
 
-			SmartDashboard.putNumber("Encoder Voltage", RobotMap.m_climbEncoder.getVoltage());
-			SmartDashboard.putBoolean("L1 switch 1", RobotMap.m_l1Switch.get());
-			SmartDashboard.putBoolean("L1 switch 2", RobotMap.m_h2Switch.get());
-			SmartDashboard.putBoolean("L3 switch 1", RobotMap.m_l3Switch.get());
-			SmartDashboard.putBoolean("L3 switch 2", RobotMap.m_h4Switch.get());
+			SmartDashboard.putBoolean("L1 switch 1", climber.l1Switch.get());
+			SmartDashboard.putBoolean("L1 switch 2", climber.h2Switch.get());
+			SmartDashboard.putBoolean("L3 switch 1", climber.l3Switch.get());
+			SmartDashboard.putBoolean("L3 switch 2", climber.h4Switch.get());
 			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
-			SmartDashboard.putNumber("tx (inverted)", RobotMap.limelight.getHorizontalAngleOffset().getDegrees());
-			SmartDashboard.putNumber("ty", RobotMap.limelight.getPixelAngle());
-			SmartDashboard.putNumber("distance", RobotMap.limelight.getDistance());
+			SmartDashboard.putNumber("tx (inverted)", limelight.getHorizontalAngleOffset().getDegrees());
+			SmartDashboard.putNumber("ty", limelight.getPixelAngle());
+			SmartDashboard.putNumber("distance", limelight.getDistance());
 
 			//SmartDashboard.putNumber("Moving Target Angle Offset", RobotMap.limelight.getLimelightShootProjection().getOffset().getDegrees());
 			//SmartDashboard.putNumber("Moving Target Distance", RobotMap.limelight.getLimelightShootProjection().getDistance());
@@ -273,7 +287,7 @@ public class Robot extends TimedRobot {
 
 			SmartDashboard.putString("Target Velocity Vector", String.format("X: %.2f, Y: %.2f", targetVectorVelocity.x, targetVectorVelocity.y));
 
-			SmartDashboard.putBoolean("Target Acquired", RobotMap.limelight.isTargetAcquired());
+			SmartDashboard.putBoolean("Target Acquired", limelight.isTargetAcquired());
 
 			SmartDashboard.putNumber("Target Angle Error", swerveDrive.getTargetShootRotationAngleError().getDegrees());
 

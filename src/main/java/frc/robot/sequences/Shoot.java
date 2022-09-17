@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
@@ -27,19 +26,19 @@ public class Shoot extends BaseSequence<ShootState> {
     @Override
     public void process() {
 
-        RobotMap.limelight.updateLimelightShootProjection();
+        Robot.limelight.updateLimelightShootProjection();
         Robot.swerveDrive.setTargetShootRotationAngle();
 
         switch (getState()) {
             case UPTOSPEED:
-                if (RobotMap.limelight.isValid()) {
-                    RobotMap.limelight.setTargetAcquired();
+                if (Robot.limelight.isValid()) {
+                    Robot.limelight.setTargetAcquired();
                 }
                 if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
                     setNextState(ShootState.RESETPUNCH);
                 }
                 if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && Robot.shooter.getCalculatedRPMError() < 35
-                        && RobotMap.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
+                        && Robot.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
                     System.out.println("In state");
                     setNextState(ShootState.PUNCH);
                 }

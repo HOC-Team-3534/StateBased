@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -21,6 +20,75 @@ import edu.wpi.first.math.geometry.Translation2d;
  */
 public final class Constants {
         public static RobotType ROBOTTYPE = RobotType.CBOT;
+
+        /**
+         * Swerve Drive Module CAN IDs and Encoder Offset Info
+         */
+        public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // FIXME Set front left module drive motor ID
+        public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3; // FIXME Set front left module steer motor ID
+        public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2; // FIXME Set front left steer encoder ID
+        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(263.89) : -Math.toRadians(93.35); //85.2 // FIXME Measure and set
+
+        public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; // FIXME Set front right drive motor ID
+        public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6; // FIXME Set front right steer motor ID
+        public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 5; // FIXME Set front right steer encoder ID
+        public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(173.45) : -Math.toRadians(124.05); //7.95 // FIXME Measure and set
+
+        public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; // FIXME Set back left drive motor ID
+        public static final int BACK_LEFT_MODULE_STEER_MOTOR = 9; // FIXME Set back left steer motor ID
+        public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8; // FIXME Set back left steer encoder ID
+        public static final double BACK_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(92.0) : -Math.toRadians(313.4); //274.04 // FIXME Measure and set back
+
+        public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; // FIXME Set back right drive motor ID
+        public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12; // FIXME Set back right steer motor ID
+        public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11; // FIXME Set back right steer encoder ID
+        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(199.5) : -Math.toRadians(202.26); //24.5 // FIXME Measure and set
+
+        /**
+         * PCM Port and Solenoid Information //FIXME Are you using air?
+         */
+        public static final int L1_EXTEND = 0;
+        public static final int L1_RETRACT = 1;
+
+        public static final int H2_EXTEND = 2;
+        public static final int H2_RETRACT = 3;
+
+        public static final int L3_EXTEND = 4;
+        public static final int L3_RETRACT = 5;
+
+        public static final int H4_EXTEND = 6;
+        public static final int H4_RETRACT = 7;
+
+        public static final int PUSHER_FORWARD = 0;
+        public static final int PUSHER_REVERSE = 1;
+
+        public static final int INTAKE_EXTEND = 2;
+        public static final int INTAKE_RETRACT = 3;
+
+        /**
+         * DIO Port Information
+         */
+        public static final int L1_SWITCH = 0;
+        public static final int H2_SWITCH = 1;
+        public static final int L3_SWITCH = 2;
+        public static final int H4_SWITCH = 3;
+
+        /**
+         * CAN IDs
+         */
+        public static final int CLIMB_ARM_MOTOR = 14;
+
+        public static final int SHOOTER_MOTOR = 13;
+
+        public static final int SHOOTER_BOOT = 18;
+
+        public static final int INTAKE_ROLLER = 15;
+
+        public static final int MAIN_PCM = 17;
+        public static final int CLIMB_PCM = 16;
+
+        public static final int PIGEON_2 = 19; //FIXME Set Pigeon ID
+
         /**
          * The left-to-right distance between the drivetrain wheels
          *
@@ -34,65 +102,9 @@ public final class Constants {
          */
         public static final double DRIVETRAIN_WHEELBASE_METERS = 0.578; // FIXME Measure and set wheelbase
 
-        // public static final int DRIVETRAIN_PIGEON_ID = 0; // FIXME Set Pigeon ID
-
-        public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // FIXME Set front left module drive motor ID
-        public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3; // FIXME Set front left module steer motor ID
-        public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2; // FIXME Set front left steer encoder ID
-        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(263.89) : -Math.toRadians(93.35); //85.2 // FIXME Measure and set
-                                                                                           // front
-                                                                                           // left steer offset
-
-        public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; // FIXME Set front right drive motor ID
-        public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6; // FIXME Set front right steer motor ID
-        public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 5; // FIXME Set front right steer encoder ID
-        public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(173.45) : -Math.toRadians(124.05); //7.95 // FIXME Measure and set
-                                                                                            // front
-                                                                                            // right steer offset
-
-        public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; // FIXME Set back left drive motor ID
-        public static final int BACK_LEFT_MODULE_STEER_MOTOR = 9; // FIXME Set back left steer motor ID
-        public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8; // FIXME Set back left steer encoder ID
-        public static final double BACK_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(92.0) : -Math.toRadians(313.4); //274.04 // FIXME Measure and set back
-                                                                                          // left
-                                                                                          // steer offset
-
-        public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; // FIXME Set back right drive motor ID
-        public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12; // FIXME Set back right steer motor ID
-        public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11; // FIXME Set back right steer encoder ID
-        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(199.5) : -Math.toRadians(202.26); //24.5 // FIXME Measure and set
-                                                                                            // back
-                                                                                            // right steer offset
-
-        public static final int PIGEON_2 = 19;
-
-        public static final int L1_EXTEND = 0;
-        public static final int L1_RETRACT = 1;
-
-        public static final int H2_EXTEND = 2;
-        public static final int H2_RETRACT = 3;
-
-        public static final int L3_EXTEND = 4;
-        public static final int L3_RETRACT = 5;
-
-        public static final int H4_EXTEND = 6; //6
-        public static final int H4_RETRACT = 7; //7
-
-        public static final int L1_SWITCH = 0;
-        public static final int H2_SWITCH = 1;
-        public static final int L3_SWITCH = 2;
-        public static final int H4_SWITCH = 3;
-
-        public static final int CLIMB_ARM_MOTOR = 14;
-        public static final int CLIMB_ENCODER = 0;
-
         public static final int TALONFX_CPR = 2048;
 
-        public static final double MAX_ANALOG_VOLTAGE = 5.0;
         public static final double CLIMB_ARM_GEAR_RATIO = 716.8;
-        public static final double CLIMB_ANALOG_VOLTAGE_OFFSET = 2.21; // 2.46
-        public static final double CLIMB_ANALOG_VOLTAGE_TO_DEGREE = 0.014556;
-        public static final double CLIMB_ARM_ROTATIONS_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR;
         public static final double ARM_DEGREES_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * TALONFX_CPR / 360.0;
         public static final double FALCON_TICKS_TO_ARM_DEGREES = 1 / ARM_DEGREES_TO_FALCON_TICKS;
 
@@ -105,27 +117,8 @@ public final class Constants {
         public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW = 50.0;
         public static final int MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
         public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
-        
-        public static final int SHOOTER_MOTOR = 13;
-
-        public static final int SHOOTER_BOOT = 18;
-
-        public static final int INTAKE_ROLLER = 15;
-
-        public static final int INTAKE_EXTEND = 2;
-        
-        public static final int INTAKE_RETRACT = 3;
-
-        public static final int MAIN_PCM = 17;
-
-        public static final int CLIMB_PCM = 16;
-
-        public static final int PUSHER_FORWARD = 0;
-
-        public static final int PUSHER_REVERSE = 1;
 
         public static final double SHOOT_MOTOR_GEAR_RATIO = 1.0;
-
         public static final double RPM_TO_COUNTS_PER_100MS = TALONFX_CPR / 600.0 / SHOOT_MOTOR_GEAR_RATIO;
 
         public static final double MAX_VOLTAGE = 12.0;
@@ -134,15 +127,11 @@ public final class Constants {
                 SdsModuleConfigurations.MK4_L2.getDriveReduction() *
                 SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND = PHYSICAL_MAX_VELOCITY * .02;
+        public static final double MAX_VELOCITY_AUTONOMOUS = 2.0;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS = 2.0;
+        public static final double MAX_ACCELERATION = 3.0;
 
-        public static final double AUTON_MAX_VELOCITY_RATIO = MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS / PHYSICAL_MAX_VELOCITY;
-
-        public static final double MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND = 3.0;
-
-        public static final double MAX_VELOCITY_CREEP_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.25;
+        public static final double MAX_VELOCITY_CREEP = PHYSICAL_MAX_VELOCITY * 0.25;
         /**
          * The maximum angular velocity of the robot in radians per second.
          * <p>
@@ -150,10 +139,10 @@ public final class Constants {
          */
         // Here we calculate the theoretical maximum angular velocity. You can also
         // replace this with a measured amount.
-        public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
+        public static final double PHYSICAL_MAX_ANGULAR_VELOCITY = PHYSICAL_MAX_VELOCITY /
                         Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
-        public static final double MAX_ANGULAR_VELOCITY_CREEP_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.25;
+        public static final double MAX_ANGULAR_VELOCITY_CREEP = PHYSICAL_MAX_ANGULAR_VELOCITY * 0.25;
 
         public static final double MIDBAR_GRAB_ANGLE_COMMAND = 94.0;
         public static final double HIGHBAR_GRAB_ANGLE_COMMAND = 265.0; //impossible to actually be at 270
@@ -168,8 +157,6 @@ public final class Constants {
         public static final double RECENTER_ANGLE_TOLERANCE = 5.0; //should at least be 3 degrees just for comfort, if not at least 5
 
         public static final double DONERELEASINGMIDBAR_ANGLE = 270.0;
-  
-        public static final Translation2d HUB_LOCATION = new Translation2d(8.27, 4.15);
 
         public enum DelayToOff {
 
@@ -189,76 +176,6 @@ public final class Constants {
                         this.millis = (long) time * 1000;
 
                 }
-        }
-
-        public enum FunctionStateDelay {
-
-                /**
-                 * the delay in seconds between different states in the function switch
-                 * statements
-                 * creates the wait time between cases in other words
-                 * below is just an example from 2019 (the examples should probably be removed
-                 * when the next years copy of the code is made)
-                 */
-
-                cargoIntakeFloor_elevatorStage1A_to_armExtendExtended_rollerIntake(1.0),
-                cargoShoot_shooterShoot_to_shooterStop(0.2),
-                hatchPlace_hatchIntakeRelease_to_hatchPanelApparatusExtended(0.05),
-                hatchPlace_hatchPanelApparatusExtended_to_hatchPanelApparatusCollapsed(0.25),
-                hatchPlace_hatchPanelApparatusCollapsed_to_hatchPlaceCompleted(3.0),
-                xButtonReset_armLiftMid_to_armExtendCollapsed(1.0),
-                intakeRoller_burpDelay(0.15);
-
-                public double time;
-
-                FunctionStateDelay(double time) {
-
-                        this.time = time * 1000;
-
-                }
-        }
-
-        public enum PowerOutput {
-
-                /**
-                 * the power output in percentage for the different actions in the functions for
-                 * the motors
-                 * for example, an intake motor at a constant percentage of power while button
-                 * pressed
-                 * below is just an example from 2020 (shooter was updated for RobotBasic)
-                 */
-
-                shooter_shooter_shootConstant(15500), // 17750
-                // shooter_shooter_shootInner(0.1127 * Math.pow((Robot.drive.getDistance()), 2)
-                // - (42.1417 * Robot.drive.getDistance()) + 17746.7581),
-                shooter_topBelt_feed(0.80),
-                shooter_indexWheel_feed(0.40),
-                shooter_indexWheel_index(0.45),
-                shooter_indexWheel_reverseIndex(1.0),
-                shooter_indexWheel_manualIndex(-1.0),
-                shooter_hood_far(0.5),
-                shooter_hood_close(-0.5),
-                intake_intakeRoller_intake(.75),
-                intake_intakeRoller_burp(-0.5),
-                intake_intakeArm_armUp(0.80),
-                intake_intakeArm_armDown(-0.80),
-                elevator_elevator_maxup(0.9),
-                elevator_elevator_maxdown(0.5),
-                elevator_elevator_stop(0.1),
-                elevator_elevator_colorWheel(0.5),
-                elevator_elevator_removeResistance(0.0),
-                elevator_winch_winch(1.0),
-                elevator_translator_maxOutput(1.0),
-                spinner_spinner_spin(1.0);
-
-                public double power;
-
-                PowerOutput(double power) {
-
-                        this.power = power;
-
-                }
-
         }
 
         public enum RobotType{

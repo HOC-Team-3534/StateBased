@@ -2,7 +2,6 @@ package frc.robot.autons.pathplannerfollower;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
@@ -27,7 +26,7 @@ public class PathPlannerFollower {
     }
 
     private void loadPath(String pathName){
-        this.path = PathPlanner.loadPath(pathName, Constants.MAX_VELOCITY_METERS_PER_SECOND_AUTONOMOUS, Constants.MAX_ACCELERATION_METERS_PER_SECOND_PER_SECOND);
+        this.path = PathPlanner.loadPath(pathName, Constants.MAX_VELOCITY_AUTONOMOUS, Constants.MAX_ACCELERATION);
     }
 
     public PathPlannerTrajectory.PathPlannerState getState(double seconds){

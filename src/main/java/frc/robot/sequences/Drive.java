@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.robot.subsystems.states.SwerveDriveState;
+import frc.robot.subsystems.SwerveDriveState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 

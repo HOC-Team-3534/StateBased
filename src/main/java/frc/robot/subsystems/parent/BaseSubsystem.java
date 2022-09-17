@@ -51,6 +51,8 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
         isStillRequired();
         checkStateChanged();
         checkToTurnOff();
+
+        getCurrentSubsystemState().process();
     }
 
     private void setSequenceRequiring(BaseSequence<? extends ISequenceState> sequence) {

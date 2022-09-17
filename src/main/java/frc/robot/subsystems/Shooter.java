@@ -11,7 +11,6 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.IDistanceToShooterRPM;
-import frc.robot.subsystems.states.ShooterState;
 
 import static frc.robot.Constants.*;
 
@@ -51,52 +50,6 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         this.rpmFunction = rpmFunction;
     }
 
-    @Override
-    public void process() {
-
-        super.process();
-
-        switch (getCurrentSubsystemState()) {
-            case NEUTRAL:
-                neutral();
-                break;
-            case AUTONPREUPTOSPEED:
-                if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower() != null) {
-                    if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower()
-                            .getRemainingTimeSeconds() < 2.0) {
-                        upToSpeed(3000);
-                    } else {
-                        neutral();
-                    }
-                } else {
-                    neutral();
-                }
-                break;
-            case UPTOSPEED:
-                // grabs the number from SmartDashboard
-                //waitNSpin(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
-                if (Robot.limelight.isTargetAcquired()) {
-                    upToSpeed();
-                    //upToSpeed(SmartDashboard.getNumber("Manual Testing RPM", 0.0));
-                } else {
-                    upToSpeed(3000);
-                }
-                break;
-            case BURP:
-                burp();
-                break;
-            case PUNCH:
-                punch();
-                break;
-            case RESETPUNCH:
-                resetPunch();
-                break;
-            case BOOT:
-                boot();
-                break;
-        }
-    }
-
     public void shoot(double rpm) {
         double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
         shooter.set(ControlMode.Velocity, countsPer100MS);
@@ -116,7 +69,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         //return Math.abs(getShooterRPM() - rpmMultiplier * SmartDashboard.getNumber("Manual Testing RPM", 0.0));
     }
 
-    private void upToSpeed() {
+    protected void upToSpeed() {
         if(getStateFirstRunThrough()){
             shooter.selectProfileSlot(0, 0);
         }
@@ -125,27 +78,27 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         //shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getLimelightShootProjection().getDistance()));
     }
 
-    private void upToSpeed(double rpm) {
+    protected void upToSpeed(double rpm) {
         if(getStateFirstRunThrough()){
             shooter.selectProfileSlot(0, 0);
         }
         shoot(rpm);
     }
 
-    private void burp() {
+    protected void burp() {
         if(getStateFirstRunThrough()){
             shooter.selectProfileSlot(1, 0);
         }
         shoot(1300);
     }
 
-    private void punch() {
+    protected void punch() {
         if (getStateFirstRunThrough()) {
             setWithADelayToOff(pusher, Value.kForward, Constants.DelayToOff.SHOOTER_PUSHER.millis);
         }
     }
 
-    private void resetPunch() {
+    protected void resetPunch() {
         if (getStateFirstRunThrough()) {
             setWithADelayToOff(pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
         }
@@ -159,7 +112,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
 
     }
 
-    private void boot() {
+    protected void boot() {
         if (this.getStateFirstRunThrough()) {
             shooterBoot.set(ControlMode.PercentOutput, 0.90);
         }

@@ -6,7 +6,7 @@ import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.IntakeReq;
-import frc.robot.subsystems.states.IntakeState;
+import frc.robot.subsystems.IntakeState;
 
 import java.util.Arrays;
 import java.util.List;

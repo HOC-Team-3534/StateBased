@@ -12,7 +12,7 @@ import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
-import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.ShooterState;
 
 public class Burp extends BaseSequence<BurpState> {
 

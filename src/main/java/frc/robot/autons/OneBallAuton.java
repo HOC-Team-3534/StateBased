@@ -11,8 +11,8 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.robot.subsystems.states.ShooterState;
-import frc.robot.subsystems.states.SwerveDriveState;
+import frc.robot.subsystems.ShooterState;
+import frc.robot.subsystems.SwerveDriveState;
 
 import java.util.Arrays;
 import java.util.List;

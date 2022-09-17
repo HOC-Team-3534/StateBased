@@ -11,7 +11,7 @@ import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ClimberReq;
-import frc.robot.subsystems.states.ClimberState;
+import frc.robot.subsystems.ClimberState;
 
 public class ClimbPrep extends BaseSequence<ClimbPrepState> {
 

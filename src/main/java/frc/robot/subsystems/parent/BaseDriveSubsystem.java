@@ -44,8 +44,8 @@ public abstract class BaseDriveSubsystem<SsS extends ISubsystemState> extends Ba
     }
 
     public void process() {
-        super.process();
         updateOdometry();
+        super.process();
     }
 
     public PathStateController getPathStateController() {

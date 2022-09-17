@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.*;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.parent.BaseSubsystem;
-import frc.robot.subsystems.states.ClimberState;
 
 public class Climber extends BaseSubsystem<ClimberState> {
 
@@ -58,70 +57,8 @@ public class Climber extends BaseSubsystem<ClimberState> {
 
     @Override
     public void process() {
-
         super.process();
-
         SmartDashboard.putNumber("Arm Encoder Position", climbMotor.getSelectedSensorPosition());
-
-        switch (getCurrentSubsystemState()) {
-            case NEUTRAL:
-                neutral();
-                break;
-            case PREPCLAW:
-                prepClaw();
-                break;
-            case SWINGARM:
-                swingArm();
-                break;
-            case GRIPMIDBAR:
-                gripMidBar();
-                break;
-            case SWINGMIDHIGH1:
-                swingMidHigh1();
-                break;
-            case SWINGMIDHIGH2:
-                swingMidHigh2();
-                break;
-            case GRIPHIGHBAR:
-                gripHighBar();
-                break;
-            case RETRYHIGHBAR:
-                retryHighBar();
-                break;
-            case RECENTERMIDHIGHBAR:
-                recenterMidHighBar();
-                break;
-            case RELEASEMIDBAR:
-                releaseMidBar();
-                break;
-            case SWINGHIGHTRAVERSAL1:
-                swingHighTraversal1();
-                break;
-            case SWINGHIGHTRAVERSAL2:
-                swingHighTraversal2();
-                break;
-            case GRIPTRAVERSALBAR:
-                gripTraversalBar();
-                break;
-            case RETRYTRAVERSALBAR:
-                retryTraversalBar();
-                break;
-            case RECENTERHIGHTRAVERSALBAR:
-                recenterHighTraversalBar();
-                break;
-            case RELEASEHIGHBAR:
-                releaseHighBar();
-                break;
-            case SWINGTOREST:
-                swingToRest();
-                break;
-            case RESETARM:
-                resetArm();
-                break;
-            case MOVEARMMANUALLY:
-                moveArmManually();
-                break;
-        }
     }
 
     public double getClimbArmDegree() {

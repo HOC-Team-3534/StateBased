@@ -14,8 +14,8 @@ import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ClimberReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.robot.subsystems.states.ClimberState;
-import frc.robot.subsystems.states.SwerveDriveState;
+import frc.robot.subsystems.ClimberState;
+import frc.robot.subsystems.SwerveDriveState;
 
 public class Climb extends BaseSequence<ClimbState> {
 

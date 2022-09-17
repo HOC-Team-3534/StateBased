@@ -4,4 +4,5 @@ public interface ISubsystemState<BaseS extends BaseSubsystem> {
 
     BaseS getAssociatedSubsystem();
 
+    void process();
 }

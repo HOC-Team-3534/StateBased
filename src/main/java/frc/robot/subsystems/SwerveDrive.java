@@ -17,7 +17,6 @@ import frc.robot.RobotContainer.Axes;
 import frc.robot.autons.pathplannerfollower.CalculatedDriveVelocities;
 import frc.robot.autons.pathplannerfollower.PathStateController;
 import frc.robot.subsystems.parent.BaseDriveSubsystem;
-import frc.robot.subsystems.states.SwerveDriveState;
 
 public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 
@@ -97,49 +96,6 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 		setPathStateController(pathStateController);
 	}
 
-	@Override
-	public void process() {
-
-		super.process();
-
-		switch(getCurrentSubsystemState()){
-			case NEUTRAL:
-				neutral();
-				break;
-			case DRIVE:
-				if ((Buttons.Creep.getButton())) {
-					creep();
-				} else {
-					drive();
-				}
-				break;
-			case AIM:
-				if (Robot.limelight.isTargetAcquired() && Buttons.SHOOT.getButton()) {
-					aim();
-				}else if(Robot.limelight.isTargetAcquired() && Robot.isAutonomous){
-					aim();
-				}else{
-					if(Buttons.Creep.getButton()){
-						creep();
-					}else{
-						drive();
-					}
-				}
-				break;
-			case DRIVE_AUTONOMOUSLY:
-				if (getStateFirstRunThrough()) {
-					// TODO check if the start of the path is near current odometry for safety
-				}
-				if (this.getPathStateController().getPathPlannerFollower() != null) {
-					driveOnPath();
-				} else {
-					System.out.println(
-							"DRIVE PATH NOT SET. MUST CREATE PATHPLANNERFOLLOWER IN AUTON AND SET IN SWERVEDRIVE SUBSYSTEM");
-				}
-				break;
-		}
-	}
-
 	public Vector2d getRobotCentricVelocity(){
 		ChassisSpeeds chassisSpeeds = this.getSwerveDriveKinematics().toChassisSpeeds(this.getSwerveModuleStates());
 		return new Vector2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
@@ -168,7 +124,7 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 		Robot.pigeon.reset();
 	}
 
-	private void drive(){
+	protected void drive(){
 		drive(Axes.Drive_ForwardBackward.getAxis() * PHYSICAL_MAX_VELOCITY,
 				Axes.Drive_LeftRight.getAxis() * PHYSICAL_MAX_VELOCITY,
 				Axes.Drive_Rotation.getAxis() * PHYSICAL_MAX_ANGULAR_VELOCITY,
@@ -204,13 +160,13 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 				backRight_stateAngle);
 	}
 
-	private void driveOnPath() {
+	protected void driveOnPath() {
 		CalculatedDriveVelocities velocities = this.getPathStateController()
 				.getVelocitiesAtCurrentState(this.getSwerveDriveOdometry(), this.getGyroHeading());
 		drive(velocities.getXVel(), velocities.getYVel(), velocities.getRotVel(), MAX_VELOCITY_AUTONOMOUS,true);
 	}
 
-	private void creep(){
+	protected void creep(){
 		drive(Axes.Drive_ForwardBackward.getAxis() * MAX_VELOCITY_CREEP,
 				Axes.Drive_LeftRight.getAxis() * MAX_VELOCITY_CREEP,
 				Axes.Drive_Rotation.getAxis() * MAX_ANGULAR_VELOCITY_CREEP,
@@ -218,7 +174,7 @@ public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 				true);
 	}
 
-	private void aim(){
+	protected void aim(){
 		double angleError = getTargetShootRotationAngleError().getDegrees();
 		if(angleError > 2.0){
 			angleError = 2.0;

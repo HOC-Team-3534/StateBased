@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.BaseSubsystem;
-import frc.robot.subsystems.states.IntakeState;
 
 import static frc.robot.Constants.*;
 import static frc.robot.Constants.ROBOTTYPE;
@@ -26,32 +25,6 @@ public class Intake extends BaseSubsystem<IntakeState> {
         intakeRoller.setInverted(ROBOTTYPE == RobotType.PBOT);
 
         intakeKickers = Robot.mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
-    }
-
-    @Override
-    public void process() {
-
-        super.process();
-
-        switch (getCurrentSubsystemState()) {
-            case NEUTRAL:
-                neutral();
-                break;
-            case KICKOUT:
-                kickOut();
-                break;
-            case RETRACT:
-                retract();
-                break;
-            case EXTAKE:
-                extake();
-                break;
-            case ROLLIN:
-                rollIn();
-                break;
-            case HOLDPOSITION:
-                break;
-        }
     }
 
     @Override

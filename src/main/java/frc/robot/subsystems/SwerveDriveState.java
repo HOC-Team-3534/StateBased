@@ -20,7 +20,7 @@ public enum SwerveDriveState implements ISubsystemState<SwerveDrive> {
         if (Robot.limelight.isTargetAcquired() && RobotContainer.Buttons.SHOOT.getButton() ||
                 Robot.limelight.isTargetAcquired() && Robot.isAutonomous) {
             s.aim();
-        }else{
+        } else {
             DRIVE.getState().process();
         }
     }),
@@ -37,7 +37,7 @@ public enum SwerveDriveState implements ISubsystemState<SwerveDrive> {
 
     SubsystemState<SwerveDrive> state;
 
-    SwerveDriveState(Consumer<SwerveDrive> processFunction){
+    SwerveDriveState(Consumer<SwerveDrive> processFunction) {
         this.state = new SubsystemState<>(this.name(), processFunction, Robot.swerveDrive);
     }
 

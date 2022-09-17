@@ -7,5 +7,5 @@ public interface ISubsystem {
     void neutral();
 
     boolean abort();
-    
+
 }

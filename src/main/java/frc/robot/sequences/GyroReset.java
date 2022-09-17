@@ -6,15 +6,28 @@ import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.sequences.parent.SequenceState;
-import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import static frc.robot.sequences.GyroResetState.NEUTRAL;
 
-public class GyroReset extends BaseSequence<GyroResetState>{
+enum GyroResetState implements ISequenceState {
+    NEUTRAL,
+    RESET;
+
+    SequenceState state;
+
+    GyroResetState(SubsystemRequirement... requirements) {
+        state = new SequenceState(requirements);
+    }
+
+    @Override
+    public SequenceState getState() {
+        return state;
+    }
+
+}
+
+public class GyroReset extends BaseSequence<GyroResetState> {
 
     public GyroReset(GyroResetState neutralState, GyroResetState startState) {
         super(neutralState, startState);
@@ -26,7 +39,7 @@ public class GyroReset extends BaseSequence<GyroResetState>{
         switch (getState()) {
             case RESET:
                 Robot.swerveDrive.setGyroOffset(new Rotation2d().minus(Robot.pigeon.getRotation2d()));
-                setNextState(GyroResetState.NEUTRAL);
+                setNextState(NEUTRAL);
                 break;
             case NEUTRAL:
                 break;
@@ -42,23 +55,6 @@ public class GyroReset extends BaseSequence<GyroResetState>{
     public boolean abort() {
         // TODO Auto-generated method stub
         return false;
-    }
-
-}
-
-enum GyroResetState implements ISequenceState {
-    NEUTRAL,
-    RESET;
-
-    SequenceState state;
-
-    GyroResetState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
-    }
-
-    @Override
-    public SequenceState getState() {
-        return state;
     }
 
 }

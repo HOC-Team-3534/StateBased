@@ -11,8 +11,8 @@ public enum ShooterState implements ISubsystemState<Shooter> {
     AUTONPREUPTOSPEED((s) -> {
         if (Robot.swerveDrive.getPathStateController().getPathPlannerFollower() != null &&
                 Robot.swerveDrive.getPathStateController().getPathPlannerFollower()
-                .getRemainingTimeSeconds() < 2.0) {
-                s.upToSpeed(3000);
+                        .getRemainingTimeSeconds() < 2.0) {
+            s.upToSpeed(3000);
         } else {
             NEUTRAL.getState().process();
         }
@@ -33,7 +33,7 @@ public enum ShooterState implements ISubsystemState<Shooter> {
 
     SubsystemState<Shooter> state;
 
-    ShooterState(Consumer<Shooter> processFunction){
+    ShooterState(Consumer<Shooter> processFunction) {
         this.state = new SubsystemState<>(this.name(), processFunction, Robot.shooter);
     }
 

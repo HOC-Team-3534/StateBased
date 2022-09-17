@@ -11,9 +11,9 @@ import java.util.function.Function;
 
 public class Limelight {
 
-    Function<Double,Double> distanceFunction;
-    Function<Double,Double> distanceToAverageShootVelocityFunction;
-    Function<Double,Double> averageShootVelocityToDistanceFunction;
+    Function<Double, Double> distanceFunction;
+    Function<Double, Double> distanceToAverageShootVelocityFunction;
+    Function<Double, Double> averageShootVelocityToDistanceFunction;
     NetworkTable table;
     boolean isTargetAcquired;
     double savedDistance = -999;
@@ -23,7 +23,7 @@ public class Limelight {
 
     LimelightShootProjection limelightShootProjection;
 
-    public Limelight(Function<Double,Double> distanceFunction, Function<Double,Double> distanceToAverageVelocityFunction, Function<Double,Double> averageShootVelocityToDistanceFunction) {
+    public Limelight(Function<Double, Double> distanceFunction, Function<Double, Double> distanceToAverageVelocityFunction, Function<Double, Double> averageShootVelocityToDistanceFunction) {
 
         this.distanceFunction = distanceFunction;
         this.distanceToAverageShootVelocityFunction = distanceToAverageVelocityFunction;
@@ -37,7 +37,7 @@ public class Limelight {
     }
 
     public Rotation2d getHorizontalAngleOffset() {
-        if(System.currentTimeMillis() - lastTimeTableSet > 20){
+        if (System.currentTimeMillis() - lastTimeTableSet > 20) {
             lastTimeTableSet = System.currentTimeMillis();
             getTable();
         }
@@ -52,7 +52,7 @@ public class Limelight {
     }
 
     public double getDistance() {
-        if(System.currentTimeMillis() - lastTimeTableSet > 20){
+        if (System.currentTimeMillis() - lastTimeTableSet > 20) {
             lastTimeTableSet = System.currentTimeMillis();
             getTable();
         }
@@ -75,32 +75,32 @@ public class Limelight {
     }
 
     public boolean isValid() {
-        if(System.currentTimeMillis() - lastTimeTableSet > 20){
+        if (System.currentTimeMillis() - lastTimeTableSet > 20) {
             lastTimeTableSet = System.currentTimeMillis();
             getTable();
         }
         return table.getEntry("tv").getDouble(0.0) == 1;
     }
 
-    public boolean isTargetAcquired(){
+    public boolean isTargetAcquired() {
         return isTargetAcquired;
     }
 
-    public void setTargetAcquired(){
+    public void setTargetAcquired() {
         isTargetAcquired = true;
     }
 
-    public void resetLimelightGlobalValues(){
+    public void resetLimelightGlobalValues() {
         isTargetAcquired = false;
         savedDistance = -999;
         savedTX = 0;
     }
 
-    public LimelightShootProjection getLimelightShootProjection(){
+    public LimelightShootProjection getLimelightShootProjection() {
         return limelightShootProjection;
     }
 
-    public void updateLimelightShootProjection(){
+    public void updateLimelightShootProjection() {
 
         // Known Variables
         double straightLineDistance = getDistance();

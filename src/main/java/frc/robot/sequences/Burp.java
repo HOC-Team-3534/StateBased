@@ -1,72 +1,15 @@
 package frc.robot.sequences;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.sequences.parent.SequenceState;
-import frc.robot.subsystems.parent.BaseSubsystem;
+import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
-import frc.robot.subsystems.ShooterState;
 
-public class Burp extends BaseSequence<BurpState> {
-
-    public Burp(BurpState neutralState, BurpState startState) {
-        super(neutralState, startState);
-        // TODO Auto-generated constructor stub
-    }
-
-    @Override
-    public void process() {
-        switch (getState()) {
-            case BURP:
-                if(!Buttons.Burp.getButton()){
-                    setNextState(BurpState.RESETPUNCH);
-                }if (this.getTimeSinceStartOfState() > 500 && Robot.shooter.getShooterClosedLoopError() < 250) {
-                    System.out.println("In state");
-                    setNextState(BurpState.PUNCH);
-                }
-                break;
-            case PUNCH:
-                if (this.getTimeSinceStartOfState() > 250) {
-                    setNextState(BurpState.RESETPUNCH);
-                }
-                break;
-            case RESETPUNCH:
-                if(!Buttons.Burp.getButton() && this.getTimeSinceStartOfState() > 250){
-                    setNextState(BurpState.NEUTRAL);
-                }else if (this.getTimeSinceStartOfState() > 250) {
-                    setNextState(BurpState.BOOT);
-                }
-                break;
-            case BOOT:
-                if(this.getTimeSinceStartOfState() > 150){
-                    setNextState(BurpState.BURP);
-                }
-                break;
-            case NEUTRAL:
-                break;
-            default:
-                break;
-
-        }
-        updateState();
-
-    }
-
-    @Override
-    public boolean abort() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-}
+import static frc.robot.sequences.BurpState.*;
 
 enum BurpState implements ISequenceState {
     NEUTRAL,
@@ -85,4 +28,58 @@ enum BurpState implements ISequenceState {
     public SequenceState getState() {
         return state;
     }
+}
+
+public class Burp extends BaseSequence<BurpState> {
+
+    public Burp(BurpState neutralState, BurpState startState) {
+        super(neutralState, startState);
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void process() {
+        switch (getState()) {
+            case BURP:
+                if (!Buttons.Burp.getButton()) {
+                    setNextState(RESETPUNCH);
+                }
+                if (this.getTimeSinceStartOfState() > 500 && Robot.shooter.getShooterClosedLoopError() < 250) {
+                    System.out.println("In state");
+                    setNextState(PUNCH);
+                }
+                break;
+            case PUNCH:
+                if (this.getTimeSinceStartOfState() > 250) {
+                    setNextState(RESETPUNCH);
+                }
+                break;
+            case RESETPUNCH:
+                if (!Buttons.Burp.getButton() && this.getTimeSinceStartOfState() > 250) {
+                    setNextState(NEUTRAL);
+                } else if (this.getTimeSinceStartOfState() > 250) {
+                    setNextState(BOOT);
+                }
+                break;
+            case BOOT:
+                if (this.getTimeSinceStartOfState() > 150) {
+                    setNextState(BURP);
+                }
+                break;
+            case NEUTRAL:
+                break;
+            default:
+                break;
+
+        }
+        updateState();
+
+    }
+
+    @Override
+    public boolean abort() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

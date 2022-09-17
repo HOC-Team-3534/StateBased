@@ -14,9 +14,11 @@ public class SubsystemState<BaseS extends BaseSubsystem> {
         this.subsystem = subsystem;
     }
 
-    public String getName(){
+    public String getName() {
         return stateName;
     }
 
-    public void process(){processFunction.accept(subsystem);}
+    public void process() {
+        processFunction.accept(subsystem);
+    }
 }

@@ -1,8 +1,5 @@
 package frc.robot.autons;
 
-import java.util.Arrays;
-import java.util.List;
-
 import frc.robot.Robot;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
@@ -30,18 +27,18 @@ public enum Auton {
     NO_OP(new NoOpAuton(
             NoOpAutonState.NEUTRAL,
             NoOpAutonState.NEUTRAL, Robot.swerveDrive));
-    
+
     BaseAutonSequence<? extends IAutonState> auton;
-    
-    Auton(frc.robot.autons.parent.BaseAutonSequence<? extends IAutonState> auton){
+
+    Auton(frc.robot.autons.parent.BaseAutonSequence<? extends IAutonState> auton) {
         this.auton = auton;
     }
 
-    public void setPathPlannerFollowers(PathPlannerFollower... pathPlannerFollowers){
+    public void setPathPlannerFollowers(PathPlannerFollower... pathPlannerFollowers) {
         this.auton.setPathPlannerFollowers(pathPlannerFollowers);
     }
-    
-    public BaseAutonSequence<? extends IAutonState> getAuton(){
+
+    public BaseAutonSequence<? extends IAutonState> getAuton() {
         return auton;
     }
 }

@@ -29,7 +29,7 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
         updateSequenceStartTime();
     }
 
-    public boolean reset(){
+    public boolean reset() {
         setNextState(getNeutralState());
         return updateState();
     }
@@ -42,11 +42,11 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
         }
     }
 
-    public void start(BaseSubsystem ...subsystems) {
+    public void start(BaseSubsystem... subsystems) {
         if (isNeutral()) {
             init();
-            for(BaseSubsystem subsystem : subsystems){
-                if(!subsystem.forceRelease()){
+            for (BaseSubsystem subsystem : subsystems) {
+                if (!subsystem.forceRelease()) {
                     return;
                 }
             }
@@ -55,7 +55,7 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
         }
     }
 
-    public boolean isNeutral(){
+    public boolean isNeutral() {
         return getState() == getNeutralState();
     }
 
@@ -73,28 +73,28 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
         return this.state;
     }
 
-    protected void setNextState(SeqS state) {
-        nextState = state;
-    }
-
     SeqS getNextState() {
         return nextState;
     }
 
-    void setNeutralState(SeqS state) {
-        neutralState = state;
+    protected void setNextState(SeqS state) {
+        nextState = state;
     }
 
     public SeqS getNeutralState() {
         return neutralState;
     }
 
-    void setStartState(SeqS state) {
-        startState = state;
+    void setNeutralState(SeqS state) {
+        neutralState = state;
     }
 
     SeqS getStartState() {
         return startState;
+    }
+
+    void setStartState(SeqS state) {
+        startState = state;
     }
 
     protected boolean updateState() {
@@ -121,6 +121,8 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
         return System.currentTimeMillis() - timeAtStartOfState;
     }
 
-    public boolean getStateFirstRunThrough() { return stateFirstRunThrough; }
+    public boolean getStateFirstRunThrough() {
+        return stateFirstRunThrough;
+    }
 
 }

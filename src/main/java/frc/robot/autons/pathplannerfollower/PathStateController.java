@@ -20,35 +20,35 @@ public class PathStateController {
      * Creates the PathStateController, which can be used to calculate velocities
      * based on the current path using the {@link #getVelocitiesAtCurrentState(SwerveDriveOdometry, Rotation2d) getVelocitiesAtCurrentState} method
      *
-     * @param x_pid to correct position error in the x direction
-     * @param y_pid to correct position error in the y direction
+     * @param x_pid   to correct position error in the x direction
+     * @param y_pid   to correct position error in the y direction
      * @param rot_pid to correct heading error
      */
-    public PathStateController(PIDController x_pid, PIDController y_pid, PIDController rot_pid){
+    public PathStateController(PIDController x_pid, PIDController y_pid, PIDController rot_pid) {
         this.x_pid = x_pid;
         this.y_pid = y_pid;
         this.rot_pid = rot_pid;
     }
 
     /**
+     * @return the pathfollower with the {@link PathPlannerTrajectory} to be followed when in a pathfollowing autonomous state
+     */
+    public PathPlannerFollower getPathPlannerFollower() {
+        return this.pathPlannerFollower;
+    }
+
+    /**
      * @param pathPlannerFollower the follower with the path for the {@link PathStateController} to follow
      */
-    public void setPathPlannerFollower(PathPlannerFollower pathPlannerFollower){
+    public void setPathPlannerFollower(PathPlannerFollower pathPlannerFollower) {
         this.pathPlannerFollower = pathPlannerFollower;
         resetPIDs();
     }
 
     /**
-     * @return the pathfollower with the {@link PathPlannerTrajectory} to be followed when in a pathfollowing autonomous state
-     */
-    public PathPlannerFollower getPathPlannerFollower(){
-        return this.pathPlannerFollower;
-    }
-
-    /**
      * Reset the PID controllers
      */
-    private void resetPIDs(){
+    private void resetPIDs() {
         x_pid.reset();
         y_pid.reset();
         rot_pid.reset();
@@ -59,11 +59,11 @@ public class PathStateController {
      * the current {@link SwerveDriveOdometry} is compared to the expected position from the {@link com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState PathPlannerState}
      * and those are used to correct for the base velocities given at the current part of the path
      *
-     * @param odometry the current position and direction of the motion of the robot
+     * @param odometry           the current position and direction of the motion of the robot
      * @param currentOrientation the current holonomic heading of the robot
      * @return the x, y, and angular velocity (in meters per second and radians per second)
      */
-    public CalculatedDriveVelocities getVelocitiesAtCurrentState(SwerveDriveOdometry odometry, Rotation2d currentOrientation){
+    public CalculatedDriveVelocities getVelocitiesAtCurrentState(SwerveDriveOdometry odometry, Rotation2d currentOrientation) {
         PathPlannerTrajectory.PathPlannerState pathState = this.pathPlannerFollower.getCurrentState();
         double fwd_back_position = pathState.poseMeters.getX(); //going down field, closer or farther from driver station
         double left_right_position = pathState.poseMeters.getY(); //side to side, parallel with driver station wall
@@ -78,7 +78,6 @@ public class PathStateController {
 
         // System.out.println(String.format("Current Commands Pos and Vel [ X(pos): %.2f Y(pos): %.2f ] [ X(vel): %.2f Y(vel): %.2f ]", fwd_back_position, left_right_position, x_velocity, y_velocity));
         // System.out.println(String.format("Current Commands Orientation [ Heading(pos): %.2f Heading(vel): %.2f ]", targetHolonomicHeading.getRadians(), angular_velocity));
-
 
 
         double output_x_vel = x_velocity + x_pid.calculate(currentX, fwd_back_position);

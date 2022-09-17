@@ -13,7 +13,7 @@ public class SequenceState {
     List<SubsystemRequirement> subsystemRequirements;
     Set<BaseSubsystem> requiredSubsystems;
 
-    public SequenceState(SubsystemRequirement... requirements){
+    public SequenceState(SubsystemRequirement... requirements) {
         subsystemRequirements = Arrays.asList(requirements);
         requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }

@@ -6,15 +6,15 @@ import edu.wpi.first.wpilibj.drive.Vector2d;
 
 public abstract class Utils {
 
-    public static Translation2d getPositionAfterMotion(Translation2d translation, Vector2d vector, double time){
+    public static Translation2d getPositionAfterMotion(Translation2d translation, Vector2d vector, double time) {
         return new Translation2d(translation.getX() + vector.x * time, translation.getY() + vector.y * time);
     }
 
-    public static Vector2d getCombinedMotion(Vector2d vector1, Vector2d vector2){
+    public static Vector2d getCombinedMotion(Vector2d vector1, Vector2d vector2) {
         return new Vector2d(vector1.x + vector2.x, vector1.y + vector2.y);
     }
 
-    public static Vector2d createVector2d(double magnitude, Rotation2d direction){
+    public static Vector2d createVector2d(double magnitude, Rotation2d direction) {
         return new Vector2d(magnitude * direction.getCos(), magnitude * direction.getSin());
     }
 

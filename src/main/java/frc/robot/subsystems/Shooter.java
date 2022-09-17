@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -19,12 +18,12 @@ public class Shooter extends BaseSubsystem<ShooterState> {
 
     public static WPI_TalonFX shooter;
     public static WPI_TalonSRX shooterBoot;
-    
+
     static DoubleSolenoid pusher;
 
-    Function<Double,Double> rpmFunction;
+    Function<Double, Double> rpmFunction;
 
-    public Shooter(Function<Double,Double> rpmFunction) {
+    public Shooter(Function<Double, Double> rpmFunction) {
         super(ShooterState.NEUTRAL);
 
         shooter = new WPI_TalonFX(SHOOTER_MOTOR);
@@ -42,7 +41,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         shooterBoot.setInverted(true);
 
         pusher = Robot.mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
-        
+
         // makes the graphical number to enter text - have to do a
         // put to do a get
         SmartDashboard.putNumber("Manual Testing RPM", 2000.0);
@@ -56,22 +55,22 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         shooter.set(ControlMode.Velocity, countsPer100MS);
     }
 
-    private double getShooterRPM(){
+    private double getShooterRPM() {
         return shooter.getSelectedSensorVelocity() / Constants.RPM_TO_COUNTS_PER_100MS;
     }
 
-    public double getShooterClosedLoopError(){
+    public double getShooterClosedLoopError() {
         return shooter.getClosedLoopError();
     }
 
-    public double getCalculatedRPMError(){
+    public double getCalculatedRPMError() {
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
         return Math.abs(getShooterRPM() - rpmMultiplier * rpmFunction.apply((Robot.limelight.getDistance())));
         //return Math.abs(getShooterRPM() - rpmMultiplier * SmartDashboard.getNumber("Manual Testing RPM", 0.0));
     }
 
     protected void upToSpeed() {
-        if(getStateFirstRunThrough()){
+        if (getStateFirstRunThrough()) {
             shooter.selectProfileSlot(0, 0);
         }
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
@@ -80,14 +79,14 @@ public class Shooter extends BaseSubsystem<ShooterState> {
     }
 
     protected void upToSpeed(double rpm) {
-        if(getStateFirstRunThrough()){
+        if (getStateFirstRunThrough()) {
             shooter.selectProfileSlot(0, 0);
         }
         shoot(rpm);
     }
 
     protected void burp() {
-        if(getStateFirstRunThrough()){
+        if (getStateFirstRunThrough()) {
             shooter.selectProfileSlot(1, 0);
         }
         shoot(1300);

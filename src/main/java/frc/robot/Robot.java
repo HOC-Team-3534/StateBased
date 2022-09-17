@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import frc.robot.autons.*;
+import frc.robot.autons.Auton;
 import frc.robot.autons.parent.BaseAutonSequence;
 import frc.robot.autons.parent.IAutonState;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
@@ -35,264 +34,260 @@ import static frc.robot.Constants.*;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static SwerveDrive swerveDrive;
-	public static Shooter shooter;
-	public static Intake intake;
-	public static Climber climber;
-	public static SequenceProcessor sequenceProcessor;
-	public static RobotContainer robotContainer;
+    public static SwerveDrive swerveDrive;
+    public static Shooter shooter;
+    public static Intake intake;
+    public static Climber climber;
+    public static SequenceProcessor sequenceProcessor;
+    public static RobotContainer robotContainer;
+
+    public static WPI_Pigeon2 pigeon;
+    public static Limelight limelight;
+    public static PneumaticsControlModule mainPCM;
+
+    public static boolean isAutonomous = false;
+    public static double designatedLoopPeriod = 20;
+    public static BaseAutonSequence<? extends IAutonState> chosenAuton;
+    public static PathPlannerFollower corner1OneBall1;
+    public static PathPlannerFollower corner1TwoBall1;
+    public static PathPlannerFollower corner2OneBall1;
+    public static PathPlannerFollower corner3OneBall1;
+    public static PathPlannerFollower corner4FiveBallPre;
+    public static PathPlannerFollower corner4FiveBall1;
+    public static PathPlannerFollower corner4FiveBall2;
+    public static PathPlannerFollower corner4FiveBall3;
+    private static long autonStartTime;
+    private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
+    private int loopCnt = 0;
+    private int loopPeriod = 0;
+    private int logCounter = 0;
 
-	public static WPI_Pigeon2 pigeon;
-	public static Limelight limelight;
-	public static PneumaticsControlModule mainPCM;
-
-	public static boolean isAutonomous = false;
+    @Override
+    public void robotInit() {
 
-	private int loopCnt = 0;
-	private int loopPeriod = 0;
-	private int logCounter = 0;
+        pigeon = new WPI_Pigeon2(PIGEON_2);
+        if (ROBOTTYPE == RobotType.PBOT) {
+            limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3.0, vel -> 3.0);
+        } else {
+            limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225 / 52);
+        }
+        mainPCM = new PneumaticsControlModule(MAIN_PCM);
 
-	public static double designatedLoopPeriod = 20;
-	private static long autonStartTime;
+        pigeon.reset();
 
-	public static BaseAutonSequence<? extends IAutonState> chosenAuton;
-	private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
+        // PortForwarder.add(5800, "limelight.local", 5800);
+        // PortForwarder.add(5801, "limelight.local", 5801);
+        // PortForwarder.add(5805, "limelight.local", 5805);
 
-	public static PathPlannerFollower corner1OneBall1;
-	public static PathPlannerFollower corner1TwoBall1;
-	public static PathPlannerFollower corner2OneBall1;
-	public static PathPlannerFollower corner3OneBall1;
-	public static PathPlannerFollower corner4FiveBallPre;
-	public static PathPlannerFollower corner4FiveBall1;
-	public static PathPlannerFollower corner4FiveBall2;
-	public static PathPlannerFollower corner4FiveBall3;
+        robotContainer = new RobotContainer();
 
-	@Override
-	public void robotInit() {
+        swerveDrive = new SwerveDrive();
 
-		pigeon = new WPI_Pigeon2(PIGEON_2);
-		if(ROBOTTYPE == RobotType.PBOT) {
-			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3.0, vel -> 3.0);
-		}else{
-			limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225/52);
-		}
-		mainPCM = new PneumaticsControlModule(MAIN_PCM);
+        if (Constants.ROBOTTYPE == Constants.RobotType.PBOT) {
+            shooter = new Shooter(d -> 1018.0 + 1984.0 * Math.log(d));
+        } else {
+            shooter = new Shooter(d -> 1781.0 + 1003.6 * Math.log(d));
+        }
+        intake = new Intake();
 
-		pigeon.reset();
+        climber = new Climber();
 
-		// PortForwarder.add(5800, "limelight.local", 5800);
-		// PortForwarder.add(5801, "limelight.local", 5801);
-		// PortForwarder.add(5805, "limelight.local", 5805);
+        sequenceProcessor = new SequenceProcessor();
 
-		robotContainer = new RobotContainer();
+        corner1OneBall1 = new PathPlannerFollower("Corner 1 1 Ball 1");
+        corner1TwoBall1 = new PathPlannerFollower("Corner 1 2 Ball 1");
+        corner2OneBall1 = new PathPlannerFollower("Corner 2 1 Ball 1");
+        corner3OneBall1 = new PathPlannerFollower("Corner 3 1 Ball 1");
+        corner4FiveBallPre = new PathPlannerFollower("Corner 4 5 Ball Pre");
+        corner4FiveBall1 = new PathPlannerFollower("Corner 4 5 Ball 1");
+        corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2");
+        corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3");
 
-		swerveDrive = new SwerveDrive();
+        Auton.CORNER1_1BALL.setPathPlannerFollowers(corner1OneBall1);
+        Auton.CORNER1_2BALL.setPathPlannerFollowers(corner1TwoBall1);
+        Auton.CORNER2_1BALL.setPathPlannerFollowers(corner2OneBall1);
+        Auton.CORNER3_1BALL.setPathPlannerFollowers(corner3OneBall1);
+        Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1);
+        Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
 
-		if(Constants.ROBOTTYPE == Constants.RobotType.PBOT) {
-			shooter = new Shooter(d -> 1018.0 + 1984.0 * Math.log(d));
-		}else{
-			shooter = new Shooter(d -> 1781.0 + 1003.6 * Math.log(d));
-		}
-		intake = new Intake();
+        SmartDashboard.putNumber("Auton Time Delay(ms)", 0.0);
 
-		climber = new Climber();
+        sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
+        sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);
 
-		sequenceProcessor = new SequenceProcessor();
+        sendableChooser.addOption("CORNER 3: 1 BALL", Auton.CORNER3_1BALL);
 
-		corner1OneBall1 = new PathPlannerFollower("Corner 1 1 Ball 1");
-		corner1TwoBall1 = new PathPlannerFollower("Corner 1 2 Ball 1");
-		corner2OneBall1 = new PathPlannerFollower("Corner 2 1 Ball 1");
-		corner3OneBall1 = new PathPlannerFollower("Corner 3 1 Ball 1");
-		corner4FiveBallPre = new PathPlannerFollower("Corner 4 5 Ball Pre");
-		corner4FiveBall1 = new PathPlannerFollower("Corner 4 5 Ball 1");
-		corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2");
-		corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3");
+        sendableChooser.addOption("CORNER 2: 1 BALL", Auton.CORNER2_1BALL);
 
-		Auton.CORNER1_1BALL.setPathPlannerFollowers(corner1OneBall1);
-		Auton.CORNER1_2BALL.setPathPlannerFollowers(corner1TwoBall1);
-		Auton.CORNER2_1BALL.setPathPlannerFollowers(corner2OneBall1);
-		Auton.CORNER3_1BALL.setPathPlannerFollowers(corner3OneBall1);
-		Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1);
-		Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
+        sendableChooser.addOption("CORNER 1: 2 BALL", Auton.CORNER1_2BALL);
+        sendableChooser.addOption("CORNER 1: 1 BALL", Auton.CORNER1_1BALL);
 
-		SmartDashboard.putNumber("Auton Time Delay(ms)", 0.0);
+        sendableChooser.addOption("NO AUTON (MUST BE STRAIGHT ALIGNED)", Auton.NO_OP);
 
-		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
-		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);
+        SmartDashboard.putData(sendableChooser);
 
-		sendableChooser.addOption("CORNER 3: 1 BALL", Auton.CORNER3_1BALL);
+    }
 
-		sendableChooser.addOption("CORNER 2: 1 BALL", Auton.CORNER2_1BALL);
 
-		sendableChooser.addOption("CORNER 1: 2 BALL", Auton.CORNER1_2BALL);
-		sendableChooser.addOption("CORNER 1: 1 BALL", Auton.CORNER1_1BALL);
+    @Override
+    public void robotPeriodic() {
+    }
 
-		sendableChooser.addOption("NO AUTON (MUST BE STRAIGHT ALIGNED)", Auton.NO_OP);
+    @Override
+    public void disabledInit() {
+        swerveDrive.forceRelease();
+        shooter.forceRelease();
+        intake.forceRelease();
+        climber.forceRelease();
+    }
 
-		SmartDashboard.putData(sendableChooser);
+    @Override
+    public void disabledPeriodic() {
 
-	}
-	
+        long prevLoopTime = 0;
 
-	@Override
-	public void robotPeriodic() {
-	}
+        while (this.isDisabled()) {
 
-	@Override
-	public void disabledInit() {
-		swerveDrive.forceRelease();
-		shooter.forceRelease();
-		intake.forceRelease();
-		climber.forceRelease();
-	}
+            log();
 
-	@Override
-	public void disabledPeriodic() {
+            long currentTime = System.currentTimeMillis();
 
-		long prevLoopTime = 0;
+            if (currentTime - prevLoopTime >= designatedLoopPeriod) {
 
-		while(this.isDisabled()){
+                loopPeriod = (int) (currentTime - prevLoopTime);
+                prevLoopTime = currentTime;
+                loopCnt++;
 
-			log();
+                swerveDrive.neutral();
+            }
 
-			long currentTime = System.currentTimeMillis();
+            Timer.delay(0.001);
 
-			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+        }
+    }
 
-				loopPeriod = (int) (currentTime - prevLoopTime);
-				prevLoopTime = currentTime;
-				loopCnt++;
+    @Override
+    public void autonomousInit() {
+        chosenAuton = sendableChooser.getSelected().getAuton();
+        chosenAuton.start();
+        autonStartTime = System.currentTimeMillis();
+    }
 
-				swerveDrive.neutral();
-			}
+    @Override
+    public void autonomousPeriodic() {
+        isAutonomous = this.isAutonomous();
 
-			Timer.delay(0.001);
+        long prevLoopTime = 0;
 
-		}
-	}
+        while (this.isAutonomous() && this.isEnabled()) {
 
-	@Override
-	public void autonomousInit() {
-		chosenAuton = sendableChooser.getSelected().getAuton();
-		chosenAuton.start();
-		autonStartTime = System.currentTimeMillis();
-	}
+            log();
 
-	@Override
-	public void autonomousPeriodic() {
-		isAutonomous = this.isAutonomous();
+            long currentTime = System.currentTimeMillis();
 
-		long prevLoopTime = 0;
+            if (currentTime - prevLoopTime >= designatedLoopPeriod) {
 
-		while (this.isAutonomous() && this.isEnabled()) {
+                loopPeriod = (int) (currentTime - prevLoopTime);
+                prevLoopTime = currentTime;
+                loopCnt++;
 
-			log();
+                if (currentTime - autonStartTime > SmartDashboard.getNumber("Auton Time Delay(ms)", 0.0)) {
+                    chosenAuton.process();
+                }
+                // run processes
 
-			long currentTime = System.currentTimeMillis();
+                /** Run subsystem process methods here */
+                swerveDrive.process();
+                shooter.process();
+                intake.process();
+                //climber.process();
+            }
 
-			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+            Timer.delay(0.001);
+        }
+    }
 
-				loopPeriod = (int) (currentTime - prevLoopTime);
-				prevLoopTime = currentTime;
-				loopCnt++;
+    @Override
+    public void teleopInit() {
+        swerveDrive.forceRelease();
+        shooter.forceRelease();
+        intake.forceRelease();
+        climber.forceRelease();
+    }
 
-				if(currentTime - autonStartTime > SmartDashboard.getNumber("Auton Time Delay(ms)", 0.0)) {
-					chosenAuton.process();
-				}
-				// run processes
+    @Override
+    public void teleopPeriodic() {
 
-				/** Run subsystem process methods here */
-				swerveDrive.process();
-				shooter.process();
-				intake.process();
-				//climber.process();
-			}
+        isAutonomous = this.isAutonomous();
 
-			Timer.delay(0.001);
-		}
-	}
+        long prevLoopTime = 0;
 
-	@Override
-	public void teleopInit() {
-		swerveDrive.forceRelease();
-		shooter.forceRelease();
-		intake.forceRelease();
-		climber.forceRelease();
-	}
+        while (this.isTeleop() && this.isEnabled()) {
 
-	@Override
-	public void teleopPeriodic() {
+            log();
 
-		isAutonomous = this.isAutonomous();
+            long currentTime = System.currentTimeMillis();
 
-		long prevLoopTime = 0;
+            if (currentTime - prevLoopTime >= designatedLoopPeriod) {
 
-		while (this.isTeleop() && this.isEnabled()) {
+                loopPeriod = (int) (currentTime - prevLoopTime);
+                prevLoopTime = currentTime;
+                loopCnt++;
 
-			log();
+                sequenceProcessor.process();
+                // run processes
 
-			long currentTime = System.currentTimeMillis();
+                /** Run subsystem process methods here */
+                swerveDrive.process();
+                shooter.process();
+                intake.process();
+                climber.process();
+            }
 
-			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+            Timer.delay(0.001);
+        }
+    }
 
-				loopPeriod = (int) (currentTime - prevLoopTime);
-				prevLoopTime = currentTime;
-				loopCnt++;
+    @Override
+    public void testInit() {
+    }
 
-				sequenceProcessor.process();
-				// run processes
+    @Override
+    public void testPeriodic() {
+    }
 
-				/** Run subsystem process methods here */
-				swerveDrive.process();
-				shooter.process();
-				intake.process();
-				climber.process();
-			}
+    public void log() {
 
-			Timer.delay(0.001);
-		}
-	}
+        logCounter++;
 
-	@Override
-	public void testInit() {
-	}
+        if (logCounter > 5) {
 
-	@Override
-	public void testPeriodic() {
-	}
+            SmartDashboard.putBoolean("L1 switch 1", Climber.l1Switch.get());
+            SmartDashboard.putBoolean("L1 switch 2", Climber.h2Switch.get());
+            SmartDashboard.putBoolean("L3 switch 1", Climber.l3Switch.get());
+            SmartDashboard.putBoolean("L3 switch 2", Climber.h4Switch.get());
+            SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
 
-	public void log() {
+            SmartDashboard.putNumber("tx (inverted)", limelight.getHorizontalAngleOffset().getDegrees());
+            SmartDashboard.putNumber("ty", limelight.getPixelAngle());
+            SmartDashboard.putNumber("distance", limelight.getDistance());
 
-		logCounter++;
+            //SmartDashboard.putNumber("Moving Target Angle Offset", RobotMap.limelight.getLimelightShootProjection().getOffset().getDegrees());
+            //SmartDashboard.putNumber("Moving Target Distance", RobotMap.limelight.getLimelightShootProjection().getDistance());
 
-		if (logCounter > 5) {
+            SmartDashboard.putNumber("Odometry X", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getX());
+            SmartDashboard.putNumber("Odometry Y", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getY());
 
-			SmartDashboard.putBoolean("L1 switch 1", climber.l1Switch.get());
-			SmartDashboard.putBoolean("L1 switch 2", climber.h2Switch.get());
-			SmartDashboard.putBoolean("L3 switch 1", climber.l3Switch.get());
-			SmartDashboard.putBoolean("L3 switch 2", climber.h4Switch.get());
-			SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
+            Vector2d targetVectorVelocity = swerveDrive.getTargetOrientedVelocity();
 
-			SmartDashboard.putNumber("tx (inverted)", limelight.getHorizontalAngleOffset().getDegrees());
-			SmartDashboard.putNumber("ty", limelight.getPixelAngle());
-			SmartDashboard.putNumber("distance", limelight.getDistance());
+            SmartDashboard.putString("Target Velocity Vector", String.format("X: %.2f, Y: %.2f", targetVectorVelocity.x, targetVectorVelocity.y));
 
-			//SmartDashboard.putNumber("Moving Target Angle Offset", RobotMap.limelight.getLimelightShootProjection().getOffset().getDegrees());
-			//SmartDashboard.putNumber("Moving Target Distance", RobotMap.limelight.getLimelightShootProjection().getDistance());
+            SmartDashboard.putBoolean("Target Acquired", limelight.isTargetAcquired());
 
-			SmartDashboard.putNumber("Odometry X", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getX());
-			SmartDashboard.putNumber("Odometry Y", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getY());
+            SmartDashboard.putNumber("Target Angle Error", swerveDrive.getTargetShootRotationAngleError().getDegrees());
 
-			Vector2d targetVectorVelocity = swerveDrive.getTargetOrientedVelocity();
+            logCounter = 0;
+        }
 
-			SmartDashboard.putString("Target Velocity Vector", String.format("X: %.2f, Y: %.2f", targetVectorVelocity.x, targetVectorVelocity.y));
-
-			SmartDashboard.putBoolean("Target Acquired", limelight.isTargetAcquired());
-
-			SmartDashboard.putNumber("Target Angle Error", swerveDrive.getTargetShootRotationAngleError().getDegrees());
-
-			logCounter = 0;
-		}
-
-	}
+    }
 }

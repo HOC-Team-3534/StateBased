@@ -12,7 +12,7 @@ import frc.robot.Robot;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.autons.pathplannerfollower.PathStateController;
 
-public abstract class BaseDriveSubsystem<SsS extends ISubsystemState> extends BaseSubsystem<SsS> implements IDriveSubsystem{
+public abstract class BaseDriveSubsystem<SsS extends ISubsystemState> extends BaseSubsystem<SsS> implements IDriveSubsystem {
 
 
     final SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
@@ -35,7 +35,7 @@ public abstract class BaseDriveSubsystem<SsS extends ISubsystemState> extends Ba
     SwerveDriveOdometry swerveDriveOdometry = new SwerveDriveOdometry(this.swerveDriveKinematics,
             getGyroHeading(), new Pose2d(0.0, 0.0, getGyroHeading()));
 
-    public BaseDriveSubsystem(SwerveModule frontLeftModule, SwerveModule frontRightModule, SwerveModule backLeftModule, SwerveModule backRightModule, SsS neutralState){
+    public BaseDriveSubsystem(SwerveModule frontLeftModule, SwerveModule frontRightModule, SwerveModule backLeftModule, SwerveModule backRightModule, SsS neutralState) {
         super(neutralState);
         this.frontLeftModule = frontLeftModule;
         this.frontRightModule = frontRightModule;
@@ -105,12 +105,12 @@ public abstract class BaseDriveSubsystem<SsS extends ISubsystemState> extends Ba
         return this.gyroOffset;
     }
 
-    public void setGyroOffset(Rotation2d offset){
+    public void setGyroOffset(Rotation2d offset) {
         this.gyroOffset = offset;
     }
 
 
-    public double getMetersFromLocation(Translation2d location){
+    public double getMetersFromLocation(Translation2d location) {
         return getSwerveDriveOdometry().getPoseMeters().getTranslation().getDistance(location);
     }
 }

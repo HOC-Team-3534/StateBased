@@ -18,38 +18,40 @@ public class PathPlannerFollower {
     private PathPlannerTrajectory path;
     private long START_TIME;
 
-    public PathPlannerFollower(String pathName){
+    public PathPlannerFollower(String pathName) {
         PATH_FILE_NAME = pathName;
         long load_start = System.currentTimeMillis();
         loadPath(PATH_FILE_NAME);
         System.out.println(String.format("Path: [%s] took %d milliseconds.", pathName, System.currentTimeMillis() - load_start));
     }
 
-    private void loadPath(String pathName){
+    private void loadPath(String pathName) {
         this.path = PathPlanner.loadPath(pathName, Constants.MAX_VELOCITY_AUTONOMOUS, Constants.MAX_ACCELERATION);
     }
 
-    public PathPlannerTrajectory.PathPlannerState getState(double seconds){
+    public PathPlannerTrajectory.PathPlannerState getState(double seconds) {
         return (PathPlannerTrajectory.PathPlannerState) path.sample(seconds);
     }
 
-    public PathPlannerTrajectory.PathPlannerState getCurrentState(){
-        double timeSinceStart = (double)(System.currentTimeMillis() - START_TIME) / 1000.0;
+    public PathPlannerTrajectory.PathPlannerState getCurrentState() {
+        double timeSinceStart = (double) (System.currentTimeMillis() - START_TIME) / 1000.0;
         return (PathPlannerTrajectory.PathPlannerState) path.sample(timeSinceStart);
     }
 
-    public Translation2d getInitialPosition(){
+    public Translation2d getInitialPosition() {
         return path.getInitialState().poseMeters.getTranslation();
     }
 
-    public Rotation2d getInitialHolonomic() { return path.getInitialState().holonomicRotation;}
+    public Rotation2d getInitialHolonomic() {
+        return path.getInitialState().holonomicRotation;
+    }
 
-    public double getRemainingTimeSeconds(){
+    public double getRemainingTimeSeconds() {
         double timeSinceStart = (double) (System.currentTimeMillis() - START_TIME) / 1000.0;
         return path.getTotalTimeSeconds() - timeSinceStart;
     }
 
-    public void resetStart(){
+    public void resetStart() {
         START_TIME = System.currentTimeMillis();
     }
 

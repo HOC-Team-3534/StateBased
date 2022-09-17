@@ -9,25 +9,23 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import static frc.robot.Constants.*;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
+import static frc.robot.Constants.*;
+
 public class Climber extends BaseSubsystem<ClimberState> {
-
-    static WPI_TalonFX climbMotor;
-
-    static PneumaticsControlModule climbPCM;
-
-    static DoubleSolenoid l1Claw;
-    static DoubleSolenoid h2Claw;
-    static DoubleSolenoid l3Claw;
-    static DoubleSolenoid h4Claw;
 
     public static DigitalInput l1Switch;
     public static DigitalInput h2Switch;
     public static DigitalInput l3Switch;
     public static DigitalInput h4Switch;
+    static WPI_TalonFX climbMotor;
+    static PneumaticsControlModule climbPCM;
+    static DoubleSolenoid l1Claw;
+    static DoubleSolenoid h2Claw;
+    static DoubleSolenoid l3Claw;
+    static DoubleSolenoid h4Claw;
 
     public Climber() {
         super(ClimberState.NEUTRAL);

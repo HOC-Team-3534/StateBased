@@ -1,57 +1,57 @@
 package frc.robot.extras;
 
+import edu.wpi.first.wpilibj.XboxController;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.wpilibj.XboxController;
-
 public class XboxPlusPOV extends XboxController {
 
-	List<Integer> povRecords = new ArrayList<>();
-	int[] clear = {};
+    List<Integer> povRecords = new ArrayList<>();
+    int[] clear = {};
 
-	public XboxPlusPOV(int port) {
+    public XboxPlusPOV(int port) {
 
-		super(port);
+        super(port);
 
-	}
+    }
 
-	public void process(int povReading) {
+    public void process(int povReading) {
 
-		povRecords.add(povReading);
+        povRecords.add(povReading);
 
-	}
+    }
 
-	public boolean getPOVPressed(POV direction) {
+    public boolean getPOVPressed(POV direction) {
 
-		boolean found = false;
+        boolean found = false;
 
-		for (int i = 0; i < povRecords.size() && !found; i++) {
+        for (int i = 0; i < povRecords.size() && !found; i++) {
 
-			if (povRecords.get(i) == direction.value && povRecords.get(i - 1) != direction.value) {
+            if (povRecords.get(i) == direction.value && povRecords.get(i - 1) != direction.value) {
 
-				found = true;
-				povRecords.clear();
+                found = true;
+                povRecords.clear();
 
-			} else {
+            } else {
 
-			}
-		}
+            }
+        }
 
-		return found;
+        return found;
 
-	}
+    }
 
-	public enum POV {
+    public enum POV {
 
-		North(0), East(90), South(180), West(270), NorthEast(45), SouthEast(135), SouthWest(225), NorthWest(315);
+        North(0), East(90), South(180), West(270), NorthEast(45), SouthEast(135), SouthWest(225), NorthWest(315);
 
-		int value;
+        int value;
 
-		POV(int value) {
+        POV(int value) {
 
-			this.value = value;
+            this.value = value;
 
-		}
-	}
+        }
+    }
 }

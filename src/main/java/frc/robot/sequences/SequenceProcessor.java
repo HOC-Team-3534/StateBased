@@ -3,8 +3,9 @@ package frc.robot.sequences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
+import frc.robot.subsystems.Climber;
 
-public class SequenceProcessor{
+public class SequenceProcessor {
 
     /**
      * Create a new variable of each of the functions
@@ -30,7 +31,7 @@ public class SequenceProcessor{
          */
 
         drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
-        
+
         shoot = new Shoot(ShootState.NEUTRAL, ShootState.UPTOSPEED);
         burp = new Burp(BurpState.NEUTRAL, BurpState.BURP);
         intake = new IntakeSeq(IntakeSeqState.NEUTRAL, IntakeSeqState.EXTEND);
@@ -46,26 +47,26 @@ public class SequenceProcessor{
 
     public void process() {
 
-        if(shoot.isNeutral()){
+        if (shoot.isNeutral()) {
             Robot.limelight.resetLimelightGlobalValues();
         }
-        
+
         if (climb.isNeutral() && shoot.isNeutral()) {
             drive.start(Robot.swerveDrive);
         }
-        if((Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton()) && !Buttons.MoveClimbArmManually.getButton()) {
+        if ((Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton()) && !Buttons.MoveClimbArmManually.getButton()) {
             shoot.start(Robot.swerveDrive);
         }
-        if(Buttons.Burp.getButton()){
+        if (Buttons.Burp.getButton()) {
             burp.start();
         }
-        if(Buttons.Intake.getButton()) {
+        if (Buttons.Intake.getButton()) {
             intake.start();
         }
-        if(Buttons.Extake.getButton()){
+        if (Buttons.Extake.getButton()) {
             extake.start();
         }
-        if(Buttons.RollIn.getButton() && !Buttons.MoveClimbArmManually.getButton()){
+        if (Buttons.RollIn.getButton() && !Buttons.MoveClimbArmManually.getButton()) {
             rollIn.start();
         }
         if (Buttons.ClimbPrep.getButton()) { // TODO: in last 35 seconds of match logic
@@ -73,16 +74,16 @@ public class SequenceProcessor{
         }
         if (Buttons.Climb.getButton()
                 && Robot.climber.getSequenceRequiring().getState().equals(ClimbPrepState.PREPPEDFORCLIMB)
-                && (!Robot.climber.l1Switch.get() || !Robot.climber.h2Switch.get())) {
+                && (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
             climb.start(Robot.climber, Robot.swerveDrive);
         }
-        if(Buttons.ClimbPrepReset.getButton() && !climbPrep.isNeutral()){
+        if (Buttons.ClimbPrepReset.getButton() && !climbPrep.isNeutral()) {
             climbPrepReset.start(Robot.climber);
         }
-        if(Buttons.GyroReset.getButton()){
+        if (Buttons.GyroReset.getButton()) {
             gyroReset.start();
         }
-        if(Buttons.MoveClimbArmManually.getButton()){
+        if (Buttons.MoveClimbArmManually.getButton()) {
             climbReset.start();
         }
 

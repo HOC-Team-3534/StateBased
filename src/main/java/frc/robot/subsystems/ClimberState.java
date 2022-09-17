@@ -29,7 +29,7 @@ public enum ClimberState implements ISubsystemState<Climber> {
 
     SubsystemState<Climber> state;
 
-    ClimberState(Consumer<Climber> processFunction){
+    ClimberState(Consumer<Climber> processFunction) {
         this.state = new SubsystemState<>(this.name(), processFunction, Robot.climber);
     }
 

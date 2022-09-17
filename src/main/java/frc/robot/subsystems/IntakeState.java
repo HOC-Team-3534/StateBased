@@ -12,11 +12,12 @@ public enum IntakeState implements ISubsystemState<Intake> {
     RETRACT((s) -> s.retract()),
     EXTAKE((s) -> s.extake()),
     ROLLIN((s) -> s.rollIn()),
-    HOLDPOSITION((s) -> {});
+    HOLDPOSITION((s) -> {
+    });
 
     SubsystemState<Intake> state;
 
-    IntakeState(Consumer<Intake> processFunction){
+    IntakeState(Consumer<Intake> processFunction) {
         this.state = new SubsystemState<>(this.name(), processFunction, Robot.intake);
     }
 

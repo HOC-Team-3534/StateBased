@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.sequences.parent.SequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 
@@ -49,22 +50,15 @@ enum GyroResetState implements ISequenceState {
     NEUTRAL,
     RESET;
 
-    Set<BaseSubsystem> requiredSubsystems;
-    List<SubsystemRequirement> subsystemRequirements;
+    SequenceState state;
 
     GyroResetState(SubsystemRequirement... requirements) {
-        subsystemRequirements = Arrays.asList(requirements);
-        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
+        state = new SequenceState(requirements);
     }
 
     @Override
-    public Set<BaseSubsystem> getRequiredSubsystems() {
-        return requiredSubsystems;
-    }
-
-    @Override
-    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
-        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
+    public SequenceState getState() {
+        return state;
     }
 
 }

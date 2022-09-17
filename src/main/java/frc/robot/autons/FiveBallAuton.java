@@ -152,23 +152,16 @@ enum FiveBallAutonState implements IAutonState {
     RESETPUNCH3( -999, new ShooterReq(ShooterState.RESETPUNCH));
 
     int pathIndex;
-    Set<BaseSubsystem> requiredSubsystems;
-    List<SubsystemRequirement> subsystemRequirements;
+    SequenceState state;
 
     FiveBallAutonState(int pathIndex, SubsystemRequirement... requirements) {
         this.pathIndex = pathIndex;
-        subsystemRequirements = Arrays.asList(requirements);
-        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
+        state = new SequenceState(requirements);
     }
 
     @Override
-    public Set<BaseSubsystem> getRequiredSubsystems() {
-        return requiredSubsystems;
-    }
-
-    @Override
-    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
-        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
+    public SequenceState getState() {
+        return state;
     }
 
     @Override

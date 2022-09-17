@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.sequences.parent.SequenceState;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 import frc.robot.subsystems.SwerveDriveState;
 import frc.robot.subsystems.parent.BaseSubsystem;
@@ -45,22 +46,15 @@ enum DriveState implements ISequenceState {
     NEUTRAL,
     DRIVE(new SwerveDriveReq(SwerveDriveState.DRIVE));
 
-    Set<BaseSubsystem> requiredSubsystems;
-    List<SubsystemRequirement> subsystemRequirements;
+    SequenceState state;
 
     DriveState(SubsystemRequirement... requirements) {
-        subsystemRequirements = Arrays.asList(requirements);
-        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
+        state = new SequenceState(requirements);
     }
 
     @Override
-    public Set<BaseSubsystem> getRequiredSubsystems() {
-        return requiredSubsystems;
-    }
-
-    @Override
-    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
-        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
+    public SequenceState getState() {
+        return state;
     }
 
 }

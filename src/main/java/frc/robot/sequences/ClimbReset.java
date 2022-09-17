@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.sequences.parent.SequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ClimberReq;
@@ -51,22 +52,15 @@ enum ClimbResetState implements ISequenceState {
     NEUTRAL,
     MOVEARMMANUALLY(new ClimberReq(ClimberState.MOVEARMMANUALLY));
 
-    Set<BaseSubsystem> requiredSubsystems;
-    List<SubsystemRequirement> subsystemRequirements;
+    SequenceState state;
 
     ClimbResetState(SubsystemRequirement... requirements) {
-        subsystemRequirements = Arrays.asList(requirements);
-        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
+        state = new SequenceState(requirements);
     }
 
     @Override
-    public Set<BaseSubsystem> getRequiredSubsystems() {
-        return requiredSubsystems;
-    }
-
-    @Override
-    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
-        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
+    public SequenceState getState() {
+        return state;
     }
 
 }

@@ -62,7 +62,7 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
     private boolean isStillRequired() {
         if (!required) {
             return false;
-        } else if (!sequenceRequiring.getState().getRequiredSubsystems().contains(this)) {
+        } else if (!sequenceRequiring.getState().getState().getRequiredSubsystems().contains(this)) {
             release();
             return false;
         } else {

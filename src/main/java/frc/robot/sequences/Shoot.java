@@ -9,6 +9,7 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.sequences.parent.SequenceState;
 import frc.robot.subsystems.parent.BaseSubsystem;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
@@ -88,22 +89,15 @@ enum ShootState implements ISequenceState {
     RESETPUNCH(new ShooterReq(ShooterState.RESETPUNCH), new SwerveDriveReq(SwerveDriveState.AIM)),
     BOOT(new ShooterReq(ShooterState.BOOT), new SwerveDriveReq(SwerveDriveState.AIM));
 
-    Set<BaseSubsystem> requiredSubsystems;
-    List<SubsystemRequirement> subsystemRequirements;
+    SequenceState state;
 
     ShootState(SubsystemRequirement... requirements) {
-        subsystemRequirements = Arrays.asList(requirements);
-        requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
+        state = new SequenceState(requirements);
     }
 
     @Override
-    public Set<BaseSubsystem> getRequiredSubsystems() {
-        return requiredSubsystems;
-    }
-
-    @Override
-    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
-        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
+    public SequenceState getState() {
+        return state;
     }
 
 }

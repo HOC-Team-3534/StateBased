@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
 
 		pigeon = new WPI_Pigeon2(PIGEON_2);
 		if(ROBOTTYPE == RobotType.PBOT) {
-			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3, vel -> 3);
+			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3.0, vel -> 3.0);
 		}else{
 			limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225/52);
 		}

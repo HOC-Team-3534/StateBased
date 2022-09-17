@@ -11,9 +11,7 @@ import javax.management.InstanceNotFoundException;
 
 public interface ISequenceState {
 
-    Set<BaseSubsystem> getRequiredSubsystems();
-
-    boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence);
+    SequenceState getState();
 
     static boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence, List<SubsystemRequirement> requirements) {
         for (SubsystemRequirement subsystemRequirement : requirements) {

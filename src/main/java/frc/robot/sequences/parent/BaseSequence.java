@@ -60,7 +60,7 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
     }
 
     boolean setState(SeqS state) {
-        if (state.requireSubsystems(this)) {
+        if (state.getState().requireSubsystems(this)) {
             this.state = state;
             updateStateStartTime();
             stateFirstRunThrough = true;

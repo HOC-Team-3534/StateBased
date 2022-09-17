@@ -52,7 +52,7 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
         checkStateChanged();
         checkToTurnOff();
 
-        getCurrentSubsystemState().process();
+        getCurrentSubsystemState().getState().process();
     }
 
     private void setSequenceRequiring(BaseSequence<? extends ISequenceState> sequence) {
@@ -103,6 +103,7 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
     }
 
     public void setWithADelayToOff(DoubleSolenoid ds, DoubleSolenoid.Value value, long millisUntilOff) {
+        //TODO Determine a fix to turn solednoids off within a given amount of time
         //solenoidSetTimes.put(ds, Arrays.asList(System.currentTimeMillis(), millisUntilOff));
         ds.set(value);
     }

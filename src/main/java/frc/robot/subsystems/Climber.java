@@ -65,7 +65,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         return climbMotor.getSelectedSensorPosition() * FALCON_TICKS_TO_ARM_DEGREES;
     }
 
-    public void setClimbArmDegree(double degree) {
+    private void setClimbArmDegree(double degree) {
         climbMotor.set(ControlMode.MotionMagic, degree * ARM_DEGREES_TO_FALCON_TICKS);
     }
 
@@ -101,7 +101,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         climbMotor.configMotionAcceleration(MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW, 20);
     }
 
-    public void prepClaw() {
+    protected void prepClaw() {
 
         if (this.getStateFirstRunThrough()) {
             setL1(Value.kForward);
@@ -111,7 +111,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void swingArm() {
+    protected void swingArm() {
 
         if (this.getStateFirstRunThrough()) {
             setClimbArmDegree(MIDBAR_GRAB_ANGLE_COMMAND);
@@ -120,14 +120,14 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void gripMidBar() {
+    protected void gripMidBar() {
 
         if (this.getStateFirstRunThrough()) {
             setH2(Value.kForward);
         }
     }
 
-    public void swingMidHigh1() {
+    protected void swingMidHigh1() {
 
         if (this.getStateFirstRunThrough()) {
             setL3(Value.kForward);
@@ -137,7 +137,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void swingMidHigh2() {
+    protected void swingMidHigh2() {
 
         if (this.getStateFirstRunThrough()) {
             setL3(Value.kForward);
@@ -147,7 +147,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void gripHighBar() {
+    protected void gripHighBar() {
 
         if (this.getStateFirstRunThrough()) {
             setH4(Value.kForward);
@@ -156,7 +156,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void retryHighBar() {
+    protected void retryHighBar() {
 
         if (this.getStateFirstRunThrough()) {
             setH4(Value.kReverse);
@@ -165,7 +165,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void recenterMidHighBar() {
+    protected void recenterMidHighBar() {
 
         if (this.getStateFirstRunThrough()) {
             setClimbArmDegree(MIDHIGHBAR_RECENTER_ANGLE_COMMAND);
@@ -174,7 +174,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void releaseMidBar() {
+    protected void releaseMidBar() {
 
         if (this.getStateFirstRunThrough()) {
             setL1(Value.kReverse);
@@ -185,7 +185,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void swingHighTraversal1() {
+    protected void swingHighTraversal1() {
 
         if (this.getStateFirstRunThrough()) {
             setL1(Value.kForward);
@@ -195,7 +195,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void swingHighTraversal2() {
+    protected void swingHighTraversal2() {
 
         if (this.getStateFirstRunThrough()) {
             setL1(Value.kForward);
@@ -205,7 +205,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void gripTraversalBar() {
+    protected void gripTraversalBar() {
 
         if (this.getStateFirstRunThrough()) {
             setH2(Value.kForward);
@@ -214,7 +214,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void retryTraversalBar() {
+    protected void retryTraversalBar() {
 
         if (this.getStateFirstRunThrough()) {
             setH2(Value.kReverse);
@@ -223,7 +223,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void recenterHighTraversalBar() {
+    protected void recenterHighTraversalBar() {
 
         if (this.getStateFirstRunThrough()) {
             setClimbArmDegree(HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND);
@@ -232,7 +232,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void releaseHighBar() {
+    protected void releaseHighBar() {
 
         if (this.getStateFirstRunThrough()) {
             setL3(Value.kReverse);
@@ -243,13 +243,13 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void swingToRest() {
+    protected void swingToRest() {
         if (this.getStateFirstRunThrough()) {
             setClimbArmDegree(SWINGTOREST_ANGLE_COMMAND);
         }
     }
 
-    public void resetArm() {
+    protected void resetArm() {
         if (this.getStateFirstRunThrough()) {
             setL1(Value.kReverse);
             setClimbArmDegree(0.0);
@@ -258,7 +258,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
         }
     }
 
-    public void moveArmManually() {
+    protected void moveArmManually() {
         if (Buttons.MoveClimbArmForward.getButton()) {
             climbMotor.set(ControlMode.PercentOutput, 0.30);
         } else if (Buttons.MoveClimbArmBackward.getButton()) {

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.ISubsystemState;
+import frc.robot.subsystems.parent.SubsystemState;
 
 import java.util.function.Consumer;
 
@@ -26,19 +27,14 @@ public enum ClimberState implements ISubsystemState<Climber> {
     RESETARM((s) -> s.resetArm()),
     MOVEARMMANUALLY((s) -> s.moveArmManually());
 
-    Consumer<Climber> processFunction;
+    SubsystemState<Climber> state;
 
     ClimberState(Consumer<Climber> processFunction){
-        this.processFunction = processFunction;
+        this.state = new SubsystemState<>(this.name(), processFunction, Robot.climber);
     }
 
     @Override
-    public Climber getAssociatedSubsystem() {
-        return Robot.climber;
-    }
-
-    @Override
-    public void process() {
-        processFunction.accept(getAssociatedSubsystem());
+    public SubsystemState<Climber> getState() {
+        return state;
     }
 }

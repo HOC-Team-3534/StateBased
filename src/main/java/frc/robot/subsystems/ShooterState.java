@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.ISubsystemState;
+import frc.robot.subsystems.parent.SubsystemState;
 
 import java.util.function.Consumer;
 
@@ -13,7 +14,7 @@ public enum ShooterState implements ISubsystemState<Shooter> {
                 .getRemainingTimeSeconds() < 2.0) {
                 s.upToSpeed(3000);
         } else {
-            NEUTRAL.process();
+            NEUTRAL.getState().process();
         }
     }),
     UPTOSPEED((s) -> {
@@ -30,19 +31,14 @@ public enum ShooterState implements ISubsystemState<Shooter> {
     RESETPUNCH((s) -> s.resetPunch()),
     BOOT((s) -> s.boot());
 
-    Consumer<Shooter> processFunction;
+    SubsystemState<Shooter> state;
 
     ShooterState(Consumer<Shooter> processFunction){
-        this.processFunction = processFunction;
+        this.state = new SubsystemState<>(this.name(), processFunction, Robot.shooter);
     }
 
     @Override
-    public Shooter getAssociatedSubsystem() {
-        return Robot.shooter;
-    }
-
-    @Override
-    public void process() {
-        processFunction.accept(getAssociatedSubsystem());
+    public SubsystemState<Shooter> getState() {
+        return state;
     }
 }

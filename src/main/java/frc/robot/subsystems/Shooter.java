@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.BaseSubsystem;
-import frc.robot.subsystems.parent.IDistanceToShooterRPM;
+
+import java.util.function.Function;
 
 import static frc.robot.Constants.*;
 
@@ -21,9 +22,9 @@ public class Shooter extends BaseSubsystem<ShooterState> {
     
     static DoubleSolenoid pusher;
 
-    IDistanceToShooterRPM rpmFunction;
+    Function<Double,Double> rpmFunction;
 
-    public Shooter(IDistanceToShooterRPM rpmFunction) {
+    public Shooter(Function<Double,Double> rpmFunction) {
         super(ShooterState.NEUTRAL);
 
         shooter = new WPI_TalonFX(SHOOTER_MOTOR);
@@ -65,7 +66,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
 
     public double getCalculatedRPMError(){
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
-        return Math.abs(getShooterRPM() - rpmMultiplier * rpmFunction.getShooterRPM((Robot.limelight.getDistance())));
+        return Math.abs(getShooterRPM() - rpmMultiplier * rpmFunction.apply((Robot.limelight.getDistance())));
         //return Math.abs(getShooterRPM() - rpmMultiplier * SmartDashboard.getNumber("Manual Testing RPM", 0.0));
     }
 
@@ -74,7 +75,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
             shooter.selectProfileSlot(0, 0);
         }
         double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
-        shoot(rpmMultiplier * rpmFunction.getShooterRPM(Robot.limelight.getDistance()));
+        shoot(rpmMultiplier * rpmFunction.apply(Robot.limelight.getDistance()));
         //shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getLimelightShootProjection().getDistance()));
     }
 

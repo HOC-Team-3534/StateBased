@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.ISubsystemState;
+import frc.robot.subsystems.parent.SubsystemState;
 
 import java.util.function.Consumer;
 
@@ -13,19 +14,14 @@ public enum IntakeState implements ISubsystemState<Intake> {
     ROLLIN((s) -> s.rollIn()),
     HOLDPOSITION((s) -> {});
 
-    Consumer<Intake> processFunction;
+    SubsystemState<Intake> state;
 
     IntakeState(Consumer<Intake> processFunction){
-        this.processFunction = processFunction;
+        this.state = new SubsystemState<>(this.name(), processFunction, Robot.intake);
     }
 
     @Override
-    public Intake getAssociatedSubsystem() {
-        return Robot.intake;
-    }
-
-    @Override
-    public void process() {
-        processFunction.accept(getAssociatedSubsystem());
+    public SubsystemState<Intake> getState() {
+        return state;
     }
 }

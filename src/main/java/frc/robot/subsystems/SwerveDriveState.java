@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.parent.ISubsystemState;
+import frc.robot.subsystems.parent.SubsystemState;
 
 import java.util.function.Consumer;
 
@@ -20,7 +21,7 @@ public enum SwerveDriveState implements ISubsystemState<SwerveDrive> {
                 Robot.limelight.isTargetAcquired() && Robot.isAutonomous) {
             s.aim();
         }else{
-            DRIVE.process();
+            DRIVE.getState().process();
         }
     }),
     DRIVE_AUTONOMOUSLY((s) -> {
@@ -34,19 +35,14 @@ public enum SwerveDriveState implements ISubsystemState<SwerveDrive> {
         }
     });
 
-    Consumer<SwerveDrive> processFunction;
+    SubsystemState<SwerveDrive> state;
 
     SwerveDriveState(Consumer<SwerveDrive> processFunction){
-        this.processFunction = processFunction;
+        this.state = new SubsystemState<>(this.name(), processFunction, Robot.swerveDrive);
     }
 
     @Override
-    public SwerveDrive getAssociatedSubsystem() {
-        return Robot.swerveDrive;
-    }
-
-    @Override
-    public void process() {
-        processFunction.accept(getAssociatedSubsystem());
+    public SubsystemState<SwerveDrive> getState() {
+        return state;
     }
 }

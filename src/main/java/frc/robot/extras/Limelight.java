@@ -7,11 +7,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.Robot;
 
+import java.util.function.Function;
+
 public class Limelight {
 
-    ILimelightAngleToDistanceFunction distanceFunction;
-    IDistanceToAverageShootVelocityFunction distanceToAverageShootVelocityFunction;
-    IAverageShootVelocityToDistanceFunction averageShootVelocityToDistanceFunction;
+    Function<Double,Double> distanceFunction;
+    Function<Double,Double> distanceToAverageShootVelocityFunction;
+    Function<Double,Double> averageShootVelocityToDistanceFunction;
     NetworkTable table;
     boolean isTargetAcquired;
     double savedDistance = -999;
@@ -21,7 +23,7 @@ public class Limelight {
 
     LimelightShootProjection limelightShootProjection;
 
-    public Limelight(ILimelightAngleToDistanceFunction distanceFunction, IDistanceToAverageShootVelocityFunction distanceToAverageVelocityFunction, IAverageShootVelocityToDistanceFunction averageShootVelocityToDistanceFunction) {
+    public Limelight(Function<Double,Double> distanceFunction, Function<Double,Double> distanceToAverageVelocityFunction, Function<Double,Double> averageShootVelocityToDistanceFunction) {
 
         this.distanceFunction = distanceFunction;
         this.distanceToAverageShootVelocityFunction = distanceToAverageVelocityFunction;
@@ -55,7 +57,7 @@ public class Limelight {
             getTable();
         }
         if (isValid()) {
-            savedDistance = distanceFunction.getDistance(getPixelAngle()); // getHorizontalAngleOffset().getCos();
+            savedDistance = distanceFunction.apply(getPixelAngle()); // getHorizontalAngleOffset().getCos();
         }
         return savedDistance;
     }
@@ -111,9 +113,9 @@ public class Limelight {
          * - Combine the motion of the average velocity of the game piece with the relative motion of the target
          * - Back calculate the distance for that overall average velocity
          */
-        Vector2d baseAvgVel = Utils.createVector2d(distanceToAverageShootVelocityFunction.getAverageVelocity(straightLineDistance), offset);
+        Vector2d baseAvgVel = Utils.createVector2d(distanceToAverageShootVelocityFunction.apply(straightLineDistance), offset);
         Vector2d desiredAverageVelocity = Utils.getCombinedMotion(baseAvgVel, targetMotion);
-        double projectedDistance = averageShootVelocityToDistanceFunction.getDistance(desiredAverageVelocity.magnitude());
+        double projectedDistance = averageShootVelocityToDistanceFunction.apply(desiredAverageVelocity.magnitude());
 
         /*
          * - Find the time elapsed during the shot
@@ -129,4 +131,23 @@ public class Limelight {
 
     }
 
+}
+
+class LimelightShootProjection {
+
+    double distance;
+    Rotation2d offset;
+
+    public LimelightShootProjection(double distance, Rotation2d offset) {
+        this.distance = distance;
+        this.offset = offset;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public Rotation2d getOffset() {
+        return offset;
+    }
 }

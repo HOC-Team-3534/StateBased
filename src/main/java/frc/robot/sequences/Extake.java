@@ -2,44 +2,44 @@ package frc.robot.sequences;
 
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.IntakeState;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.IntakeReq;
 
-import static frc.robot.sequences.ExtakeState.NEUTRAL;
+import static frc.robot.sequences.ExtakePhase.NEUTRAL;
 
-enum ExtakeState implements ISequenceState {
+enum ExtakePhase implements ISequencePhase {
     NEUTRAL,
     EXTAKE(new IntakeReq(IntakeState.EXTAKE));
 
-    SequenceState state;
+    SequencePhase state;
 
-    ExtakeState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    ExtakePhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
 }
 
-public class Extake extends BaseSequence<ExtakeState> {
+public class Extake extends BaseSequence<ExtakePhase> {
 
-    public Extake(ExtakeState neutralState, ExtakeState startState) {
+    public Extake(ExtakePhase neutralState, ExtakePhase startState) {
         super(neutralState, startState);
         //TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-        switch (getState()) {
+        switch (getPhase()) {
             case EXTAKE:
                 if (!Buttons.Extake.getButton()) {
-                    setNextState(NEUTRAL);
+                    setNextPhase(NEUTRAL);
                 }
                 break;
             case NEUTRAL:
@@ -48,7 +48,7 @@ public class Extake extends BaseSequence<ExtakeState> {
                 break;
 
         }
-        updateState();
+        updatePhase();
 
     }
 

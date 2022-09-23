@@ -3,39 +3,39 @@ package frc.robot.sequences;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
-import static frc.robot.sequences.ShootState.*;
+import static frc.robot.sequences.ShootPhase.*;
 
-enum ShootState implements ISequenceState {
+enum ShootPhase implements ISequencePhase {
     NEUTRAL,
     UPTOSPEED(new ShooterReq(ShooterState.UPTOSPEED), new SwerveDriveReq(SwerveDriveState.AIM)),
     PUNCH(new ShooterReq(ShooterState.PUNCH), new SwerveDriveReq(SwerveDriveState.AIM)),
     RESETPUNCH(new ShooterReq(ShooterState.RESETPUNCH), new SwerveDriveReq(SwerveDriveState.AIM)),
     BOOT(new ShooterReq(ShooterState.BOOT), new SwerveDriveReq(SwerveDriveState.AIM));
 
-    SequenceState state;
+    SequencePhase state;
 
-    ShootState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    ShootPhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
 }
 
-public class Shoot extends BaseSequence<ShootState> {
+public class Shoot extends BaseSequence<ShootPhase> {
 
-    public Shoot(ShootState neutralState, ShootState startState) {
+    public Shoot(ShootPhase neutralState, ShootPhase startState) {
         super(neutralState, startState);
         // TODO Auto-generated constructor stub
     }
@@ -46,38 +46,38 @@ public class Shoot extends BaseSequence<ShootState> {
         Robot.limelight.updateLimelightShootProjection();
         Robot.swerveDrive.setTargetShootRotationAngle();
 
-        switch (getState()) {
+        switch (getPhase()) {
             case UPTOSPEED:
                 if (Robot.limelight.isValid()) {
                     Robot.limelight.setTargetAcquired();
                 }
                 if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
-                    setNextState(RESETPUNCH);
+                    setNextPhase(RESETPUNCH);
                 }
-                if (this.getTimeSinceStartOfState() > 500 && Buttons.SHOOT.getButton() && Robot.shooter.getCalculatedRPMError() < 35
+                if (this.getTimeSinceStartOfPhase() > 500 && Buttons.SHOOT.getButton() && Robot.shooter.getCalculatedRPMError() < 35
                         && Robot.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
                     System.out.println("In state");
-                    setNextState(PUNCH);
+                    setNextPhase(PUNCH);
                 }
                 break;
             case PUNCH:
-                if (this.getTimeSinceStartOfState() > 250) {
+                if (this.getTimeSinceStartOfPhase() > 250) {
                     System.out.println("punching");
-                    setNextState(RESETPUNCH);
+                    setNextPhase(RESETPUNCH);
 
                 }
                 break;
             case RESETPUNCH:
-                if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton() && this.getTimeSinceStartOfState() > 250) {
-                    this.setNextState(NEUTRAL);
-                } else if (this.getTimeSinceStartOfState() > 350) {
+                if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton() && this.getTimeSinceStartOfPhase() > 250) {
+                    this.setNextPhase(NEUTRAL);
+                } else if (this.getTimeSinceStartOfPhase() > 350) {
                     //System.out.println("resetting");
-                    setNextState(BOOT);
+                    setNextPhase(BOOT);
                 }
                 break;
             case BOOT:
-                if (this.getTimeSinceStartOfState() > 150) {
-                    setNextState(UPTOSPEED);
+                if (this.getTimeSinceStartOfPhase() > 150) {
+                    setNextPhase(UPTOSPEED);
                 }
                 break;
             case NEUTRAL:
@@ -86,7 +86,7 @@ public class Shoot extends BaseSequence<ShootState> {
                 break;
 
         }
-        updateState();
+        updatePhase();
 
     }
 

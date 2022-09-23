@@ -3,67 +3,67 @@ package frc.robot.sequences;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
 
-import static frc.robot.sequences.BurpState.*;
+import static frc.robot.sequences.BurpPhase.*;
 
-enum BurpState implements ISequenceState {
+enum BurpPhase implements ISequencePhase {
     NEUTRAL,
     BURP(new ShooterReq(ShooterState.BURP)),
     PUNCH(new ShooterReq(ShooterState.PUNCH)),
     RESETPUNCH(new ShooterReq(ShooterState.RESETPUNCH)),
     BOOT(new ShooterReq(ShooterState.BOOT));
 
-    SequenceState state;
+    SequencePhase state;
 
-    BurpState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    BurpPhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 }
 
-public class Burp extends BaseSequence<BurpState> {
+public class Burp extends BaseSequence<BurpPhase> {
 
-    public Burp(BurpState neutralState, BurpState startState) {
+    public Burp(BurpPhase neutralState, BurpPhase startState) {
         super(neutralState, startState);
         // TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-        switch (getState()) {
+        switch (getPhase()) {
             case BURP:
                 if (!Buttons.Burp.getButton()) {
-                    setNextState(RESETPUNCH);
+                    setNextPhase(RESETPUNCH);
                 }
-                if (this.getTimeSinceStartOfState() > 500 && Robot.shooter.getShooterClosedLoopError() < 250) {
+                if (this.getTimeSinceStartOfPhase() > 500 && Robot.shooter.getShooterClosedLoopError() < 250) {
                     System.out.println("In state");
-                    setNextState(PUNCH);
+                    setNextPhase(PUNCH);
                 }
                 break;
             case PUNCH:
-                if (this.getTimeSinceStartOfState() > 250) {
-                    setNextState(RESETPUNCH);
+                if (this.getTimeSinceStartOfPhase() > 250) {
+                    setNextPhase(RESETPUNCH);
                 }
                 break;
             case RESETPUNCH:
-                if (!Buttons.Burp.getButton() && this.getTimeSinceStartOfState() > 250) {
-                    setNextState(NEUTRAL);
-                } else if (this.getTimeSinceStartOfState() > 250) {
-                    setNextState(BOOT);
+                if (!Buttons.Burp.getButton() && this.getTimeSinceStartOfPhase() > 250) {
+                    setNextPhase(NEUTRAL);
+                } else if (this.getTimeSinceStartOfPhase() > 250) {
+                    setNextPhase(BOOT);
                 }
                 break;
             case BOOT:
-                if (this.getTimeSinceStartOfState() > 150) {
-                    setNextState(BURP);
+                if (this.getTimeSinceStartOfPhase() > 150) {
+                    setNextPhase(BURP);
                 }
                 break;
             case NEUTRAL:
@@ -72,7 +72,7 @@ public class Burp extends BaseSequence<BurpState> {
                 break;
 
         }
-        updateState();
+        updatePhase();
 
     }
 

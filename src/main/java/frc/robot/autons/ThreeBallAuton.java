@@ -2,9 +2,9 @@ package frc.robot.autons;
 
 import frc.robot.Robot;
 import frc.robot.autons.parent.BaseAutonSequence;
-import frc.robot.autons.parent.IAutonState;
+import frc.robot.autons.parent.IAutonPhase;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.IntakeState;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
@@ -14,9 +14,9 @@ import frc.robot.subsystems.requirements.IntakeReq;
 import frc.robot.subsystems.requirements.ShooterReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
-import static frc.robot.autons.ThreeBallAutonState.*;
+import static frc.robot.autons.ThreeBallAutonPhase.*;
 
-enum ThreeBallAutonState implements IAutonState {
+enum ThreeBallAutonPhase implements IAutonPhase {
     NEUTRAL(-999),
     DRIVE1(0, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
     SHOOTBALL1(-999, new ShooterReq(ShooterState.UPTOSPEED)),
@@ -29,29 +29,29 @@ enum ThreeBallAutonState implements IAutonState {
     BOOT1(-999, new ShooterReq(ShooterState.BOOT));
 
     int pathIndex;
-    SequenceState state;
+    SequencePhase state;
 
-    ThreeBallAutonState(int pathIndex, SubsystemRequirement... requirements) {
+    ThreeBallAutonPhase(int pathIndex, SubsystemRequirement... requirements) {
         this.pathIndex = pathIndex;
-        state = new SequenceState(requirements);
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
     @Override
-    public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence) {
-        return IAutonState.getPath(sequence, pathIndex);
+    public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonPhase> sequence) {
+        return IAutonPhase.getPath(sequence, pathIndex);
     }
 }
 
-public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
+public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonPhase> {
 
     int ballsShot = 0;
 
-    public ThreeBallAuton(ThreeBallAutonState neutralState, ThreeBallAutonState startState, BaseDriveSubsystem driveSubsystem) {
+    public ThreeBallAuton(ThreeBallAutonPhase neutralState, ThreeBallAutonPhase startState, BaseDriveSubsystem driveSubsystem) {
         super(neutralState, startState, driveSubsystem);
     }
 
@@ -60,38 +60,38 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
 
         Robot.swerveDrive.setTargetShootRotationAngle();
 
-        switch (getState()) {
+        switch (getPhase()) {
             case NEUTRAL:
                 break;
             case DRIVE1:
                 setPathPlannerFollowerAtStartOfState(true);
                 if (this.getPlannerFollower().isFinished()) {
-                    setNextState(SHOOTBALL1);
+                    setNextPhase(SHOOTBALL1);
                 }
                 break;
             case SHOOTBALL1:
                 //THE FOLLOWING IS ONLY IN ORDER TO SET THE CORRECT INITIAL POSITION
                 ballsShot = 0;
 //                setInitialPoseFromCurrentPath();
-                if (Robot.shooter.getShooterClosedLoopError() < 100 && getTimeSinceStartOfState() > 500) {
-                    setNextState(PUNCH1);
+                if (Robot.shooter.getShooterClosedLoopError() < 100 && getTimeSinceStartOfPhase() > 500) {
+                    setNextPhase(PUNCH1);
                 }
                 break;
             case PUNCH1:
-                if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(RESETPUNCH1);
+                if (this.getTimeSinceStartOfPhase() > 500) {
+                    setNextPhase(RESETPUNCH1);
                     ballsShot++;
                 }
                 break;
             case RESETPUNCH1:
                 //if (this.getTimeSinceStartOfState() > 500) {
-                setNextState(PICKUPBALL1);
+                setNextPhase(PICKUPBALL1);
                 //}
                 break;
             case PICKUPBALL1:
                 setPathPlannerFollowerAtStartOfState(false);
                 if (this.getPlannerFollower().isFinished()) {
-                    setNextState(SHOOTBALL2);
+                    setNextPhase(SHOOTBALL2);
                     Robot.limelight.resetLimelightGlobalValues();
                 }
                 break;
@@ -99,32 +99,32 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonState> {
                 if (Robot.limelight.isValid()) {
                     Robot.limelight.setTargetAcquired();
                 }
-                if ((ballsShot == 1 || (ballsShot == 2 && this.getTimeSinceStartOfState() > 500
+                if ((ballsShot == 1 || (ballsShot == 2 && this.getTimeSinceStartOfPhase() > 500
                         && Robot.limelight.isTargetAcquired() && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0))
                         && Robot.shooter.getShooterClosedLoopError() < 100) {
-                    setNextState(PUNCH2);
+                    setNextPhase(PUNCH2);
                 }
                 break;
             case PUNCH2:
-                if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(RESETPUNCH2);
+                if (this.getTimeSinceStartOfPhase() > 500) {
+                    setNextPhase(RESETPUNCH2);
                     ballsShot++;
                 }
                 break;
             case RESETPUNCH2:
-                if (ballsShot == 3 && this.getTimeSinceStartOfState() > 500) {
-                    setNextState(NEUTRAL);
-                } else if (this.getTimeSinceStartOfState() > 500) {
-                    setNextState(BOOT1);
+                if (ballsShot == 3 && this.getTimeSinceStartOfPhase() > 500) {
+                    setNextPhase(NEUTRAL);
+                } else if (this.getTimeSinceStartOfPhase() > 500) {
+                    setNextPhase(BOOT1);
                 }
                 break;
             case BOOT1:
-                if (this.getTimeSinceStartOfState() > 150) {
-                    setNextState(SHOOTBALL2);
+                if (this.getTimeSinceStartOfPhase() > 150) {
+                    setNextPhase(SHOOTBALL2);
                 }
                 break;
         }
-        updateState();
+        updatePhase();
     }
 
     @Override

@@ -1,39 +1,39 @@
 package frc.robot.sequences;
 
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.SwerveDriveState;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
-enum DriveState implements ISequenceState {
+enum DrivePhase implements ISequencePhase {
     NEUTRAL,
     DRIVE(new SwerveDriveReq(SwerveDriveState.DRIVE));
 
-    SequenceState state;
+    SequencePhase state;
 
-    DriveState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    DrivePhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
 }
 
-public class Drive extends BaseSequence<DriveState> {
+public class Drive extends BaseSequence<DrivePhase> {
 
-    public Drive(DriveState neutralState, DriveState startState) {
+    public Drive(DrivePhase neutralState, DrivePhase startState) {
         super(neutralState, startState);
     }
 
     @Override
     public void process() {
 
-        switch (getState()) {
+        switch (getPhase()) {
             case DRIVE:
                 break;
             case NEUTRAL:
@@ -42,7 +42,7 @@ public class Drive extends BaseSequence<DriveState> {
                 break;
 
         }
-        updateState();
+        updatePhase();
     }
 
     @Override

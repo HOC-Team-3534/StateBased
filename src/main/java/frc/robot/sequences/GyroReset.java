@@ -1,45 +1,44 @@
 package frc.robot.sequences;
 
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 
-import static frc.robot.sequences.GyroResetState.NEUTRAL;
+import static frc.robot.sequences.GyroResetPhase.NEUTRAL;
 
-enum GyroResetState implements ISequenceState {
+enum GyroResetPhase implements ISequencePhase {
     NEUTRAL,
     RESET;
 
-    SequenceState state;
+    SequencePhase state;
 
-    GyroResetState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    GyroResetPhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
 }
 
-public class GyroReset extends BaseSequence<GyroResetState> {
+public class GyroReset extends BaseSequence<GyroResetPhase> {
 
-    public GyroReset(GyroResetState neutralState, GyroResetState startState) {
+    public GyroReset(GyroResetPhase neutralState, GyroResetPhase startState) {
         super(neutralState, startState);
         //TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-        switch (getState()) {
+        switch (getPhase()) {
             case RESET:
                 Robot.swerveDrive.resetGyro();
-                setNextState(NEUTRAL);
+                setNextPhase(NEUTRAL);
                 break;
             case NEUTRAL:
                 break;
@@ -47,7 +46,7 @@ public class GyroReset extends BaseSequence<GyroResetState> {
                 break;
 
         }
-        updateState();
+        updatePhase();
 
     }
 

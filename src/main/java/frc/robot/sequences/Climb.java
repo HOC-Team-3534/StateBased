@@ -4,8 +4,8 @@ import static frc.robot.Constants.CLIMBER.*;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ClimberState;
 import frc.robot.subsystems.SwerveDriveState;
@@ -13,9 +13,9 @@ import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ClimberReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
-import static frc.robot.sequences.ClimbState.*;
+import static frc.robot.sequences.ClimbPhase.*;
 
-enum ClimbState implements ISequenceState {
+enum ClimbPhase implements ISequencePhase {
     NEUTRAL,
     PAUSED(new ClimberReq(ClimberState.NEUTRAL), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
     GRIPMIDBAR(new ClimberReq(ClimberState.GRIPMIDBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
@@ -33,149 +33,149 @@ enum ClimbState implements ISequenceState {
     RELEASEHIGHBAR(new ClimberReq(ClimberState.RELEASEHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
     SWINGTOREST(new ClimberReq(ClimberState.SWINGTOREST), new SwerveDriveReq(SwerveDriveState.NEUTRAL));
 
-    SequenceState state;
+    SequencePhase state;
 
-    ClimbState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    ClimbPhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
 }
 
-public class Climb extends BaseSequence<ClimbState> {
+public class Climb extends BaseSequence<ClimbPhase> {
 
     int limitSwitchLoopCounter = 0;
-    ClimbState savedPauseState;
+    ClimbPhase savedPauseState;
 
-    public Climb(ClimbState neutralState, ClimbState startState) {
+    public Climb(ClimbPhase neutralState, ClimbPhase startState) {
         super(neutralState, startState);
     }
 
     @Override
     public void process() {
 
-        switch (getState()) {
+        switch (getPhase()) {
             case GRIPMIDBAR:
-                if (getTimeSinceStartOfState() > 500) {
-                    setNextState(SWINGMIDHIGH1);
+                if (getTimeSinceStartOfPhase() > 500) {
+                    setNextPhase(SWINGMIDHIGH1);
                 }
                 break;
             case SWINGMIDHIGH1:
                 if (Robot.climber.getClimbArmDegree() > MIDHIGHBAR_SLOWDOWN_ANGLE) {
-                    setNextState(SWINGMIDHIGH2);
+                    setNextPhase(SWINGMIDHIGH2);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case SWINGMIDHIGH2:
                 if (!Climber.l3Switch.get() || !Climber.h4Switch.get()) {
-                    setNextState(GRIPHIGHBAR);
+                    setNextPhase(GRIPHIGHBAR);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case GRIPHIGHBAR:
-                if (getTimeSinceStartOfState() > 500 && (!Climber.l3Switch.get() || !Climber.h4Switch.get())) {
-                    setNextState(RECENTERMIDHIGHBAR);
+                if (getTimeSinceStartOfPhase() > 500 && (!Climber.l3Switch.get() || !Climber.h4Switch.get())) {
+                    setNextPhase(RECENTERMIDHIGHBAR);
                 } else if ((Climber.l3Switch.get() && Climber.h4Switch.get())) {
                     limitSwitchLoopCounter++;
                     if (limitSwitchLoopCounter >= 10) {
                         limitSwitchLoopCounter = 0;
-                        setNextState(RETRYHIGHBAR);
+                        setNextPhase(RETRYHIGHBAR);
                     }
                 } else {
                     limitSwitchLoopCounter = 0;
                 }
                 break;
             case RETRYHIGHBAR:
-                if (getTimeSinceStartOfState() > 1500) {
-                    setNextState(SWINGMIDHIGH2);
+                if (getTimeSinceStartOfPhase() > 1500) {
+                    setNextPhase(SWINGMIDHIGH2);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case RECENTERMIDHIGHBAR:
                 if (Robot.climber.getClimbArmDegree() - RECENTER_ANGLE_TOLERANCE < MIDHIGHBAR_RECENTER_ANGLE_COMMAND) {
-                    setNextState(RELEASEMIDBAR);
+                    setNextPhase(RELEASEMIDBAR);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case RELEASEMIDBAR:
                 if (Robot.climber.getClimbArmDegree() > DONERELEASINGMIDBAR_ANGLE) {
-                    setNextState(SWINGHIGHTRAVERSAL1);
+                    setNextPhase(SWINGHIGHTRAVERSAL1);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case SWINGHIGHTRAVERSAL1:
                 if (Robot.climber.getClimbArmDegree() > HIGHTRAVERSAL_SLOWDOWN_ANGLE) {
-                    setNextState(SWINGHIGHTRAVERSAL2);
+                    setNextPhase(SWINGHIGHTRAVERSAL2);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case SWINGHIGHTRAVERSAL2:
                 if (!Climber.h2Switch.get() || !Climber.l1Switch.get()) {
-                    setNextState(GRIPTRAVERSALBAR);
+                    setNextPhase(GRIPTRAVERSALBAR);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case GRIPTRAVERSALBAR:
-                if (getTimeSinceStartOfState() > 500 && (!Climber.h2Switch.get() || !Climber.l1Switch.get())) {
-                    setNextState(RECENTERHIGHTRAVERSALBAR);
+                if (getTimeSinceStartOfPhase() > 500 && (!Climber.h2Switch.get() || !Climber.l1Switch.get())) {
+                    setNextPhase(RECENTERHIGHTRAVERSALBAR);
                 } else if ((Climber.h2Switch.get() && Climber.l1Switch.get())) {
                     limitSwitchLoopCounter++;
                     if (limitSwitchLoopCounter >= 10) {
                         limitSwitchLoopCounter = 0;
-                        setNextState(RETRYTRAVERSALBAR);
+                        setNextPhase(RETRYTRAVERSALBAR);
                     }
                 } else {
                     limitSwitchLoopCounter = 0;
                 }
                 break;
             case RETRYTRAVERSALBAR:
-                if (getTimeSinceStartOfState() > 1500) {
-                    setNextState(SWINGHIGHTRAVERSAL2);
+                if (getTimeSinceStartOfPhase() > 1500) {
+                    setNextPhase(SWINGHIGHTRAVERSAL2);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case RECENTERHIGHTRAVERSALBAR:
                 if (Robot.climber.getClimbArmDegree() - RECENTER_ANGLE_TOLERANCE < HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND) {
-                    setNextState(RELEASEHIGHBAR);
+                    setNextPhase(RELEASEHIGHBAR);
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case RELEASEHIGHBAR:
-                setNextState(SWINGTOREST);
+                setNextPhase(SWINGTOREST);
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case SWINGTOREST:
@@ -183,13 +183,13 @@ public class Climb extends BaseSequence<ClimbState> {
                     System.out.println("Hooray!");
                 }
                 if (!Buttons.Climb.getButton()) {
-                    savedPauseState = getState();
-                    setNextState(PAUSED);
+                    savedPauseState = getPhase();
+                    setNextPhase(PAUSED);
                 }
                 break;
             case PAUSED:
                 if (Buttons.Climb.getButton()) {
-                    setNextState(savedPauseState);
+                    setNextPhase(savedPauseState);
                     savedPauseState = null;
                 }
                 break;
@@ -198,14 +198,14 @@ public class Climb extends BaseSequence<ClimbState> {
             default:
                 break;
         }
-        updateState();
+        updatePhase();
     }
 
     @Override
     public boolean abort() {
         if (Robot.climber.abort()) {
-            setNextState(getNeutralState());
-            return updateState();
+            setNextPhase(getNeutralPhase());
+            return updatePhase();
         }
         return false;
     }

@@ -1,11 +1,11 @@
 package frc.robot.autons.parent;
 
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
-import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
 
-public interface IAutonState extends ISequenceState {
+public interface IAutonPhase extends ISequencePhase {
 
-    static PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence, int pathIndex) {
+    static PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonPhase> sequence, int pathIndex) {
         if (pathIndex >= 0 && pathIndex < sequence.getPaths().size()) {
             return sequence.getPaths().get(pathIndex);
         }
@@ -13,6 +13,6 @@ public interface IAutonState extends ISequenceState {
         return null;
     }
 
-    PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonState> sequence);
+    PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonPhase> sequence);
 
 }

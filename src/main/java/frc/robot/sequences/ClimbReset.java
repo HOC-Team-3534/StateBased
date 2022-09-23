@@ -2,44 +2,44 @@ package frc.robot.sequences;
 
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.ClimberState;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ClimberReq;
 
-import static frc.robot.sequences.ClimbResetState.NEUTRAL;
+import static frc.robot.sequences.ClimbResetPhase.NEUTRAL;
 
-enum ClimbResetState implements ISequenceState {
+enum ClimbResetPhase implements ISequencePhase {
     NEUTRAL,
     MOVEARMMANUALLY(new ClimberReq(ClimberState.MOVEARMMANUALLY));
 
-    SequenceState state;
+    SequencePhase state;
 
-    ClimbResetState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    ClimbResetPhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
 }
 
-public class ClimbReset extends BaseSequence<ClimbResetState> {
+public class ClimbReset extends BaseSequence<ClimbResetPhase> {
 
-    public ClimbReset(ClimbResetState neutralState, ClimbResetState startState) {
+    public ClimbReset(ClimbResetPhase neutralState, ClimbResetPhase startState) {
         super(neutralState, startState);
     }
 
     @Override
     public void process() {
 
-        switch (getState()) {
+        switch (getPhase()) {
             case MOVEARMMANUALLY:
                 if (!Buttons.MoveClimbArmManually.getButton()) {
-                    setNextState(NEUTRAL);
+                    setNextPhase(NEUTRAL);
                 }
                 break;
             case NEUTRAL:
@@ -49,14 +49,14 @@ public class ClimbReset extends BaseSequence<ClimbResetState> {
 
         }
 
-        updateState();
+        updatePhase();
 
     }
 
     @Override
     public boolean abort() {
-        setNextState(getNeutralState());
-        return updateState();
+        setNextPhase(getNeutralPhase());
+        return updatePhase();
     }
 
 }

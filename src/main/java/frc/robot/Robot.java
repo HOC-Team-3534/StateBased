@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autons.Auton;
 import frc.robot.autons.parent.BaseAutonSequence;
-import frc.robot.autons.parent.IAutonState;
+import frc.robot.autons.parent.IAutonPhase;
 import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.extras.Limelight;
 import frc.robot.sequences.SequenceProcessor;
@@ -46,7 +45,7 @@ public class Robot extends TimedRobot {
 
     public static boolean isAutonomous = false;
     public static double designatedLoopPeriod = 20;
-    public static BaseAutonSequence<? extends IAutonState> chosenAuton;
+    public static BaseAutonSequence<? extends IAutonPhase> chosenAuton;
     public static PathPlannerFollower corner1OneBall1;
     public static PathPlannerFollower corner1TwoBall1;
     public static PathPlannerFollower corner2OneBall1;

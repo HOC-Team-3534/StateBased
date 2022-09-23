@@ -2,53 +2,53 @@ package frc.robot.sequences;
 
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
-import frc.robot.sequences.parent.SequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
+import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.IntakeState;
 import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.IntakeReq;
 
-import static frc.robot.sequences.IntakeSeqState.*;
+import static frc.robot.sequences.IntakeSeqPhase.*;
 
-enum IntakeSeqState implements ISequenceState {
+enum IntakeSeqPhase implements ISequencePhase {
     NEUTRAL,
     EXTEND(new IntakeReq(IntakeState.KICKOUT)),
     RETRACT(new IntakeReq(IntakeState.RETRACT));
 
-    SequenceState state;
+    SequencePhase state;
 
-    IntakeSeqState(SubsystemRequirement... requirements) {
-        state = new SequenceState(requirements);
+    IntakeSeqPhase(SubsystemRequirement... requirements) {
+        state = new SequencePhase(requirements);
     }
 
     @Override
-    public SequenceState getState() {
+    public SequencePhase getPhase() {
         return state;
     }
 
 }
 
-public class IntakeSeq extends BaseSequence<IntakeSeqState> {
+public class IntakeSeq extends BaseSequence<IntakeSeqPhase> {
 
-    public IntakeSeq(IntakeSeqState neutralState, IntakeSeqState startState) {
+    public IntakeSeq(IntakeSeqPhase neutralState, IntakeSeqPhase startState) {
         super(neutralState, startState);
         //TODO Auto-generated constructor stub
     }
 
     @Override
     public void process() {
-        switch (getState()) {
+        switch (getPhase()) {
             case EXTEND:
                 if (!Buttons.Intake.getButton()) {
-                    setNextState(RETRACT);
+                    setNextPhase(RETRACT);
                 }
                 break;
             case RETRACT:
                 if (Buttons.Intake.getButton()) {
-                    setNextState(EXTEND);
+                    setNextPhase(EXTEND);
                 }
-                if (getTimeSinceStartOfState() > 700) {
-                    setNextState(NEUTRAL);
+                if (getTimeSinceStartOfPhase() > 700) {
+                    setNextPhase(NEUTRAL);
                 }
                 break;
             case NEUTRAL:
@@ -57,7 +57,7 @@ public class IntakeSeq extends BaseSequence<IntakeSeqState> {
                 break;
 
         }
-        updateState();
+        updatePhase();
 
     }
 

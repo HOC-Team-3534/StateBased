@@ -30,18 +30,18 @@ public class SequenceProcessor {
          * Instantiate each of the sequences
          */
 
-        drive = new Drive(DriveState.NEUTRAL, DriveState.DRIVE);
+        drive = new Drive(DrivePhase.NEUTRAL, DrivePhase.DRIVE);
 
-        shoot = new Shoot(ShootState.NEUTRAL, ShootState.UPTOSPEED);
-        burp = new Burp(BurpState.NEUTRAL, BurpState.BURP);
-        intake = new IntakeSeq(IntakeSeqState.NEUTRAL, IntakeSeqState.EXTEND);
-        extake = new Extake(ExtakeState.NEUTRAL, ExtakeState.EXTAKE);
-        rollIn = new RollIn(RollInState.NEUTRAL, RollInState.ROLLIN);
-        climbPrep = new ClimbPrep(ClimbPrepState.NEUTRAL, ClimbPrepState.PREPCLAW);
-        climb = new Climb(ClimbState.NEUTRAL, ClimbState.GRIPMIDBAR);
-        climbPrepReset = new ClimbPrepReset(ClimbPrepResetState.NEUTRAL, ClimbPrepResetState.RESETARM);
-        climbReset = new ClimbReset(ClimbResetState.NEUTRAL, ClimbResetState.MOVEARMMANUALLY);
-        gyroReset = new GyroReset(GyroResetState.NEUTRAL, GyroResetState.RESET);
+        shoot = new Shoot(ShootPhase.NEUTRAL, ShootPhase.UPTOSPEED);
+        burp = new Burp(BurpPhase.NEUTRAL, BurpPhase.BURP);
+        intake = new IntakeSeq(IntakeSeqPhase.NEUTRAL, IntakeSeqPhase.EXTEND);
+        extake = new Extake(ExtakePhase.NEUTRAL, ExtakePhase.EXTAKE);
+        rollIn = new RollIn(RollInPhase.NEUTRAL, RollInPhase.ROLLIN);
+        climbPrep = new ClimbPrep(ClimbPrepPhase.NEUTRAL, ClimbPrepPhase.PREPCLAW);
+        climb = new Climb(ClimbPhase.NEUTRAL, ClimbPhase.GRIPMIDBAR);
+        climbPrepReset = new ClimbPrepReset(ClimbPrepResetPhase.NEUTRAL, ClimbPrepResetPhase.RESETARM);
+        climbReset = new ClimbReset(ClimbResetPhase.NEUTRAL, ClimbResetPhase.MOVEARMMANUALLY);
+        gyroReset = new GyroReset(GyroResetPhase.NEUTRAL, GyroResetPhase.RESET);
 
     }
 
@@ -73,7 +73,7 @@ public class SequenceProcessor {
             climbPrep.start();
         }
         if (Buttons.Climb.getButton()
-                && Robot.climber.getSequenceRequiring().getState().equals(ClimbPrepState.PREPPEDFORCLIMB)
+                && Robot.climber.getSequenceRequiring().getPhase().equals(ClimbPrepPhase.PREPPEDFORCLIMB)
                 && (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
             climb.start(Robot.climber, Robot.swerveDrive);
         }
@@ -98,7 +98,7 @@ public class SequenceProcessor {
         climb.process();
         climbReset.process();
         gyroReset.process();
-        SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getState().name() == "PREPPEDFORCLIMB");
-        SmartDashboard.putString("Climb State", climb.getState().name());
+        SmartDashboard.putBoolean("Prepped for climb: ", climbPrep.getPhase().name() == "PREPPEDFORCLIMB");
+        SmartDashboard.putString("Climb State", climb.getPhase().name());
     }
 }

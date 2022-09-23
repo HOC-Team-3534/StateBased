@@ -3,23 +3,23 @@ package frc.robot.sequences.parent;
 
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequence<SeqS> {
+public abstract class BaseSequence<SeqP extends ISequencePhase> implements ISequence<SeqP> {
 
-    SeqS state = null;
-    SeqS nextState = null;
-    SeqS neutralState = null;
-    SeqS startState = null;
+    SeqP phase = null;
+    SeqP nextPhase = null;
+    SeqP neutralPhase = null;
+    SeqP startPhase = null;
 
     long timeAtStartOfSequence = 0;
-    long timeAtStartOfState = 0;
+    long timeAtStartOfPhase = 0;
 
-    boolean stateFirstRunThrough = false;
+    boolean phaseFirstRunThrough = false;
 
-    public BaseSequence(SeqS neutralState, SeqS startState) {
-        setNeutralState(neutralState);
-        setStartState(startState);
-        setNextState(neutralState);
-        setState(neutralState);
+    public BaseSequence(SeqP neutralPhase, SeqP startPhase) {
+        setNeutralPhase(neutralPhase);
+        setStartPhase(startPhase);
+        setNextPhase(neutralPhase);
+        setPhase(neutralPhase);
     }
 
     /**
@@ -30,15 +30,15 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
     }
 
     public boolean reset() {
-        setNextState(getNeutralState());
-        return updateState();
+        setNextPhase(getNeutralPhase());
+        return updatePhase();
     }
 
     public void start() {
         if (isNeutral()) {
             init();
-            setNextState(getStartState());
-            setState(getStartState());
+            setNextPhase(getStartPhase());
+            setPhase(getStartPhase());
         }
     }
 
@@ -50,57 +50,57 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
                     return;
                 }
             }
-            setNextState(getStartState());
-            setState(getStartState());
+            setNextPhase(getStartPhase());
+            setPhase(getStartPhase());
         }
     }
 
     public boolean isNeutral() {
-        return getState() == getNeutralState();
+        return getPhase() == getNeutralPhase();
     }
 
-    boolean setState(SeqS state) {
-        if (state.getState().requireSubsystems(this)) {
-            this.state = state;
+    boolean setPhase(SeqP phase) {
+        if (phase.getPhase().requireSubsystems(this)) {
+            this.phase = phase;
             updateStateStartTime();
-            stateFirstRunThrough = true;
+            phaseFirstRunThrough = true;
             return true;
         }
         return false;
     }
 
-    public SeqS getState() {
-        return this.state;
+    public SeqP getPhase() {
+        return this.phase;
     }
 
-    SeqS getNextState() {
-        return nextState;
+    SeqP getNextPhase() {
+        return nextPhase;
     }
 
-    protected void setNextState(SeqS state) {
-        nextState = state;
+    protected void setNextPhase(SeqP state) {
+        nextPhase = state;
     }
 
-    public SeqS getNeutralState() {
-        return neutralState;
+    public SeqP getNeutralPhase() {
+        return neutralPhase;
     }
 
-    void setNeutralState(SeqS state) {
-        neutralState = state;
+    void setNeutralPhase(SeqP state) {
+        neutralPhase = state;
     }
 
-    SeqS getStartState() {
-        return startState;
+    SeqP getStartPhase() {
+        return startPhase;
     }
 
-    void setStartState(SeqS state) {
-        startState = state;
+    void setStartPhase(SeqP state) {
+        startPhase = state;
     }
 
-    protected boolean updateState() {
-        stateFirstRunThrough = false;
-        if (getState() != getNextState()) {
-            return setState(nextState);
+    protected boolean updatePhase() {
+        phaseFirstRunThrough = false;
+        if (getPhase() != getNextPhase()) {
+            return setPhase(nextPhase);
         }
         return false;
     }
@@ -114,15 +114,15 @@ public abstract class BaseSequence<SeqS extends ISequenceState> implements ISequ
     }
 
     void updateStateStartTime() {
-        timeAtStartOfState = System.currentTimeMillis();
+        timeAtStartOfPhase = System.currentTimeMillis();
     }
 
-    public long getTimeSinceStartOfState() {
-        return System.currentTimeMillis() - timeAtStartOfState;
+    public long getTimeSinceStartOfPhase() {
+        return System.currentTimeMillis() - timeAtStartOfPhase;
     }
 
-    public boolean getStateFirstRunThrough() {
-        return stateFirstRunThrough;
+    public boolean getPhaseFirstRunThrough() {
+        return phaseFirstRunThrough;
     }
 
 }

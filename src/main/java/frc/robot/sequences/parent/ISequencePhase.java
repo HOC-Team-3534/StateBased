@@ -6,9 +6,9 @@ import frc.robot.subsystems.parent.SubsystemRequirement;
 
 import java.util.List;
 
-public interface ISequenceState {
+public interface ISequencePhase {
 
-    static boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence, List<SubsystemRequirement> requirements) {
+    static boolean requireSubsystems(BaseSequence<? extends ISequencePhase> sequence, List<SubsystemRequirement> requirements) {
         for (SubsystemRequirement subsystemRequirement : requirements) {
             if (subsystemRequirement.getSubsystem().isRequiredByAnother(sequence)) {
                 return false;
@@ -29,5 +29,5 @@ public interface ISequenceState {
         return null;
     }
 
-    SequenceState getState();
+    SequencePhase getPhase();
 }

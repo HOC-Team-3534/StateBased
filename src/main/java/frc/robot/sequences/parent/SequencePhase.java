@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SequenceState {
+public class SequencePhase {
 
     List<SubsystemRequirement> subsystemRequirements;
     Set<BaseSubsystem> requiredSubsystems;
 
-    public SequenceState(SubsystemRequirement... requirements) {
+    public SequencePhase(SubsystemRequirement... requirements) {
         subsystemRequirements = Arrays.asList(requirements);
         requiredSubsystems = subsystemRequirements.stream().map(requirement -> requirement.getSubsystem()).collect(Collectors.toSet());
     }
@@ -22,8 +22,8 @@ public class SequenceState {
         return requiredSubsystems;
     }
 
-    public boolean requireSubsystems(BaseSequence<? extends ISequenceState> sequence) {
-        return ISequenceState.requireSubsystems(sequence, subsystemRequirements);
+    public boolean requireSubsystems(BaseSequence<? extends ISequencePhase> sequence) {
+        return ISequencePhase.requireSubsystems(sequence, subsystemRequirements);
     }
 
 }

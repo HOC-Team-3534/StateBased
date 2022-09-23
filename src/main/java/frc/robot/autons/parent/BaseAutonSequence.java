@@ -7,7 +7,7 @@ import frc.robot.subsystems.parent.BaseDriveSubsystem;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class BaseAutonSequence<S extends IAutonState> extends BaseSequence<S> {
+public abstract class BaseAutonSequence<S extends IAutonPhase> extends BaseSequence<S> {
 
     final BaseDriveSubsystem baseDriveSubsystem;
     PathPlannerFollower pathPlannerFollower;
@@ -27,16 +27,16 @@ public abstract class BaseAutonSequence<S extends IAutonState> extends BaseSeque
     }
 
     protected void setPathPlannerFollowerAtStartOfState(boolean setInitialPositionAndHeading) {
-        if (this.getStateFirstRunThrough()) {
-            this.pathPlannerFollower = this.getState().getPath(this);
+        if (this.getPhaseFirstRunThrough()) {
+            this.pathPlannerFollower = this.getPhase().getPath(this);
             this.pathPlannerFollower.resetStart();
             this.getBaseDriveSubsystem().setPathPlannerFollower(getPlannerFollower(), setInitialPositionAndHeading);
         }
     }
 
     protected void setInitialPoseFromCurrentPath() {
-        if (this.getStateFirstRunThrough()) {
-            this.getBaseDriveSubsystem().setInitalPoseFromFirstPathPlannerFollower(this.getState().getPath(this));
+        if (this.getPhaseFirstRunThrough()) {
+            this.getBaseDriveSubsystem().setInitalPoseFromFirstPathPlannerFollower(this.getPhase().getPath(this));
         }
     }
 

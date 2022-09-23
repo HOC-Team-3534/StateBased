@@ -2,7 +2,7 @@ package frc.robot.subsystems.parent;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequenceState;
+import frc.robot.sequences.parent.ISequencePhase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISubsystem {
 
     boolean required;
-    BaseSequence<? extends ISequenceState> sequenceRequiring;
+    BaseSequence<? extends ISequencePhase> sequenceRequiring;
     boolean stateChanged;
     boolean stateFirstRunThrough;
 
@@ -26,14 +26,14 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
         this.currentSubsystemState = neutralState;
     }
 
-    public boolean isRequiredByAnother(BaseSequence<? extends ISequenceState> sequence) {
+    public boolean isRequiredByAnother(BaseSequence<? extends ISequencePhase> sequence) {
         if (sequenceRequiring == sequence) {
             return false;
         }
         return this.required;
     }
 
-    public boolean require(BaseSequence<? extends ISequenceState> sequence, SsS subsystemState) {
+    public boolean require(BaseSequence<? extends ISequencePhase> sequence, SsS subsystemState) {
         if (!isRequiredByAnother(sequence)) {
             required = true;
             setSequenceRequiring(sequence);
@@ -58,7 +58,7 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
     private boolean isStillRequired() {
         if (!required) {
             return false;
-        } else if (!sequenceRequiring.getState().getState().getRequiredSubsystems().contains(this)) {
+        } else if (!sequenceRequiring.getPhase().getPhase().getRequiredSubsystems().contains(this)) {
             release();
             return false;
         } else {
@@ -94,11 +94,11 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
         return false;
     }
 
-    public BaseSequence<? extends ISequenceState> getSequenceRequiring() {
+    public BaseSequence<? extends ISequencePhase> getSequenceRequiring() {
         return sequenceRequiring;
     }
 
-    private void setSequenceRequiring(BaseSequence<? extends ISequenceState> sequence) {
+    private void setSequenceRequiring(BaseSequence<? extends ISequencePhase> sequence) {
         this.sequenceRequiring = sequence;
     }
 

@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+import static frc.robot.Constants.SHOOTER.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
@@ -16,8 +16,8 @@ import static frc.robot.Constants.*;
 
 public class Shooter extends BaseSubsystem<ShooterState> {
 
-    public static WPI_TalonFX shooter;
-    public static WPI_TalonSRX shooterBoot;
+    static WPI_TalonFX shooter;
+    static WPI_TalonSRX shooterBoot;
 
     static DoubleSolenoid pusher;
 
@@ -37,7 +37,7 @@ public class Shooter extends BaseSubsystem<ShooterState> {
         shooter.config_kD(1, 5);
         shooter.configClosedloopRamp(0.5);
 
-        shooterBoot = new WPI_TalonSRX(Constants.SHOOTER_BOOT);
+        shooterBoot = new WPI_TalonSRX(SHOOTER_BOOT);
         shooterBoot.setInverted(true);
 
         pusher = Robot.mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
@@ -51,12 +51,12 @@ public class Shooter extends BaseSubsystem<ShooterState> {
     }
 
     public void shoot(double rpm) {
-        double countsPer100MS = rpm * Constants.RPM_TO_COUNTS_PER_100MS;
+        double countsPer100MS = rpm * RPM_TO_COUNTS_PER_100MS;
         shooter.set(ControlMode.Velocity, countsPer100MS);
     }
 
     private double getShooterRPM() {
-        return shooter.getSelectedSensorVelocity() / Constants.RPM_TO_COUNTS_PER_100MS;
+        return shooter.getSelectedSensorVelocity() / RPM_TO_COUNTS_PER_100MS;
     }
 
     public double getShooterClosedLoopError() {
@@ -94,13 +94,13 @@ public class Shooter extends BaseSubsystem<ShooterState> {
 
     protected void punch() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(pusher, Value.kForward, Constants.DelayToOff.SHOOTER_PUSHER.millis);
+            setWithADelayToOff(pusher, Value.kForward, DelayToOff.SHOOTER_PUSHER.millis);
         }
     }
 
     protected void resetPunch() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(pusher, Value.kReverse, Constants.DelayToOff.SHOOTER_PUSHER.millis);
+            setWithADelayToOff(pusher, Value.kReverse, DelayToOff.SHOOTER_PUSHER.millis);
         }
         if (this.getSequenceRequiring().getTimeSinceStartOfState() > 50) {
             shooterBoot.set(ControlMode.PercentOutput, -0.70);

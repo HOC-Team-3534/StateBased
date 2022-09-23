@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import frc.robot.Constants;
+import static frc.robot.Constants.INTAKE.*;
 import frc.robot.Robot;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
@@ -33,14 +33,14 @@ public class Intake extends BaseSubsystem<IntakeState> {
 
     public void kickOut() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(intakeKickers, Value.kForward, Constants.DelayToOff.INTAKE_KICKERS.millis);
+            setWithADelayToOff(intakeKickers, Value.kForward, DelayToOff.INTAKE_KICKERS.millis);
             intakeRoller.set(ControlMode.PercentOutput, 0.80);
         }
     }
 
     public void retract() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(intakeKickers, Value.kReverse, Constants.DelayToOff.INTAKE_KICKERS.millis);
+            setWithADelayToOff(intakeKickers, Value.kReverse, DelayToOff.INTAKE_KICKERS.millis);
         }
     }
 

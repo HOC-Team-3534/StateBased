@@ -2,9 +2,9 @@ package frc.robot.autons.pathplannerfollower;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import frc.robot.Constants;
+import frc.robot.Constants.AUTO;
 
 /**
  * The core of being able to follow a {@link PathPlannerTrajectory} from a .path file from PathPlanner. The path is
@@ -26,7 +26,7 @@ public class PathPlannerFollower {
     }
 
     private void loadPath(String pathName) {
-        this.path = PathPlanner.loadPath(pathName, Constants.MAX_VELOCITY_AUTONOMOUS, Constants.MAX_ACCELERATION);
+        this.path = PathPlanner.loadPath(pathName, AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
     }
 
     public PathPlannerTrajectory.PathPlannerState getState(double seconds) {
@@ -38,12 +38,8 @@ public class PathPlannerFollower {
         return (PathPlannerTrajectory.PathPlannerState) path.sample(timeSinceStart);
     }
 
-    public Translation2d getInitialPosition() {
-        return path.getInitialState().poseMeters.getTranslation();
-    }
-
-    public Rotation2d getInitialHolonomic() {
-        return path.getInitialState().holonomicRotation;
+    public PathPlannerState getInitialState() {
+        return path.getInitialState();
     }
 
     public double getRemainingTimeSeconds() {

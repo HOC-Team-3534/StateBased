@@ -1,6 +1,6 @@
 package frc.robot.sequences;
 
-import frc.robot.Constants;
+import static frc.robot.Constants.CLIMBER.*;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.sequences.parent.BaseSequence;
@@ -65,7 +65,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGMIDHIGH1:
-                if (Robot.climber.getClimbArmDegree() > Constants.MIDHIGHBAR_SLOWDOWN_ANGLE) {
+                if (Robot.climber.getClimbArmDegree() > MIDHIGHBAR_SLOWDOWN_ANGLE) {
                     setNextState(SWINGMIDHIGH2);
                 }
                 if (!Buttons.Climb.getButton()) {
@@ -105,7 +105,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RECENTERMIDHIGHBAR:
-                if (Robot.climber.getClimbArmDegree() - Constants.RECENTER_ANGLE_TOLERANCE < Constants.MIDHIGHBAR_RECENTER_ANGLE_COMMAND) {
+                if (Robot.climber.getClimbArmDegree() - RECENTER_ANGLE_TOLERANCE < MIDHIGHBAR_RECENTER_ANGLE_COMMAND) {
                     setNextState(RELEASEMIDBAR);
                 }
                 if (!Buttons.Climb.getButton()) {
@@ -114,7 +114,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RELEASEMIDBAR:
-                if (Robot.climber.getClimbArmDegree() > Constants.DONERELEASINGMIDBAR_ANGLE) {
+                if (Robot.climber.getClimbArmDegree() > DONERELEASINGMIDBAR_ANGLE) {
                     setNextState(SWINGHIGHTRAVERSAL1);
                 }
                 if (!Buttons.Climb.getButton()) {
@@ -123,7 +123,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case SWINGHIGHTRAVERSAL1:
-                if (Robot.climber.getClimbArmDegree() > Constants.HIGHTRAVERSAL_SLOWDOWN_ANGLE) {
+                if (Robot.climber.getClimbArmDegree() > HIGHTRAVERSAL_SLOWDOWN_ANGLE) {
                     setNextState(SWINGHIGHTRAVERSAL2);
                 }
                 if (!Buttons.Climb.getButton()) {
@@ -163,7 +163,7 @@ public class Climb extends BaseSequence<ClimbState> {
                 }
                 break;
             case RECENTERHIGHTRAVERSALBAR:
-                if (Robot.climber.getClimbArmDegree() - Constants.RECENTER_ANGLE_TOLERANCE < Constants.HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND) {
+                if (Robot.climber.getClimbArmDegree() - RECENTER_ANGLE_TOLERANCE < HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND) {
                     setNextState(RELEASEHIGHBAR);
                 }
                 if (!Buttons.Climb.getButton()) {

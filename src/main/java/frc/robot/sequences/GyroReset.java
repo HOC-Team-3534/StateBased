@@ -38,7 +38,7 @@ public class GyroReset extends BaseSequence<GyroResetState> {
     public void process() {
         switch (getState()) {
             case RESET:
-                Robot.swerveDrive.setGyroOffset(new Rotation2d().minus(Robot.pigeon.getRotation2d()));
+                Robot.swerveDrive.resetGyro();
                 setNextState(NEUTRAL);
                 break;
             case NEUTRAL:

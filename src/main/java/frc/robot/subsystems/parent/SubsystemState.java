@@ -18,6 +18,11 @@ public class SubsystemState<BaseS extends BaseSubsystem> {
         return stateName;
     }
 
+    public void process(BaseS subsystem) {
+        this.subsystem = subsystem;
+        process();
+    }
+
     public void process() {
         processFunction.accept(subsystem);
     }

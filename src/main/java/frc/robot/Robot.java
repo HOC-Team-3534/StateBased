@@ -8,7 +8,7 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.drive.Vector2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autons.Auton;
@@ -41,7 +41,6 @@ public class Robot extends TimedRobot {
     public static SequenceProcessor sequenceProcessor;
     public static RobotContainer robotContainer;
 
-    public static WPI_Pigeon2 pigeon;
     public static Limelight limelight;
     public static PneumaticsControlModule mainPCM;
 
@@ -58,6 +57,7 @@ public class Robot extends TimedRobot {
     public static PathPlannerFollower corner4FiveBall3;
     private static long autonStartTime;
     private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
+    private final Field2d m_field = new Field2d();
     private int loopCnt = 0;
     private int loopPeriod = 0;
     private int logCounter = 0;
@@ -65,15 +65,12 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
 
-        pigeon = new WPI_Pigeon2(PIGEON_2);
         if (ROBOTTYPE == RobotType.PBOT) {
             limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3.0, vel -> 3.0);
         } else {
             limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437, d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8, vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225 / 52);
         }
         mainPCM = new PneumaticsControlModule(MAIN_PCM);
-
-        pigeon.reset();
 
         // PortForwarder.add(5800, "limelight.local", 5800);
         // PortForwarder.add(5801, "limelight.local", 5801);
@@ -126,6 +123,8 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putData(sendableChooser);
 
+        SmartDashboard.putData("Field", m_field);
+
     }
 
 
@@ -159,6 +158,7 @@ public class Robot extends TimedRobot {
                 loopCnt++;
 
                 swerveDrive.neutral();
+                swerveDrive.process();
             }
 
             Timer.delay(0.001);
@@ -266,7 +266,7 @@ public class Robot extends TimedRobot {
             SmartDashboard.putBoolean("L1 switch 2", Climber.h2Switch.get());
             SmartDashboard.putBoolean("L3 switch 1", Climber.l3Switch.get());
             SmartDashboard.putBoolean("L3 switch 2", Climber.h4Switch.get());
-            SmartDashboard.putNumber("Gyro", swerveDrive.getGyroHeading().getRadians());
+            SmartDashboard.putNumber("Gyro", swerveDrive.getGyroRotation().getDegrees());
 
             SmartDashboard.putNumber("tx (inverted)", limelight.getHorizontalAngleOffset().getDegrees());
             SmartDashboard.putNumber("ty", limelight.getPixelAngle());
@@ -275,16 +275,18 @@ public class Robot extends TimedRobot {
             //SmartDashboard.putNumber("Moving Target Angle Offset", RobotMap.limelight.getLimelightShootProjection().getOffset().getDegrees());
             //SmartDashboard.putNumber("Moving Target Distance", RobotMap.limelight.getLimelightShootProjection().getDistance());
 
-            SmartDashboard.putNumber("Odometry X", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getX());
-            SmartDashboard.putNumber("Odometry Y", swerveDrive.getSwerveDriveOdometry().getPoseMeters().getY());
+            SmartDashboard.putNumber("Odometry X", swerveDrive.getPose().getX());
+            SmartDashboard.putNumber("Odometry Y", swerveDrive.getPose().getY());
 
-            Vector2d targetVectorVelocity = swerveDrive.getTargetOrientedVelocity();
+            // Vector2d targetVectorVelocity = swerveDrive.getTargetOrientedVelocity();
 
-            SmartDashboard.putString("Target Velocity Vector", String.format("X: %.2f, Y: %.2f", targetVectorVelocity.x, targetVectorVelocity.y));
+            // SmartDashboard.putString("Target Velocity Vector", String.format("X: %.2f, Y: %.2f", targetVectorVelocity.x, targetVectorVelocity.y));
 
             SmartDashboard.putBoolean("Target Acquired", limelight.isTargetAcquired());
 
             SmartDashboard.putNumber("Target Angle Error", swerveDrive.getTargetShootRotationAngleError().getDegrees());
+
+            m_field.setRobotPose(swerveDrive.getPose());
 
             logCounter = 0;
         }

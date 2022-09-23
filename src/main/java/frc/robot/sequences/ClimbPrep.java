@@ -1,6 +1,5 @@
 package frc.robot.sequences;
 
-import frc.robot.Robot;
 import frc.robot.sequences.parent.BaseSequence;
 import frc.robot.sequences.parent.ISequenceState;
 import frc.robot.sequences.parent.SequenceState;

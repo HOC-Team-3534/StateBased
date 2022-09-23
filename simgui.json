@@ -6,8 +6,18 @@
       }
     },
     "Other Devices": {
+      "Pigeon 2[19]": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon FX[10]/Integrated Sensor": {
         "name": "Back Right Drive"
+      },
+      "Talon FX[1]/Fwd Limit": {
+        "header": {
+          "open": true
+        }
       },
       "Talon FX[1]/Integrated Sensor": {
         "header": {
@@ -15,11 +25,26 @@
         },
         "name": "Front Left Drive"
       },
+      "Talon FX[1]/Rev Limit": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX[3]": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon FX[4]/Integrated Sensor": {
         "name": "Front Right Drive"
       },
       "Talon FX[7]/Integrated Sensor": {
         "name": "Back Left Drive"
+      }
+    },
+    "RoboRIO": {
+      "RoboRIO Input": {
+        "open": true
       }
     }
   },
@@ -34,6 +59,8 @@
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/Pigeon 2 [19]": "Gyro",
+      "/LiveWindow/Ungrouped/Pigeon IMU [19]": "Gyro",
       "/LiveWindow/Ungrouped/Talon FX [10]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [12]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon FX [13]": "Motor Controller",
@@ -47,15 +74,37 @@
       "/LiveWindow/Ungrouped/Talon SRX [15]": "Motor Controller",
       "/LiveWindow/Ungrouped/Talon SRX [18]": "Motor Controller",
       "/LiveWindow/Ungrouped/navX-Sensor[2]": "Gyro",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Orientation Chooser": "String Chooser",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }
   },
   "NetworkTables": {
     "Shuffleboard": {
       "Drivetrain": {
+        "Back Left Module": {
+          "open": true
+        },
+        "Back Right Module": {
+          "open": true
+        },
+        "Front Left Module": {
+          "open": true
+        },
+        "Front Right Module": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "photonvision": {
+      "Integrated_Webcam": {
         "open": true
       },
       "open": true
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }

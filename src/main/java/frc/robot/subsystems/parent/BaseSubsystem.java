@@ -52,7 +52,7 @@ public abstract class BaseSubsystem<SsS extends ISubsystemState> implements ISub
         checkStateChanged();
         checkToTurnOff();
 
-        getCurrentSubsystemState().getState().process();
+        getCurrentSubsystemState().getState().process(this);
     }
 
     private boolean isStillRequired() {

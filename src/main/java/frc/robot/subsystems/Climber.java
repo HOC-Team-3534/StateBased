@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DelayToOff;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.parent.BaseSubsystem;
 
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.CLIMBER.*;
 
 public class Climber extends BaseSubsystem<ClimberState> {
 

@@ -3,41 +3,36 @@ package frc.robot.autons;
 import frc.robot.Robot;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.requirements.ShooterReq;
-import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
-import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
 
 import static frc.robot.autons.OneBallAutonPhase.*;
 
 import frc.pathplanner.PathPlannerFollower;
 
-enum OneBallAutonPhase implements IAutonPhase {
-    NEUTRAL(-999),
-    DRIVE1(0, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
-    SHOOTBALL1(-999, new ShooterReq(ShooterState.UPTOSPEED)),
-    PUNCH1(-999, new ShooterReq(ShooterState.PUNCH)),
-    RESETPUNCH1(-999, new ShooterReq(ShooterState.RESETPUNCH));
+enum OneBallAutonPhase implements ISequencePhase {
+    NEUTRAL,
+    DRIVE1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, ShooterState.AUTONPREUPTOSPEED),
+    SHOOTBALL1(ShooterState.UPTOSPEED),
+    PUNCH1(ShooterState.PUNCH),
+    RESETPUNCH1(ShooterState.RESETPUNCH);
 
-    int pathIndex;
-    SequencePhase state;
-
-    OneBallAutonPhase(int pathIndex, SubsystemRequirement... requirements) {
-        this.pathIndex = pathIndex;
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    OneBallAutonPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
+    OneBallAutonPhase(int pathIndex, ISubsystemState... states) {
+        phase = new SequencePhase(pathIndex, states);
+    }
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
-    }
-
-    @Override
-    public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonPhase> sequence) {
-        return IAutonPhase.getPath(sequence, pathIndex);
+        return phase;
     }
 }
 

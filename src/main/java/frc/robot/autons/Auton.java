@@ -2,8 +2,8 @@ package frc.robot.autons;
 
 import frc.pathplanner.PathPlannerFollower;
 import frc.robot.Robot;
-import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
-import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
 
 public enum Auton {
     CORNER1_2BALL(new TwoBallAuton(
@@ -28,9 +28,9 @@ public enum Auton {
             NoOpAutonPhase.NEUTRAL,
             NoOpAutonPhase.NEUTRAL, Robot.swerveDrive));
 
-    BaseAutonSequence<? extends IAutonPhase> auton;
+    BaseAutonSequence<? extends ISequencePhase> auton;
 
-    Auton(BaseAutonSequence<? extends IAutonPhase> auton) {
+    Auton(BaseAutonSequence<? extends ISequencePhase> auton) {
         this.auton = auton;
     }
 
@@ -38,7 +38,7 @@ public enum Auton {
         this.auton.setPathPlannerFollowers(pathPlannerFollowers);
     }
 
-    public BaseAutonSequence<? extends IAutonPhase> getAuton() {
+    public BaseAutonSequence<? extends ISequencePhase> getAuton() {
         return auton;
     }
 }

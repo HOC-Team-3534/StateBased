@@ -19,8 +19,8 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
-import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
-import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
 
 import static frc.robot.Constants.*;
 
@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
 
     public static boolean isAutonomous = false;
     public static double designatedLoopPeriod = 20;
-    public static BaseAutonSequence<? extends IAutonPhase> chosenAuton;
+    public static BaseAutonSequence<? extends ISequencePhase> chosenAuton;
     public static PathPlannerFollower corner1OneBall1;
     public static PathPlannerFollower corner1TwoBall1;
     public static PathPlannerFollower corner2OneBall1;

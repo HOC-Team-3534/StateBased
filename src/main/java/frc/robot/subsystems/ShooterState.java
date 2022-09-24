@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
-import frc.statebasedcontroller.subsystem.fundamental.ISubsystemState;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemState;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
+import frc.statebasedcontroller.subsystem.fundamental.state.SubsystemState;
 
 import java.util.function.Consumer;
 
@@ -13,7 +13,7 @@ public enum ShooterState implements ISubsystemState<Shooter> {
                 Robot.swerveDrive.getPathPlannerFollower().getRemainingTimeSeconds() < 2.0) {
             s.upToSpeed(3000);
         } else {
-            NEUTRAL.getState().process(s);
+            NEUTRAL.getState().process();
         }
     }),
     UPTOSPEED((s) -> {
@@ -33,11 +33,16 @@ public enum ShooterState implements ISubsystemState<Shooter> {
     SubsystemState<Shooter> state;
 
     ShooterState(Consumer<Shooter> processFunction) {
-        this.state = new SubsystemState<>(this.name(), processFunction, Robot.shooter);
+        this.state = new SubsystemState<>(this, processFunction);
     }
 
     @Override
     public SubsystemState<Shooter> getState() {
         return state;
+    }
+
+    @Override
+    public Shooter getSubsystem() {
+        return Robot.shooter;
     }
 }

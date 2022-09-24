@@ -2,27 +2,27 @@ package frc.robot.sequences;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeState;
-import frc.robot.subsystems.requirements.IntakeReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
-import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
+
 
 import static frc.robot.sequences.RollInPhase.NEUTRAL;
 
 enum RollInPhase implements ISequencePhase {
     NEUTRAL,
-    ROLLIN(new IntakeReq(IntakeState.ROLLIN));
+    ROLLIN(IntakeState.ROLLIN);
 
-    SequencePhase state;
-
-    RollInPhase(SubsystemRequirement... requirements) {
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    RollInPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
+        return phase;
     }
 
 }

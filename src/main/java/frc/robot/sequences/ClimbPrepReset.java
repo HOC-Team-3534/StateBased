@@ -2,27 +2,26 @@ package frc.robot.sequences;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.ClimberState;
-import frc.robot.subsystems.requirements.ClimberReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
-import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 
 import static frc.robot.sequences.ClimbPrepResetPhase.NEUTRAL;
 
 enum ClimbPrepResetPhase implements ISequencePhase {
     NEUTRAL,
-    RESETARM(new ClimberReq(ClimberState.RESETARM));
+    RESETARM(ClimberState.RESETARM);
 
-    SequencePhase state;
-
-    ClimbPrepResetPhase(SubsystemRequirement... requirements) {
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    ClimbPrepResetPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
+        return phase;
     }
 
 }

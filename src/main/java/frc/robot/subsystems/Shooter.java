@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.SHOOTER.*;
 
 import frc.robot.Robot;
-import frc.statebasedcontroller.subsystem.fundamental.BaseSubsystem;
+import frc.statebasedcontroller.subsystem.fundamental.subsystem.BaseSubsystem;
 
 import java.util.function.Function;
 

@@ -1,31 +1,28 @@
 package frc.robot.autons;
 
 import frc.pathplanner.PathPlannerFollower;
-import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
-import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
 
-enum NoOpAutonPhase implements IAutonPhase {
-    NEUTRAL(-999);
+enum NoOpAutonPhase implements ISequencePhase {
+    NEUTRAL;
 
-    int pathIndex;
-    SequencePhase state;
-
-    NoOpAutonPhase(int pathIndex, SubsystemRequirement... requirements) {
-        this.pathIndex = pathIndex;
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    NoOpAutonPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
+    NoOpAutonPhase(int pathIndex, ISubsystemState... states) {
+        phase = new SequencePhase(pathIndex, states);
+    }
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
-    }
-
-    @Override
-    public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonPhase> sequence) {
-        return IAutonPhase.getPath(sequence, pathIndex);
+        return phase;
     }
 }
 

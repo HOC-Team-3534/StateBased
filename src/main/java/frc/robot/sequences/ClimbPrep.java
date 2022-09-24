@@ -2,11 +2,10 @@ package frc.robot.sequences;
 
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ClimberState;
-import frc.robot.subsystems.requirements.ClimberReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
-import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 
 import static frc.robot.sequences.ClimbPrepPhase.PREPPEDFORCLIMB;
 import static frc.robot.sequences.ClimbPrepPhase.SWINGARM;
@@ -14,19 +13,19 @@ import static frc.robot.sequences.ClimbPrepPhase.SWINGARM;
 
 enum ClimbPrepPhase implements ISequencePhase {
     NEUTRAL,
-    PREPCLAW(new ClimberReq(ClimberState.PREPCLAW)),
-    SWINGARM(new ClimberReq(ClimberState.SWINGARM)),
-    PREPPEDFORCLIMB(new ClimberReq(ClimberState.SWINGARM)); //stays in swing arm, just using state change as indicator
+    PREPCLAW(ClimberState.PREPCLAW),
+    SWINGARM(ClimberState.SWINGARM),
+    PREPPEDFORCLIMB(ClimberState.SWINGARM); //stays in swing arm, just using state change as indicator
 
-    SequencePhase state;
-
-    ClimbPrepPhase(SubsystemRequirement... requirements) {
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    ClimbPrepPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
+        return phase;
     }
 
 }

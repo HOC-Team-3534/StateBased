@@ -4,43 +4,35 @@ import frc.robot.Robot;
 import frc.robot.subsystems.IntakeState;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.requirements.IntakeReq;
-import frc.robot.subsystems.requirements.ShooterReq;
-import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
-import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
 
 import static frc.robot.autons.TwoBallAutonPhase.*;
 
-import frc.pathplanner.PathPlannerFollower;
+enum TwoBallAutonPhase implements ISequencePhase {
+    NEUTRAL,
+    PICKUPBALL1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.KICKOUT, ShooterState.AUTONPREUPTOSPEED),
+    SHOOTBALL1(ShooterState.UPTOSPEED, IntakeState.HOLDPOSITION, SwerveDriveState.AIM),
+    PUNCH1(ShooterState.PUNCH, IntakeState.HOLDPOSITION),
+    RESETPUNCH1(ShooterState.RESETPUNCH, IntakeState.RETRACT),
+    BOOT1(ShooterState.BOOT);
 
-enum TwoBallAutonPhase implements IAutonPhase {
-    NEUTRAL(-999),
-    PICKUPBALL1(0, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new IntakeReq(IntakeState.KICKOUT), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
-    SHOOTBALL1(-999, new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION), new SwerveDriveReq((SwerveDriveState.AIM))),
-    PUNCH1(-999, new ShooterReq(ShooterState.PUNCH), new IntakeReq(IntakeState.HOLDPOSITION)),
-    RESETPUNCH1(-999, new ShooterReq(ShooterState.RESETPUNCH), new IntakeReq(IntakeState.RETRACT)),
-    BOOT1(-999, new ShooterReq(ShooterState.BOOT));
-
-    int pathIndex;
-    SequencePhase state;
-
-    TwoBallAutonPhase(int pathIndex, SubsystemRequirement... requirements) {
-        this.pathIndex = pathIndex;
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    TwoBallAutonPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
+    TwoBallAutonPhase(int pathIndex, ISubsystemState... states) {
+        phase = new SequencePhase(pathIndex, states);
+    }
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
-    }
-
-    @Override
-    public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonPhase> sequence) {
-        return IAutonPhase.getPath(sequence, pathIndex);
+        return phase;
     }
 }
 

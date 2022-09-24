@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import static frc.robot.Constants.INTAKE.*;
 
 import frc.robot.Robot;
-import frc.statebasedcontroller.subsystem.fundamental.BaseSubsystem;
+import frc.statebasedcontroller.subsystem.fundamental.subsystem.BaseSubsystem;
 
 import static frc.robot.Constants.*;
 

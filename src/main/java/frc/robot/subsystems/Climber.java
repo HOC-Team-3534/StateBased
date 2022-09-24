@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DelayToOff;
 import frc.robot.RobotContainer.Buttons;
-import frc.statebasedcontroller.subsystem.fundamental.BaseSubsystem;
+import frc.statebasedcontroller.subsystem.fundamental.subsystem.BaseSubsystem;
 
 import static frc.robot.Constants.CLIMBER.*;
 

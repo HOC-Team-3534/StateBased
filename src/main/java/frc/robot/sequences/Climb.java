@@ -6,42 +6,40 @@ import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ClimberState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.requirements.ClimberReq;
-import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
-import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
 
 import static frc.robot.sequences.ClimbPhase.*;
 
 enum ClimbPhase implements ISequencePhase {
     NEUTRAL,
-    PAUSED(new ClimberReq(ClimberState.NEUTRAL), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    GRIPMIDBAR(new ClimberReq(ClimberState.GRIPMIDBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    SWINGMIDHIGH1(new ClimberReq(ClimberState.SWINGMIDHIGH1), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    SWINGMIDHIGH2(new ClimberReq(ClimberState.SWINGMIDHIGH2), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    GRIPHIGHBAR(new ClimberReq(ClimberState.GRIPHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    RETRYHIGHBAR(new ClimberReq(ClimberState.RETRYHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    RECENTERMIDHIGHBAR(new ClimberReq(ClimberState.RECENTERMIDHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    RELEASEMIDBAR(new ClimberReq(ClimberState.RELEASEMIDBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    SWINGHIGHTRAVERSAL1(new ClimberReq(ClimberState.SWINGHIGHTRAVERSAL1), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    SWINGHIGHTRAVERSAL2(new ClimberReq(ClimberState.SWINGHIGHTRAVERSAL2), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    GRIPTRAVERSALBAR(new ClimberReq(ClimberState.GRIPTRAVERSALBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    RETRYTRAVERSALBAR(new ClimberReq(ClimberState.RETRYTRAVERSALBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    RECENTERHIGHTRAVERSALBAR(new ClimberReq(ClimberState.RECENTERHIGHTRAVERSALBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    RELEASEHIGHBAR(new ClimberReq(ClimberState.RELEASEHIGHBAR), new SwerveDriveReq(SwerveDriveState.NEUTRAL)),
-    SWINGTOREST(new ClimberReq(ClimberState.SWINGTOREST), new SwerveDriveReq(SwerveDriveState.NEUTRAL));
+    PAUSED(ClimberState.NEUTRAL, SwerveDriveState.NEUTRAL),
+    GRIPMIDBAR(ClimberState.GRIPMIDBAR, SwerveDriveState.NEUTRAL),
+    SWINGMIDHIGH1(ClimberState.SWINGMIDHIGH1, SwerveDriveState.NEUTRAL),
+    SWINGMIDHIGH2(ClimberState.SWINGMIDHIGH2, SwerveDriveState.NEUTRAL),
+    GRIPHIGHBAR(ClimberState.GRIPHIGHBAR, SwerveDriveState.NEUTRAL),
+    RETRYHIGHBAR(ClimberState.RETRYHIGHBAR, SwerveDriveState.NEUTRAL),
+    RECENTERMIDHIGHBAR(ClimberState.RECENTERMIDHIGHBAR, SwerveDriveState.NEUTRAL),
+    RELEASEMIDBAR(ClimberState.RELEASEMIDBAR, SwerveDriveState.NEUTRAL),
+    SWINGHIGHTRAVERSAL1(ClimberState.SWINGHIGHTRAVERSAL1, SwerveDriveState.NEUTRAL),
+    SWINGHIGHTRAVERSAL2(ClimberState.SWINGHIGHTRAVERSAL2, SwerveDriveState.NEUTRAL),
+    GRIPTRAVERSALBAR(ClimberState.GRIPTRAVERSALBAR, SwerveDriveState.NEUTRAL),
+    RETRYTRAVERSALBAR(ClimberState.RETRYTRAVERSALBAR, SwerveDriveState.NEUTRAL),
+    RECENTERHIGHTRAVERSALBAR(ClimberState.RECENTERHIGHTRAVERSALBAR, SwerveDriveState.NEUTRAL),
+    RELEASEHIGHBAR(ClimberState.RELEASEHIGHBAR, SwerveDriveState.NEUTRAL),
+    SWINGTOREST(ClimberState.SWINGTOREST, SwerveDriveState.NEUTRAL);
 
-    SequencePhase state;
+    SequencePhase phase;
 
-    ClimbPhase(SubsystemRequirement... requirements) {
-        state = new SequencePhase(requirements);
+    ClimbPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
 
     @Override
     public SequencePhase getPhase() {
-        return state;
+        return phase;
     }
 
 }

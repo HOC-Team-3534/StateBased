@@ -4,31 +4,30 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.requirements.ShooterReq;
-import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
-import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
+
 
 import static frc.robot.sequences.ShootPhase.*;
 
 enum ShootPhase implements ISequencePhase {
     NEUTRAL,
-    UPTOSPEED(new ShooterReq(ShooterState.UPTOSPEED), new SwerveDriveReq(SwerveDriveState.AIM)),
-    PUNCH(new ShooterReq(ShooterState.PUNCH), new SwerveDriveReq(SwerveDriveState.AIM)),
-    RESETPUNCH(new ShooterReq(ShooterState.RESETPUNCH), new SwerveDriveReq(SwerveDriveState.AIM)),
-    BOOT(new ShooterReq(ShooterState.BOOT), new SwerveDriveReq(SwerveDriveState.AIM));
+    UPTOSPEED(ShooterState.UPTOSPEED, SwerveDriveState.AIM),
+    PUNCH(ShooterState.PUNCH, SwerveDriveState.AIM),
+    RESETPUNCH(ShooterState.RESETPUNCH, SwerveDriveState.AIM),
+    BOOT(ShooterState.BOOT, SwerveDriveState.AIM);
 
-    SequencePhase state;
-
-    ShootPhase(SubsystemRequirement... requirements) {
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    ShootPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
+        return phase;
     }
 
 }

@@ -4,48 +4,40 @@ import frc.robot.Robot;
 import frc.robot.subsystems.IntakeState;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.requirements.IntakeReq;
-import frc.robot.subsystems.requirements.ShooterReq;
-import frc.robot.subsystems.requirements.SwerveDriveReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
-import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
 
 import static frc.robot.autons.ThreeBallAutonPhase.*;
 
-import frc.pathplanner.PathPlannerFollower;
+enum ThreeBallAutonPhase implements ISequencePhase {
+    NEUTRAL,
+    DRIVE1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, ShooterState.AUTONPREUPTOSPEED),
+    SHOOTBALL1(ShooterState.UPTOSPEED),
+    PUNCH1(ShooterState.PUNCH),
+    RESETPUNCH1(ShooterState.RESETPUNCH),
+    PICKUPBALL1(1, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.KICKOUT, ShooterState.AUTONPREUPTOSPEED),
+    SHOOTBALL2(SwerveDriveState.AIM, ShooterState.UPTOSPEED, IntakeState.HOLDPOSITION),
+    PUNCH2(ShooterState.PUNCH, IntakeState.RETRACT),
+    RESETPUNCH2(ShooterState.RESETPUNCH),
+    BOOT1(ShooterState.BOOT);
 
-enum ThreeBallAutonPhase implements IAutonPhase {
-    NEUTRAL(-999),
-    DRIVE1(0, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
-    SHOOTBALL1(-999, new ShooterReq(ShooterState.UPTOSPEED)),
-    PUNCH1(-999, new ShooterReq(ShooterState.PUNCH)),
-    RESETPUNCH1(-999, new ShooterReq(ShooterState.RESETPUNCH)),
-    PICKUPBALL1(1, new SwerveDriveReq(SwerveDriveState.DRIVE_AUTONOMOUSLY), new IntakeReq(IntakeState.KICKOUT), new ShooterReq(ShooterState.AUTONPREUPTOSPEED)),
-    SHOOTBALL2(-999, new SwerveDriveReq(SwerveDriveState.AIM), new ShooterReq(ShooterState.UPTOSPEED), new IntakeReq(IntakeState.HOLDPOSITION)),
-    PUNCH2(-999, new ShooterReq(ShooterState.PUNCH), new IntakeReq(IntakeState.RETRACT)),
-    RESETPUNCH2(-999, new ShooterReq(ShooterState.RESETPUNCH)),
-    BOOT1(-999, new ShooterReq(ShooterState.BOOT));
-
-    int pathIndex;
-    SequencePhase state;
-
-    ThreeBallAutonPhase(int pathIndex, SubsystemRequirement... requirements) {
-        this.pathIndex = pathIndex;
-        state = new SequencePhase(requirements);
-    }
-
-    @Override
-    public SequencePhase getPhase() {
-        return state;
-    }
-
-    @Override
-    public PathPlannerFollower getPath(BaseAutonSequence<? extends IAutonPhase> sequence) {
-        return IAutonPhase.getPath(sequence, pathIndex);
-    }
+   SequencePhase phase;
+   
+   ThreeBallAutonPhase(ISubsystemState... states) {
+       phase = new SequencePhase(states);
+   }
+   
+   ThreeBallAutonPhase(int pathIndex, ISubsystemState... states) {
+       phase = new SequencePhase(pathIndex, states);
+   }
+   
+   @Override
+   public SequencePhase getPhase() {
+       return phase;
+   }
 }
 
 public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonPhase> {

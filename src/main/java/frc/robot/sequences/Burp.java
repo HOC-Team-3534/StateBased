@@ -3,30 +3,29 @@ package frc.robot.sequences;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.ShooterState;
-import frc.robot.subsystems.requirements.ShooterReq;
-import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
-import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
-import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
-import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.sequence.BaseSequence;
+import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 
 import static frc.robot.sequences.BurpPhase.*;
 
 enum BurpPhase implements ISequencePhase {
     NEUTRAL,
-    BURP(new ShooterReq(ShooterState.BURP)),
-    PUNCH(new ShooterReq(ShooterState.PUNCH)),
-    RESETPUNCH(new ShooterReq(ShooterState.RESETPUNCH)),
-    BOOT(new ShooterReq(ShooterState.BOOT));
+    BURP(ShooterState.BURP),
+    PUNCH(ShooterState.PUNCH),
+    RESETPUNCH(ShooterState.RESETPUNCH),
+    BOOT(ShooterState.BOOT);
 
-    SequencePhase state;
-
-    BurpPhase(SubsystemRequirement... requirements) {
-        state = new SequencePhase(requirements);
+    SequencePhase phase;
+    
+    BurpPhase(ISubsystemState... states) {
+        phase = new SequencePhase(states);
     }
-
+    
     @Override
     public SequencePhase getPhase() {
-        return state;
+        return phase;
     }
 }
 

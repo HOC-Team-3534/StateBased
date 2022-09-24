@@ -6,13 +6,12 @@ import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
 import frc.robot.subsystems.requirements.ShooterReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
+import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
+import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
 
 import static frc.robot.sequences.ShootPhase.*;
-
-import frc.BaseSequence;
-import frc.ISequencePhase;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
 
 enum ShootPhase implements ISequencePhase {
     NEUTRAL,

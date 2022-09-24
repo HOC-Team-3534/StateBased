@@ -3,12 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.DriveSpeedsConfig;
-import frc.StateBasedSwerveDrivetrainModel;
 import frc.robot.Constants.AUTO;
 import frc.robot.Constants.DRIVE;
 import frc.robot.Constants.ROBOT;
-
+import frc.statebasedcontroller.config.DriveSpeedsConfig;
+import frc.statebasedcontroller.subsystem.requiredadditions.swervedrive.StateBasedSwerveDrivetrainModel;
 import frc.swervelib.*;
 import frc.wpiClasses.QuadSwerveSim;
 

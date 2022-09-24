@@ -1,11 +1,11 @@
 package frc.robot.autons;
 
-import frc.BaseAutonSequence;
-import frc.BaseDriveSubsystem;
-import frc.IAutonPhase;
-import frc.PathPlannerFollower;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
+import frc.pathplanner.PathPlannerFollower;
+import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
+import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
 
 enum NoOpAutonPhase implements IAutonPhase {
     NEUTRAL(-999);

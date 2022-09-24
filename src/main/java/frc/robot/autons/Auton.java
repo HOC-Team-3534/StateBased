@@ -1,9 +1,9 @@
 package frc.robot.autons;
 
-import frc.BaseAutonSequence;
-import frc.IAutonPhase;
-import frc.PathPlannerFollower;
+import frc.pathplanner.PathPlannerFollower;
 import frc.robot.Robot;
+import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
+import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
 
 public enum Auton {
     CORNER1_2BALL(new TwoBallAuton(

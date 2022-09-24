@@ -4,11 +4,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.BaseDriveSubsystem;
-import frc.StateBasedSwerveDrivetrainModel;
 import frc.robot.BearSwerveHelper;
 import frc.robot.Constants.DRIVE;
 import frc.robot.RobotContainer.Axes;
+import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
+import frc.statebasedcontroller.subsystem.requiredadditions.swervedrive.StateBasedSwerveDrivetrainModel;
 
 public class SwerveDrive extends BaseDriveSubsystem<SwerveDriveState> {
 

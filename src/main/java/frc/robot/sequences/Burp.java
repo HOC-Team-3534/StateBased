@@ -4,13 +4,12 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.requirements.ShooterReq;
+import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
+import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
 
 import static frc.robot.sequences.BurpPhase.*;
-
-import frc.BaseSequence;
-import frc.ISequencePhase;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
 
 enum BurpPhase implements ISequencePhase {
     NEUTRAL,

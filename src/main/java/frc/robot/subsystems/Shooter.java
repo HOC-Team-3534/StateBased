@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.SHOOTER.*;
 
-import frc.BaseSubsystem;
 import frc.robot.Robot;
+import frc.statebasedcontroller.subsystem.fundamental.BaseSubsystem;
 
 import java.util.function.Function;
 

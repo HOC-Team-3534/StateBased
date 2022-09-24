@@ -3,14 +3,14 @@ package frc.robot.sequences;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ClimberState;
 import frc.robot.subsystems.requirements.ClimberReq;
+import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
+import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
 
 import static frc.robot.sequences.ClimbPrepPhase.PREPPEDFORCLIMB;
 import static frc.robot.sequences.ClimbPrepPhase.SWINGARM;
 
-import frc.BaseSequence;
-import frc.ISequencePhase;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
 
 enum ClimbPrepPhase implements ISequencePhase {
     NEUTRAL,

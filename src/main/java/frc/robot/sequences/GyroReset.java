@@ -1,13 +1,12 @@
 package frc.robot.sequences;
 
 import frc.robot.Robot;
+import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
+import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
 
 import static frc.robot.sequences.GyroResetPhase.NEUTRAL;
-
-import frc.BaseSequence;
-import frc.ISequencePhase;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
 
 enum GyroResetPhase implements ISequencePhase {
     NEUTRAL,

@@ -3,13 +3,12 @@ package frc.robot.sequences;
 import frc.robot.Robot;
 import frc.robot.subsystems.ClimberState;
 import frc.robot.subsystems.requirements.ClimberReq;
+import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
+import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
 
 import static frc.robot.sequences.ClimbPrepResetPhase.NEUTRAL;
-
-import frc.BaseSequence;
-import frc.ISequencePhase;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
 
 enum ClimbPrepResetPhase implements ISequencePhase {
     NEUTRAL,

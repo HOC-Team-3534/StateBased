@@ -3,13 +3,12 @@ package frc.robot.sequences;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeState;
 import frc.robot.subsystems.requirements.IntakeReq;
+import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
+import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
 
 import static frc.robot.sequences.RollInPhase.NEUTRAL;
-
-import frc.BaseSequence;
-import frc.ISequencePhase;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
 
 enum RollInPhase implements ISequencePhase {
     NEUTRAL,

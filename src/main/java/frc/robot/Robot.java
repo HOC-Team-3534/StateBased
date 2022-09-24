@@ -10,9 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.BaseAutonSequence;
-import frc.IAutonPhase;
-import frc.PathPlannerFollower;
+import frc.pathplanner.PathPlannerFollower;
 import frc.robot.Constants.AUTO;
 import frc.robot.autons.Auton;
 import frc.robot.extras.Limelight;
@@ -21,6 +19,8 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
+import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
+import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
 
 import static frc.robot.Constants.*;
 

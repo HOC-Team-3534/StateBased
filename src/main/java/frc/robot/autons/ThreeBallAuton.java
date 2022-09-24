@@ -7,15 +7,15 @@ import frc.robot.subsystems.SwerveDriveState;
 import frc.robot.subsystems.requirements.IntakeReq;
 import frc.robot.subsystems.requirements.ShooterReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
+import frc.statebasedcontroller.sequence.fundamental.BaseAutonSequence;
+import frc.statebasedcontroller.sequence.fundamental.IAutonPhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
+import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
 
 import static frc.robot.autons.ThreeBallAutonPhase.*;
 
-import frc.BaseAutonSequence;
-import frc.BaseDriveSubsystem;
-import frc.IAutonPhase;
-import frc.PathPlannerFollower;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
+import frc.pathplanner.PathPlannerFollower;
 
 enum ThreeBallAutonPhase implements IAutonPhase {
     NEUTRAL(-999),

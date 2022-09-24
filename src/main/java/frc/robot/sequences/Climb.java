@@ -8,13 +8,12 @@ import frc.robot.subsystems.ClimberState;
 import frc.robot.subsystems.SwerveDriveState;
 import frc.robot.subsystems.requirements.ClimberReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
+import frc.statebasedcontroller.sequence.fundamental.BaseSequence;
+import frc.statebasedcontroller.sequence.fundamental.ISequencePhase;
+import frc.statebasedcontroller.sequence.fundamental.SequencePhase;
+import frc.statebasedcontroller.subsystem.fundamental.SubsystemRequirement;
 
 import static frc.robot.sequences.ClimbPhase.*;
-
-import frc.BaseSequence;
-import frc.ISequencePhase;
-import frc.SequencePhase;
-import frc.SubsystemRequirement;
 
 enum ClimbPhase implements ISequencePhase {
     NEUTRAL,

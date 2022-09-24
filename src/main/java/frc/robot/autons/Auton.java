@@ -1,9 +1,9 @@
 package frc.robot.autons;
 
+import frc.BaseAutonSequence;
+import frc.IAutonPhase;
+import frc.PathPlannerFollower;
 import frc.robot.Robot;
-import frc.robot.autons.parent.BaseAutonSequence;
-import frc.robot.autons.parent.IAutonPhase;
-import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 
 public enum Auton {
     CORNER1_2BALL(new TwoBallAuton(
@@ -30,7 +30,7 @@ public enum Auton {
 
     BaseAutonSequence<? extends IAutonPhase> auton;
 
-    Auton(frc.robot.autons.parent.BaseAutonSequence<? extends IAutonPhase> auton) {
+    Auton(BaseAutonSequence<? extends IAutonPhase> auton) {
         this.auton = auton;
     }
 

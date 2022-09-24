@@ -1,18 +1,19 @@
 package frc.robot.autons;
 
 import frc.robot.Robot;
-import frc.robot.autons.parent.BaseAutonSequence;
-import frc.robot.autons.parent.IAutonPhase;
-import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
-import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.parent.BaseDriveSubsystem;
-import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
 import static frc.robot.autons.OneBallAutonPhase.*;
+
+import frc.BaseAutonSequence;
+import frc.BaseDriveSubsystem;
+import frc.IAutonPhase;
+import frc.PathPlannerFollower;
+import frc.SequencePhase;
+import frc.SubsystemRequirement;
 
 enum OneBallAutonPhase implements IAutonPhase {
     NEUTRAL(-999),

@@ -10,10 +10,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.BaseAutonSequence;
+import frc.IAutonPhase;
+import frc.PathPlannerFollower;
+import frc.robot.Constants.AUTO;
 import frc.robot.autons.Auton;
-import frc.robot.autons.parent.BaseAutonSequence;
-import frc.robot.autons.parent.IAutonPhase;
-import frc.robot.autons.pathplannerfollower.PathPlannerFollower;
 import frc.robot.extras.Limelight;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.Climber;
@@ -90,14 +91,14 @@ public class Robot extends TimedRobot {
 
         sequenceProcessor = new SequenceProcessor();
 
-        corner1OneBall1 = new PathPlannerFollower("Corner 1 1 Ball 1");
-        corner1TwoBall1 = new PathPlannerFollower("Corner 1 2 Ball 1");
-        corner2OneBall1 = new PathPlannerFollower("Corner 2 1 Ball 1");
-        corner3OneBall1 = new PathPlannerFollower("Corner 3 1 Ball 1");
-        corner4FiveBallPre = new PathPlannerFollower("Corner 4 5 Ball Pre");
-        corner4FiveBall1 = new PathPlannerFollower("Corner 4 5 Ball 1");
-        corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2");
-        corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3");
+        corner1OneBall1 = new PathPlannerFollower("Corner 1 1 Ball 1", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
+        corner1TwoBall1 = new PathPlannerFollower("Corner 1 2 Ball 1", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
+        corner2OneBall1 = new PathPlannerFollower("Corner 2 1 Ball 1", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
+        corner3OneBall1 = new PathPlannerFollower("Corner 3 1 Ball 1", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
+        corner4FiveBallPre = new PathPlannerFollower("Corner 4 5 Ball Pre", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
+        corner4FiveBall1 = new PathPlannerFollower("Corner 4 5 Ball 1", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
+        corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
+        corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
 
         Auton.CORNER1_1BALL.setPathPlannerFollowers(corner1OneBall1);
         Auton.CORNER1_2BALL.setPathPlannerFollowers(corner1TwoBall1);

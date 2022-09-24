@@ -2,16 +2,17 @@ package frc.robot.sequences;
 
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
-import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequencePhase;
-import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.ShooterState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ShooterReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
 import static frc.robot.sequences.ShootPhase.*;
+
+import frc.BaseSequence;
+import frc.ISequencePhase;
+import frc.SequencePhase;
+import frc.SubsystemRequirement;
 
 enum ShootPhase implements ISequencePhase {
     NEUTRAL,
@@ -44,7 +45,7 @@ public class Shoot extends BaseSequence<ShootPhase> {
     public void process() {
 
         Robot.limelight.updateLimelightShootProjection();
-        Robot.swerveDrive.setTargetShootRotationAngle();
+        Robot.swerveDrive.setTargetShootRotationAngle(() -> Robot.limelight.getHorizontalAngleOffset());
 
         switch (getPhase()) {
             case UPTOSPEED:

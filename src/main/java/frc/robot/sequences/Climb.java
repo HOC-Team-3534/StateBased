@@ -3,17 +3,18 @@ package frc.robot.sequences;
 import static frc.robot.Constants.CLIMBER.*;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
-import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequencePhase;
-import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ClimberState;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.ClimberReq;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
 import static frc.robot.sequences.ClimbPhase.*;
+
+import frc.BaseSequence;
+import frc.ISequencePhase;
+import frc.SequencePhase;
+import frc.SubsystemRequirement;
 
 enum ClimbPhase implements ISequencePhase {
     NEUTRAL,

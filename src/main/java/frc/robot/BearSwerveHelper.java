@@ -3,9 +3,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.DriveSpeedsConfig;
+import frc.StateBasedSwerveDrivetrainModel;
 import frc.robot.Constants.AUTO;
+import frc.robot.Constants.DRIVE;
 import frc.robot.Constants.ROBOT;
-import frc.robot.subsystems.parent.StateBasedSwerveDrivetrainModel;
+
 import frc.swervelib.*;
 import frc.wpiClasses.QuadSwerveSim;
 
@@ -89,5 +92,12 @@ public class BearSwerveHelper {
         SwerveConstants.MASS_kg = ROBOT.ROBOT_MASS_kg;
         SwerveConstants.MOI_KGM2 = ROBOT.ROBOT_MOI_KGM2;
         SwerveConstants.KINEMATICS = DRIVE.KINEMATICS;
+
+        DriveSpeedsConfig.FWD_REV_FAST = DRIVE.MAX_FWD_REV_SPEED_FAST;
+        DriveSpeedsConfig.STRAFE_FAST = DRIVE.MAX_STRAFE_SPEED_FAST;
+        DriveSpeedsConfig.ROTATION_FAST = DRIVE.MAX_ROTATE_SPEED_FAST;
+        DriveSpeedsConfig.FWD_REV_SLOW = DRIVE.MAX_FWD_REV_SPEED_SLOW;
+        DriveSpeedsConfig.STRAFE_SLOW = DRIVE.MAX_STRAFE_SPEED_SLOW;
+        DriveSpeedsConfig.ROTATION_SLOW = DRIVE.MAX_ROTATE_SPEED_SLOW;
     }
 }

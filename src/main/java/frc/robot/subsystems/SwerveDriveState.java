@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
+import frc.ISubsystemState;
+import frc.SubsystemState;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.parent.ISubsystemState;
-import frc.robot.subsystems.parent.SubsystemState;
 
 import java.util.function.Consumer;
 

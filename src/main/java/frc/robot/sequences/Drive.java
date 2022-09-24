@@ -1,10 +1,10 @@
 package frc.robot.sequences;
 
-import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequencePhase;
-import frc.robot.sequences.parent.SequencePhase;
+import frc.BaseSequence;
+import frc.ISequencePhase;
+import frc.SequencePhase;
+import frc.SubsystemRequirement;
 import frc.robot.subsystems.SwerveDriveState;
-import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.SwerveDriveReq;
 
 enum DrivePhase implements ISequencePhase {

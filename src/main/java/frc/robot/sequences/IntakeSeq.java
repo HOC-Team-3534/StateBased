@@ -1,14 +1,15 @@
 package frc.robot.sequences;
 
 import frc.robot.RobotContainer.Buttons;
-import frc.robot.sequences.parent.BaseSequence;
-import frc.robot.sequences.parent.ISequencePhase;
-import frc.robot.sequences.parent.SequencePhase;
 import frc.robot.subsystems.IntakeState;
-import frc.robot.subsystems.parent.SubsystemRequirement;
 import frc.robot.subsystems.requirements.IntakeReq;
 
 import static frc.robot.sequences.IntakeSeqPhase.*;
+
+import frc.BaseSequence;
+import frc.ISequencePhase;
+import frc.SequencePhase;
+import frc.SubsystemRequirement;
 
 enum IntakeSeqPhase implements ISequencePhase {
     NEUTRAL,

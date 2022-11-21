@@ -63,20 +63,9 @@ public class RobotContainer {
 
     public enum Buttons {
 
-        RAMPSHOOTER(() -> RobotContainer.getController2().getRightBumper()),
-        SHOOT(() -> RobotContainer.getController2().getRightTriggerAxis() > 0.15),
-        Burp(() -> RobotContainer.getController2().getLeftTriggerAxis() > 0.15),
+        /** TODO Outline all of the buttons for any operation of the robot */
+
         Creep(() -> RobotContainer.getController1().getLeftTriggerAxis() > 0.15),
-        Intake(() -> RobotContainer.getController1().getRightTriggerAxis() > 0.15),
-        Extake(() -> RobotContainer.getController1().getRightBumper()),
-        RollIn(() -> RobotContainer.getController2().getLeftBumper()),
-        Climb(() -> RobotContainer.getController2().getYButton()),
-        MoveClimbArmManually(() -> RobotContainer.getController2().getBackButton()),
-        MoveClimbArmForward(() -> RobotContainer.getController2().getRightBumper()),
-        MoveClimbArmBackward(() -> RobotContainer.getController2().getLeftBumper()),
-        ClimbArmEncoderReset(() -> RobotContainer.getController2().getStartButton()),
-        ClimbPrep(() -> RobotContainer.getController2().getAButton()),
-        ClimbPrepReset(() -> RobotContainer.getController1().getBackButton()),
         GyroReset(() -> RobotContainer.getController2().getRightStickButton());
 
         Callable<Boolean> callable;
@@ -101,6 +90,8 @@ public class RobotContainer {
     }
 
     public enum Axes {
+        /** TODO Outline all of the axes for any operation of the robot */
+
         Drive_ForwardBackward(() -> -modifyAxis(RobotContainer.getController1().getLeftY())),
         Drive_LeftRight(() -> -modifyAxis(RobotContainer.getController1().getLeftX())),
         Drive_Rotation(() -> -modifyAxis(RobotContainer.getController1().getRightX()));

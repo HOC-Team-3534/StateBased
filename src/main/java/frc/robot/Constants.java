@@ -25,29 +25,30 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final int MAIN_PCM = 17;
     public static final int PIGEON_2 = 19; //FIXME Set Pigeon ID
     public static RobotType ROBOTTYPE = RobotType.CBOT;
 
-    public enum DelayToOff {
+    public static final int DESIGNATED_LOOP_PERIOD = 20;
 
-        /**
-         * the delay in seconds until the solenoids for certain ports turn off
-         * below is just an example from 2019
-         */
+    // public enum DelayToOff {
 
-        CLIMB_CLAWS(1.0),
-        INTAKE_KICKERS(0.5),
-        SHOOTER_PUSHER(0.5);
+    //     /**
+    //      * the delay in seconds until the solenoids for certain ports turn off
+    //      * below is just an example from 2019
+    //      */
 
-        public long millis;
+    //     CLIMB_CLAWS(1.0),
+    //     INTAKE_KICKERS(0.5),
+    //     SHOOTER_PUSHER(0.5);
 
-        DelayToOff(double time) {
+    //     public long millis;
 
-            this.millis = (long) time * 1000;
+    //     DelayToOff(double time) {
 
-        }
-    }
+    //         this.millis = (long) time * 1000;
+
+    //     }
+    // }
 
     public enum RobotType {
         PBOT, CBOT
@@ -115,48 +116,6 @@ public final class Constants {
         static public final double MAX_ROTATE_SPEED_SLOW = 0.25;
     }
 
-    public static final class CLIMBER {
-        public static final int L1_EXTEND = 0;
-        public static final int L1_RETRACT = 1;
-        public static final int H2_EXTEND = 2;
-        public static final int H2_RETRACT = 3;
-        public static final int L3_EXTEND = 4;
-        public static final int L3_RETRACT = 5;
-        public static final int H4_EXTEND = 6;
-        public static final int H4_RETRACT = 7;
-
-        public static final int L1_SWITCH = 0;
-        public static final int H2_SWITCH = 1;
-        public static final int L3_SWITCH = 2;
-        public static final int H4_SWITCH = 3;
-
-        public static final int CLIMB_ARM_MOTOR = 14;
-
-        public static final int CLIMB_PCM = 16;
-
-        public static final double CLIMB_ARM_GEAR_RATIO = 716.8;
-        public static final double ARM_DEGREES_TO_FALCON_TICKS = CLIMB_ARM_GEAR_RATIO * ENCODER.ENC_PULSE_PER_REV / 360.0;
-        public static final double FALCON_TICKS_TO_ARM_DEGREES = 1 / ARM_DEGREES_TO_FALCON_TICKS;
-        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND = 51.0;
-        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND = 80.0;
-        public static final double MAX_ARM_VELOCITY_DEGREES_PER_SECOND_SLOW = 45.0;
-        public static final double MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW = 50.0;
-        public static final int MAX_ARM_VELOCITY_NATIVE_UNITS = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
-        public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
-        public static final int MAX_ARM_VELOCITY_NATIVE_UNITS_SLOW = (int) (MAX_ARM_VELOCITY_DEGREES_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
-        public static final int MAX_ARM_ACCELERATION_NATIVE_UNITS_SLOW = (int) (MAX_ARM_ACCELERATION_DEGREES_PER_SECOND_PER_SECOND_SLOW * ARM_DEGREES_TO_FALCON_TICKS / 10.0);
-        public static final double MIDBAR_GRAB_ANGLE_COMMAND = 94.0;
-        public static final double HIGHBAR_GRAB_ANGLE_COMMAND = 265.0; //impossible to actually be at 270
-        public static final double TRAVERSALBAR_GRAB_ANGLE_COMMMAND = 445.0; //impossible to actually be at 450
-        public static final double SWINGTOREST_ANGLE_COMMAND = 450.0;
-        public static final double MIDHIGHBAR_SLOWDOWN_ANGLE = 130.0;
-        public static final double HIGHTRAVERSAL_SLOWDOWN_ANGLE = 290.0;
-        public static final double MIDHIGHBAR_RECENTER_ANGLE_COMMAND = 220.0; //would be sitting perpendicular to the bars at 180
-        public static final double HIGHTRAVERSALBAR_RECENTER_ANGLE_COMMAND = 400.0; //would be sitting perpendicular to the bars at 360
-        public static final double RECENTER_ANGLE_TOLERANCE = 5.0; //should at least be 3 degrees just for comfort, if not at least 5
-        public static final double DONERELEASINGMIDBAR_ANGLE = 270.0;
-    }
-
     public static final class AUTO {
         public static final double kMaxSpeedMetersPerSecond = 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -197,20 +156,5 @@ public final class Constants {
         static public final double steer_ENC_MODULE_REVS_PER_COUNT = 1.0 / ((double) (STEER_ENC_COUNTS_PER_MODULE_REV));
     }
 
-    public static final class INTAKE {
-        public static final int INTAKE_EXTEND = 2;
-        public static final int INTAKE_RETRACT = 3;
-        public static final int INTAKE_ROLLER = 15;
-    }
-
-    public static final class SHOOTER {
-        public static final int PUSHER_FORWARD = 0;
-        public static final int PUSHER_REVERSE = 1;
-
-        public static final int SHOOTER_MOTOR = 13;
-        public static final int SHOOTER_BOOT = 18;
-
-        public static final double SHOOT_MOTOR_GEAR_RATIO = 1.0;
-        public static final double RPM_TO_COUNTS_PER_100MS = ENCODER.ENC_PULSE_PER_REV / 600.0 / SHOOT_MOTOR_GEAR_RATIO;
-    }
+    /** TODO add subsystem related constants */
 }

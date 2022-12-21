@@ -12,6 +12,8 @@ import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem
 
 import static frc.robot.autons.ThreeBallAutonPhase.*;
 
+import frc.pathplanner.PathPlannerFollower;
+
 enum ThreeBallAutonPhase implements ISequencePhase {
     NEUTRAL,
     DRIVE1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, ShooterState.AUTONPREUPTOSPEED),
@@ -57,7 +59,6 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonPhase> {
             case NEUTRAL:
                 break;
             case DRIVE1:
-                setPathPlannerFollowerAtStartOfState(true);
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(SHOOTBALL1);
                 }
@@ -82,7 +83,6 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonPhase> {
                 //}
                 break;
             case PICKUPBALL1:
-                setPathPlannerFollowerAtStartOfState(false);
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(SHOOTBALL2);
                     Robot.limelight.resetLimelightGlobalValues();

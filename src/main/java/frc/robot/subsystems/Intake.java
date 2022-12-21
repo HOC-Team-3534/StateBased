@@ -34,14 +34,14 @@ public class Intake extends BaseSubsystem<IntakeState> {
 
     public void kickOut() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(intakeKickers, Value.kForward, DelayToOff.INTAKE_KICKERS.millis);
+            intakeKickers.set(Value.kForward);
             intakeRoller.set(ControlMode.PercentOutput, 0.80);
         }
     }
 
     public void retract() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(intakeKickers, Value.kReverse, DelayToOff.INTAKE_KICKERS.millis);
+            intakeKickers.set(Value.kReverse);
         }
     }
 

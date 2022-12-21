@@ -1,6 +1,5 @@
 package frc.robot.autons;
 
-import frc.pathplanner.PathPlannerFollower;
 import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
 import frc.statebasedcontroller.sequence.fundamental.phase.SequencePhase;
 import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
@@ -14,10 +13,6 @@ enum NoOpAutonPhase implements ISequencePhase {
     
     NoOpAutonPhase(ISubsystemState... states) {
         phase = new SequencePhase(states);
-    }
-    
-    NoOpAutonPhase(int pathIndex, ISubsystemState... states) {
-        phase = new SequencePhase(pathIndex, states);
     }
     
     @Override

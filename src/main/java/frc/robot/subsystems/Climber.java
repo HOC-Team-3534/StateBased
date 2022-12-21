@@ -69,19 +69,19 @@ public class Climber extends BaseSubsystem<ClimberState> {
     }
 
     private void setL1(Value value) {
-        setWithADelayToOff(l1Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        l1Claw.set(value);
     }
 
     private void setH2(Value value) {
-        setWithADelayToOff(h2Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        h2Claw.set(value);
     }
 
     private void setL3(Value value) {
-        setWithADelayToOff(l3Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        l3Claw.set(value);
     }
 
     private void setH4(Value value) {
-        setWithADelayToOff(h4Claw, value, DelayToOff.CLIMB_CLAWS.millis);
+        h4Claw.set(value);
     }
 
     private void setHighVelocity() {

@@ -12,6 +12,8 @@ import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem
 
 import static frc.robot.autons.TwoBallAutonPhase.*;
 
+import frc.pathplanner.PathPlannerFollower;
+
 enum TwoBallAutonPhase implements ISequencePhase {
     NEUTRAL,
     PICKUPBALL1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.KICKOUT, ShooterState.AUTONPREUPTOSPEED),
@@ -51,7 +53,6 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonPhase> {
 
         switch (getPhase()) {
             case PICKUPBALL1:
-                setPathPlannerFollowerAtStartOfState(true);
                 ballsShot = 0;
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(SHOOTBALL1);

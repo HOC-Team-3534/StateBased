@@ -10,6 +10,8 @@ import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import static frc.robot.sequences.ClimbPrepPhase.PREPPEDFORCLIMB;
 import static frc.robot.sequences.ClimbPrepPhase.SWINGARM;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
+
 
 enum ClimbPrepPhase implements ISequencePhase {
     NEUTRAL,
@@ -64,8 +66,7 @@ public class ClimbPrep extends BaseSequence<ClimbPrepPhase> {
 
     @Override
     public boolean abort() {
-        setNextPhase(getNeutralPhase());
-        return updatePhase();
+        return reset();
     }
 
 }

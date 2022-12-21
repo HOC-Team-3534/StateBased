@@ -54,8 +54,7 @@ public class ClimbReset extends BaseSequence<ClimbResetPhase> {
 
     @Override
     public boolean abort() {
-        setNextPhase(getNeutralPhase());
-        return updatePhase();
+        return reset();
     }
 
 }

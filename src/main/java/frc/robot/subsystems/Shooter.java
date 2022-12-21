@@ -95,13 +95,13 @@ public class Shooter extends BaseSubsystem<ShooterState> {
 
     protected void punch() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(pusher, Value.kForward, DelayToOff.SHOOTER_PUSHER.millis);
+            pusher.set(Value.kForward);
         }
     }
 
     protected void resetPunch() {
         if (getStateFirstRunThrough()) {
-            setWithADelayToOff(pusher, Value.kReverse, DelayToOff.SHOOTER_PUSHER.millis);
+            pusher.set(Value.kReverse);
         }
         if (this.getSequenceRequiring().getTimeSinceStartOfPhase() > 50) {
             shooterBoot.set(ControlMode.PercentOutput, -0.70);

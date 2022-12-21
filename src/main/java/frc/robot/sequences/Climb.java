@@ -202,8 +202,7 @@ public class Climb extends BaseSequence<ClimbPhase> {
     @Override
     public boolean abort() {
         if (Robot.climber.abort()) {
-            setNextPhase(getNeutralPhase());
-            return updatePhase();
+            return reset();
         }
         return false;
     }

@@ -47,7 +47,6 @@ public class OneBallAuton extends BaseAutonSequence<OneBallAutonPhase> {
 
         switch (getPhase()) {
             case DRIVE1:
-                setPathPlannerFollowerAtStartOfState(true);
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(SHOOTBALL1);
                 }

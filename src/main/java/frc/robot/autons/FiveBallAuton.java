@@ -12,6 +12,8 @@ import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem
 
 import static frc.robot.autons.FiveBallAutonPhase.*;
 
+import frc.pathplanner.PathPlannerFollower;
+
 enum FiveBallAutonPhase implements ISequencePhase {
     NEUTRAL,
     DRIVE1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, ShooterState.AUTONPREUPTOSPEED),
@@ -58,14 +60,11 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
 
         switch (getPhase()) {
             case DRIVE1:
-                setPathPlannerFollowerAtStartOfState(true);
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(SHOOTBALL1);
                 }
                 break;
             case SHOOTBALL1:
-                //THE FOLLOWING IS ONLY IN ORDER TO SET THE CORRECT INITIAL POSITION
-//                setInitialPoseFromCurrentPath();
                 ballsShot = 0;
                 if (Robot.shooter.getShooterClosedLoopError() < 100 && getTimeSinceStartOfPhase() > 500) {
                     setNextPhase(PUNCH1);
@@ -83,7 +82,6 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
                 //}
                 break;
             case PICKUPBALL1:
-                setPathPlannerFollowerAtStartOfState(false);
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(SHOOTBALL2);
                 }
@@ -108,7 +106,6 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
                 }
                 break;
             case PICKUPBALL2:
-                setPathPlannerFollowerAtStartOfState(false);
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(WAITFORINTAKE);
                 }
@@ -118,7 +115,6 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
                     setNextPhase(PICKUPBALL3);
                 }
             case PICKUPBALL3:
-                setPathPlannerFollowerAtStartOfState(false);
                 if (this.getPlannerFollower().isFinished()) {
                     setNextPhase(SHOOTBALL3);
                 }

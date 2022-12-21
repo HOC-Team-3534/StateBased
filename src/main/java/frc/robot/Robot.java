@@ -100,13 +100,6 @@ public class Robot extends TimedRobot {
         corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
         corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3", AUTO.kMaxSpeedMetersPerSecond, AUTO.kMaxAccelerationMetersPerSecondSquared);
 
-        Auton.CORNER1_1BALL.setPathPlannerFollowers(corner1OneBall1);
-        Auton.CORNER1_2BALL.setPathPlannerFollowers(corner1TwoBall1);
-        Auton.CORNER2_1BALL.setPathPlannerFollowers(corner2OneBall1);
-        Auton.CORNER3_1BALL.setPathPlannerFollowers(corner3OneBall1);
-        Auton.CORNER4_3BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1);
-        Auton.CORNER4_5BALL.setPathPlannerFollowers(corner4FiveBallPre, corner4FiveBall1, corner4FiveBall2, corner4FiveBall3);
-
         SmartDashboard.putNumber("Auton Time Delay(ms)", 0.0);
 
         sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);

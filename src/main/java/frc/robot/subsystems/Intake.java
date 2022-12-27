@@ -12,52 +12,47 @@ import frc.statebasedcontroller.subsystem.fundamental.subsystem.BaseSubsystem;
 import static frc.robot.Constants.*;
 
 public class Intake extends BaseSubsystem<IntakeState> {
+	static WPI_TalonSRX intakeRoller;
+	static DoubleSolenoid intakeKickers;
 
-    static WPI_TalonSRX intakeRoller;
+	public Intake() {
+		super(IntakeState.NEUTRAL);
+		intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
+		intakeRoller.setInverted(ROBOTTYPE == RobotType.PBOT);
+		intakeKickers = Robot.mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
+	}
 
-    static DoubleSolenoid intakeKickers;
+	@Override
+	public void neutral() {
+		intakeKickers.set(Value.kOff);
+		intakeRoller.set(ControlMode.PercentOutput, 0.0);
+	}
 
-    public Intake() {
-        super(IntakeState.NEUTRAL);
+	public void kickOut() {
+		if (getStateFirstRunThrough()) {
+			intakeKickers.set(Value.kForward);
+			intakeRoller.set(ControlMode.PercentOutput, 0.80);
+		}
+	}
 
-        intakeRoller = new WPI_TalonSRX(INTAKE_ROLLER);
-        intakeRoller.setInverted(ROBOTTYPE == RobotType.PBOT);
+	public void retract() {
+		if (getStateFirstRunThrough()) {
+			intakeKickers.set(Value.kReverse);
+		}
+	}
 
-        intakeKickers = Robot.mainPCM.makeDoubleSolenoid(INTAKE_EXTEND, INTAKE_RETRACT);
-    }
+	public void extake() {
+		intakeRoller.set(ControlMode.PercentOutput, -0.80);
+	}
 
-    @Override
-    public void neutral() {
-        intakeKickers.set(Value.kOff);
-        intakeRoller.set(ControlMode.PercentOutput, 0.0);
-    }
+	public void rollIn() {
+		intakeRoller.set(ControlMode.PercentOutput, 0.80);
+	}
 
-    public void kickOut() {
-        if (getStateFirstRunThrough()) {
-            intakeKickers.set(Value.kForward);
-            intakeRoller.set(ControlMode.PercentOutput, 0.80);
-        }
-    }
-
-    public void retract() {
-        if (getStateFirstRunThrough()) {
-            intakeKickers.set(Value.kReverse);
-        }
-    }
-
-    public void extake() {
-        intakeRoller.set(ControlMode.PercentOutput, -0.80);
-    }
-
-    public void rollIn() {
-        intakeRoller.set(ControlMode.PercentOutput, 0.80);
-    }
-
-    @Override
-    public boolean abort() {
-        intakeRoller.set(ControlMode.PercentOutput, 0.0);
-        intakeKickers.set(Value.kOff);
-        return true;
-    }
+	@Override
+	public boolean abort() {
+		intakeRoller.set(ControlMode.PercentOutput, 0.0);
+		intakeKickers.set(Value.kOff);
+		return true;
+	}
 }
-

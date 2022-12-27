@@ -10,51 +10,46 @@ import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import static frc.robot.sequences.ClimbPrepResetPhase.NEUTRAL;
 
 enum ClimbPrepResetPhase implements ISequencePhase {
-    NEUTRAL,
-    RESETARM(ClimberState.RESETARM);
+	NEUTRAL,
+	RESETARM(ClimberState.RESETARM);
 
-    SequencePhase phase;
-    
-    ClimbPrepResetPhase(ISubsystemState... states) {
-        phase = new SequencePhase(states);
-    }
-    
-    @Override
-    public SequencePhase getPhase() {
-        return phase;
-    }
+	SequencePhase phase;
 
+	ClimbPrepResetPhase(ISubsystemState... states) {
+		phase = new SequencePhase(states);
+	}
+
+	@Override
+	public SequencePhase getPhase() {
+		return phase;
+	}
 }
 
 public class ClimbPrepReset extends BaseSequence<ClimbPrepResetPhase> {
+	public ClimbPrepReset(ClimbPrepResetPhase neutralState, ClimbPrepResetPhase startState) {
+		super(neutralState, startState);
+	}
 
-    public ClimbPrepReset(ClimbPrepResetPhase neutralState, ClimbPrepResetPhase startState) {
-        super(neutralState, startState);
-    }
+	@Override
+	public void process() {
+		switch (getPhase()) {
+			case RESETARM:
+				if (Robot.climber.getClimbArmDegree() < 10) {
+					setNextPhase(NEUTRAL);
+				}
+				break;
 
-    @Override
-    public void process() {
+			case NEUTRAL:
+				break;
 
-        switch (getPhase()) {
-            case RESETARM:
-                if (Robot.climber.getClimbArmDegree() < 10) {
-                    setNextPhase(NEUTRAL);
-                }
-                break;
-            case NEUTRAL:
-                break;
-            default:
-                break;
+			default:
+				break;
+		}
+		updatePhase();
+	}
 
-        }
-
-        updatePhase();
-
-    }
-
-    @Override
-    public boolean abort() {
-        return reset();
-    }
-
+	@Override
+	public boolean abort() {
+		return reset();
+	}
 }

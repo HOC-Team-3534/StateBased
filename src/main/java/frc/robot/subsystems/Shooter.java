@@ -16,124 +16,115 @@ import java.util.function.Function;
 import static frc.robot.Constants.*;
 
 public class Shooter extends BaseSubsystem<ShooterState> {
+	static WPI_TalonFX shooter;
+	static WPI_TalonSRX shooterBoot;
+	static DoubleSolenoid pusher;
+	Function<Double, Double> rpmFunction;
 
-    static WPI_TalonFX shooter;
-    static WPI_TalonSRX shooterBoot;
+	public Shooter(Function<Double, Double> rpmFunction) {
+		super(ShooterState.NEUTRAL);
+		shooter = new WPI_TalonFX(SHOOTER_MOTOR);
+		shooter.setInverted(true);
+		shooter.selectProfileSlot(0, 0);
+		shooter.config_kF(0, 0.0553); // .05
+		shooter.config_kP(0, 0.17);
+		shooter.config_kD(0, 3);
+		shooter.config_kF(1, 0.06); // .05
+		shooter.config_kP(1, 0.1);
+		shooter.config_kD(1, 5);
+		shooter.configClosedloopRamp(0.5);
+		shooterBoot = new WPI_TalonSRX(SHOOTER_BOOT);
+		shooterBoot.setInverted(true);
+		pusher = Robot.mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
+		// makes the graphical number to enter text - have to do a
+		// put to do a get
+		SmartDashboard.putNumber("Manual Testing RPM", 2000.0);
+		SmartDashboard.putNumber("RPM MULTIPLIER (%)", 100.0);
+		SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 100.0);
+		this.rpmFunction = rpmFunction;
+	}
 
-    static DoubleSolenoid pusher;
+	public void shoot(double rpm) {
+		double countsPer100MS = rpm * RPM_TO_COUNTS_PER_100MS;
+		shooter.set(ControlMode.Velocity, countsPer100MS);
+	}
 
-    Function<Double, Double> rpmFunction;
+	private double getShooterRPM() {
+		return shooter.getSelectedSensorVelocity() / RPM_TO_COUNTS_PER_100MS;
+	}
 
-    public Shooter(Function<Double, Double> rpmFunction) {
-        super(ShooterState.NEUTRAL);
+	public double getShooterClosedLoopError() {
+		return shooter.getClosedLoopError();
+	}
 
-        shooter = new WPI_TalonFX(SHOOTER_MOTOR);
-        shooter.setInverted(true);
-        shooter.selectProfileSlot(0, 0);
-        shooter.config_kF(0, 0.0553); // .05
-        shooter.config_kP(0, 0.17);
-        shooter.config_kD(0, 3);
-        shooter.config_kF(1, 0.06); // .05
-        shooter.config_kP(1, 0.1);
-        shooter.config_kD(1, 5);
-        shooter.configClosedloopRamp(0.5);
+	public double getCalculatedRPMError() {
+		double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
+		return Math.abs(getShooterRPM() - rpmMultiplier * rpmFunction.apply((Robot.limelight.getDistance())));
+		// return Math.abs(getShooterRPM() - rpmMultiplier *
+		// SmartDashboard.getNumber("Manual Testing RPM", 0.0));
+	}
 
-        shooterBoot = new WPI_TalonSRX(SHOOTER_BOOT);
-        shooterBoot.setInverted(true);
+	protected void upToSpeed() {
+		if (getStateFirstRunThrough()) {
+			shooter.selectProfileSlot(0, 0);
+		}
+		double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
+		shoot(rpmMultiplier * rpmFunction.apply(Robot.limelight.getDistance()));
+		// shoot(rpmMultiplier *
+		// rpmFunction.getShooterRPM(RobotMap.limelight.getLimelightShootProjection().getDistance()));
+	}
 
-        pusher = Robot.mainPCM.makeDoubleSolenoid(PUSHER_FORWARD, PUSHER_REVERSE);
+	protected void upToSpeed(double rpm) {
+		if (getStateFirstRunThrough()) {
+			shooter.selectProfileSlot(0, 0);
+		}
+		shoot(rpm);
+	}
 
-        // makes the graphical number to enter text - have to do a
-        // put to do a get
-        SmartDashboard.putNumber("Manual Testing RPM", 2000.0);
-        SmartDashboard.putNumber("RPM MULTIPLIER (%)", 100.0);
-        SmartDashboard.putNumber("AUTON RPM MULTIPLIER (%)", 100.0);
-        this.rpmFunction = rpmFunction;
-    }
+	protected void burp() {
+		if (getStateFirstRunThrough()) {
+			shooter.selectProfileSlot(1, 0);
+		}
+		shoot(1300);
+	}
 
-    public void shoot(double rpm) {
-        double countsPer100MS = rpm * RPM_TO_COUNTS_PER_100MS;
-        shooter.set(ControlMode.Velocity, countsPer100MS);
-    }
+	protected void punch() {
+		if (getStateFirstRunThrough()) {
+			pusher.set(Value.kForward);
+		}
+	}
 
-    private double getShooterRPM() {
-        return shooter.getSelectedSensorVelocity() / RPM_TO_COUNTS_PER_100MS;
-    }
+	protected void resetPunch() {
+		if (getStateFirstRunThrough()) {
+			pusher.set(Value.kReverse);
+		}
+		if (this.getSequenceRequiring().getTimeSinceStartOfPhase() > 50) {
+			shooterBoot.set(ControlMode.PercentOutput, -0.70);
+		}
+		if (this.getSequenceRequiring().getTimeSinceStartOfPhase() > 240) {
+			shooterBoot.set(ControlMode.PercentOutput, 0.0);
+		}
+	}
 
-    public double getShooterClosedLoopError() {
-        return shooter.getClosedLoopError();
-    }
+	protected void boot() {
+		if (this.getStateFirstRunThrough()) {
+			shooterBoot.set(ControlMode.PercentOutput, 0.90);
+		}
+		if (this.getSequenceRequiring().getTimeSinceStartOfPhase() > 140) {
+			shooterBoot.set(ControlMode.PercentOutput, 0.0);
+		}
+	}
 
-    public double getCalculatedRPMError() {
-        double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
-        return Math.abs(getShooterRPM() - rpmMultiplier * rpmFunction.apply((Robot.limelight.getDistance())));
-        //return Math.abs(getShooterRPM() - rpmMultiplier * SmartDashboard.getNumber("Manual Testing RPM", 0.0));
-    }
+	@Override
+	public void neutral() {
+		shoot(0);
+		shooterBoot.set(ControlMode.PercentOutput, 0.0);
+	}
 
-    protected void upToSpeed() {
-        if (getStateFirstRunThrough()) {
-            shooter.selectProfileSlot(0, 0);
-        }
-        double rpmMultiplier = SmartDashboard.getNumber("RPM MULTIPLIER (%)", 100.0) / 100.0;
-        shoot(rpmMultiplier * rpmFunction.apply(Robot.limelight.getDistance()));
-        //shoot(rpmMultiplier * rpmFunction.getShooterRPM(RobotMap.limelight.getLimelightShootProjection().getDistance()));
-    }
-
-    protected void upToSpeed(double rpm) {
-        if (getStateFirstRunThrough()) {
-            shooter.selectProfileSlot(0, 0);
-        }
-        shoot(rpm);
-    }
-
-    protected void burp() {
-        if (getStateFirstRunThrough()) {
-            shooter.selectProfileSlot(1, 0);
-        }
-        shoot(1300);
-    }
-
-    protected void punch() {
-        if (getStateFirstRunThrough()) {
-            pusher.set(Value.kForward);
-        }
-    }
-
-    protected void resetPunch() {
-        if (getStateFirstRunThrough()) {
-            pusher.set(Value.kReverse);
-        }
-        if (this.getSequenceRequiring().getTimeSinceStartOfPhase() > 50) {
-            shooterBoot.set(ControlMode.PercentOutput, -0.70);
-
-        }
-        if (this.getSequenceRequiring().getTimeSinceStartOfPhase() > 240) {
-            shooterBoot.set(ControlMode.PercentOutput, 0.0);
-        }
-
-    }
-
-    protected void boot() {
-        if (this.getStateFirstRunThrough()) {
-            shooterBoot.set(ControlMode.PercentOutput, 0.90);
-        }
-        if (this.getSequenceRequiring().getTimeSinceStartOfPhase() > 140) {
-            shooterBoot.set(ControlMode.PercentOutput, 0.0);
-        }
-    }
-
-    @Override
-    public void neutral() {
-        shoot(0);
-        shooterBoot.set(ControlMode.PercentOutput, 0.0);
-    }
-
-    @Override
-    public boolean abort() {
-        shoot(0);
-        shooterBoot.set(ControlMode.PercentOutput, 0.0);
-        return true;
-    }
-
+	@Override
+	public boolean abort() {
+		shoot(0);
+		shooterBoot.set(ControlMode.PercentOutput, 0.0);
+		return true;
+	}
 }
-

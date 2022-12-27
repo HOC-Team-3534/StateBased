@@ -7,41 +7,38 @@ import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem;
 
 enum NoOpAutonPhase implements ISequencePhase {
-    NEUTRAL;
+	NEUTRAL;
 
-    SequencePhase phase;
-    
-    NoOpAutonPhase(ISubsystemState... states) {
-        phase = new SequencePhase(states);
-    }
-    
-    @Override
-    public SequencePhase getPhase() {
-        return phase;
-    }
+	SequencePhase phase;
+
+	NoOpAutonPhase(ISubsystemState... states) {
+		phase = new SequencePhase(states);
+	}
+
+	@Override
+	public SequencePhase getPhase() {
+		return phase;
+	}
 }
 
 public class NoOpAuton extends BaseAutonSequence<NoOpAutonPhase> {
+	public NoOpAuton(NoOpAutonPhase neutralState, NoOpAutonPhase startState,
+	                 BaseDriveSubsystem driveSubsystem) {
+		super(neutralState, startState, driveSubsystem);
+	}
 
-    public NoOpAuton(NoOpAutonPhase neutralState, NoOpAutonPhase startState, BaseDriveSubsystem driveSubsystem) {
-        super(neutralState, startState, driveSubsystem);
-    }
+	@Override
+	public void process() {
+		switch (getPhase()) {
+			case NEUTRAL:
+				break;
+		}
+		updatePhase();
+	}
 
-    @Override
-    public void process() {
-
-        switch (getPhase()) {
-            case NEUTRAL:
-                break;
-
-        }
-        updatePhase();
-    }
-
-    @Override
-    public boolean abort() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
+	@Override
+	public boolean abort() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

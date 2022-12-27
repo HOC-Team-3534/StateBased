@@ -12,61 +12,60 @@ import static frc.robot.sequences.ClimbPrepPhase.SWINGARM;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
 
-
 enum ClimbPrepPhase implements ISequencePhase {
-    NEUTRAL,
-    PREPCLAW(ClimberState.PREPCLAW),
-    SWINGARM(ClimberState.SWINGARM),
-    PREPPEDFORCLIMB(ClimberState.SWINGARM); //stays in swing arm, just using state change as indicator
+	NEUTRAL,
+	PREPCLAW(ClimberState.PREPCLAW),
+	SWINGARM(ClimberState.SWINGARM),
+	PREPPEDFORCLIMB(ClimberState.SWINGARM); // stays in swing arm, just using
+	                                        // state change as indicator
 
-    SequencePhase phase;
-    
-    ClimbPrepPhase(ISubsystemState... states) {
-        phase = new SequencePhase(states);
-    }
-    
-    @Override
-    public SequencePhase getPhase() {
-        return phase;
-    }
+	SequencePhase phase;
 
+	ClimbPrepPhase(ISubsystemState... states) {
+		phase = new SequencePhase(states);
+	}
+
+	@Override
+	public SequencePhase getPhase() {
+		return phase;
+	}
 }
 
 public class ClimbPrep extends BaseSequence<ClimbPrepPhase> {
+	public ClimbPrep(ClimbPrepPhase neutralState, ClimbPrepPhase startState) {
+		super(neutralState, startState);
+	}
 
-    public ClimbPrep(ClimbPrepPhase neutralState, ClimbPrepPhase startState) {
-        super(neutralState, startState);
-    }
+	@Override
+	public void process() {
+		switch (getPhase()) {
+			case PREPCLAW:
+				if (getTimeSinceStartOfPhase() > 50) {
+					setNextPhase(SWINGARM);
+				}
+				break;
 
-    @Override
-    public void process() {
+			case SWINGARM:
+				if (getTimeSinceStartOfPhase() > 500
+				    && (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
+					setNextPhase(PREPPEDFORCLIMB);
+				}
+				break;
 
-        switch (getPhase()) {
-            case PREPCLAW:
-                if (getTimeSinceStartOfPhase() > 50) {
-                    setNextPhase(SWINGARM);
-                }
-                break;
-            case SWINGARM:
-                if (getTimeSinceStartOfPhase() > 500
-                        && (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
-                    setNextPhase(PREPPEDFORCLIMB);
-                }
-                break;
-            case PREPPEDFORCLIMB:
-                break;
-            case NEUTRAL:
-                break;
-            default:
-                break;
+			case PREPPEDFORCLIMB:
+				break;
 
-        }
-        updatePhase();
-    }
+			case NEUTRAL:
+				break;
 
-    @Override
-    public boolean abort() {
-        return reset();
-    }
+			default:
+				break;
+		}
+		updatePhase();
+	}
 
+	@Override
+	public boolean abort() {
+		return reset();
+	}
 }

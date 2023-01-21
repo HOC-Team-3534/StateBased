@@ -2,7 +2,7 @@ package frc.robot.extras;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.drive.Vector2d;
+import frc.wpiClasses.Vector2d;
 
 public abstract class Utils {
 	public static Translation2d getPositionAfterMotion(Translation2d translation, Vector2d vector,

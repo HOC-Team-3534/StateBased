@@ -3,13 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.swervelib.SdsModuleConfigurations;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -52,13 +52,13 @@ public final class Constants {
 		 * <p>
 		 * Should be measured from center to center.
 		 */
-		public static final double TRACKWIDTH_METERS = 0.578; // FIXME 
+		public static final double TRACKWIDTH_METERS = 0.578; // FIXME
 		/**
 		 * The front-to-back distance between the drivetrain wheels.
 		 * <p>
 		 * Should be measured from center to center.
 		 */
-		public static final double WHEELBASE_METERS = 0.578; // FIXME 
+		public static final double WHEELBASE_METERS = 0.578; // FIXME
 		public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(new Translation2d(DRIVE.TRACKWIDTH_METERS / 2.0,
 		                                                                                                   DRIVE.WHEELBASE_METERS / 2.0),
 		                                                                                 new Translation2d(DRIVE.TRACKWIDTH_METERS / 2.0,
@@ -67,36 +67,57 @@ public final class Constants {
 		                                                                                                   DRIVE.WHEELBASE_METERS / 2.0),
 		                                                                                 new Translation2d(-DRIVE.TRACKWIDTH_METERS / 2.0,
 		                                                                                                   -DRIVE.WHEELBASE_METERS / 2.0));
-		public static final double WHEEL_DIAMETER_METERS = SdsModuleConfigurations.MK4_L2.getWheelDiameter(); // .10033 = ~4 inches
+		public static final double WHEEL_DIAMETER_METERS = SdsModuleConfigurations.MK4_L2.getWheelDiameter(); // .10033
+		                                                                                                      // =
+		                                                                                                      // ~4
+		                                                                                                      // inches
 		public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_METERS * Math.PI;
 		/**
 		 * Swerve Drive Module CAN IDs
 		 */
-		public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // FIXME 
+		public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // FIXME
 		public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 3; // FIXME
 		public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 2; // FIXME
 		public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; // FIXME
-		public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6; // FIXME 
-		public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 5; // FIXME 
-		public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; // FIXME 
+		public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6; // FIXME
+		public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 5; // FIXME
+		public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; // FIXME
 		public static final int BACK_LEFT_MODULE_STEER_MOTOR = 9; // FIXME
-		public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8; // FIXME 
-		public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; // FIXME 
-		public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12; // FIXME 
-		public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11; // FIXME 
+		public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8; // FIXME
+		public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; // FIXME
+		public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12; // FIXME
+		public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11; // FIXME
 		public static final double FRONT_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(263.89)
-		                                                                                        : -Math.toRadians(93.35); // 85.2 FIXME Measure and set
+		                                                                                        : -Math.toRadians(93.35); // 85.2
+		                                                                                                                  // FIXME
+		                                                                                                                  // Measure
+		                                                                                                                  // and
+		                                                                                                                  // set
 		public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(173.45)
-		                                                                                         : -Math.toRadians(124.05); // 7.95 FIXME Measure and set
+		                                                                                         : -Math.toRadians(124.05); // 7.95
+		                                                                                                                    // FIXME
+		                                                                                                                    // Measure
+		                                                                                                                    // and
+		                                                                                                                    // set
 		public static final double BACK_LEFT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(92.0)
-		                                                                                       : -Math.toRadians(313.4); // 274.04 FIXME Measure and set back
+		                                                                                       : -Math.toRadians(313.4); // 274.04
+		                                                                                                                 // FIXME
+		                                                                                                                 // Measure
+		                                                                                                                 // and
+		                                                                                                                 // set
+		                                                                                                                 // back
 		public static final double BACK_RIGHT_MODULE_STEER_OFFSET = ROBOTTYPE == RobotType.PBOT ? -Math.toRadians(199.5)
-		                                                                                        : -Math.toRadians(202.26); // 24.5 FIXME Measure and set
+		                                                                                        : -Math.toRadians(202.26); // 24.5
+		                                                                                                                   // FIXME
+		                                                                                                                   // Measure
+		                                                                                                                   // and
+		                                                                                                                   // set
 		// Drivetrain Performance Mechanical limits
 		static public final double MAX_FWD_REV_SPEED_MPS = Units.feetToMeters(16.3); // Measured
 		static public final double MAX_FWD_REV_SPEED_MPS_EST = 6380.0 / 60.0 * SdsModuleConfigurations.MK4_L2.getDriveReduction() * SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI;
 		static public final double MAX_STRAFE_SPEED_MPS = Units.feetToMeters(16.3); // Unused
-		static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(500); // FIXME Measured
+		static public final double MAX_ROTATE_SPEED_RAD_PER_SEC = Units.degreesToRadians(500); // FIXME
+		                                                                                       // Measured
 		static public final double MAX_ROTATE_SPEED_RAD_PER_SEC_EST = MAX_FWD_REV_SPEED_MPS_EST / Math.hypot(TRACKWIDTH_METERS / 2.0, WHEELBASE_METERS / 2.0);
 		// Fine control speed limits
 		static public final double MAX_FWD_REV_SPEED_FAST = 0.5; // Percent of
@@ -168,7 +189,9 @@ public final class Constants {
 		                                                                            // bars
 		                                                                            // at
 		                                                                            // 360
-		public static final double RECENTER_ANGLE_TOLERANCE = 5.0; // should at least be 3 degrees just for comfort, if not at least 5
+		public static final double RECENTER_ANGLE_TOLERANCE = 5.0; // should at least be 3 degrees
+		                                                           // just for comfort, if not at
+		                                                           // least 5
 		public static final double DONERELEASINGMIDBAR_ANGLE = 270.0;
 	}
 

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.pathplanner.PathPlannerFollower;
 import frc.robot.Constants.AUTO;
 import frc.robot.autons.Auton;
+import frc.robot.autons.Path;
 import frc.robot.extras.Limelight;
 import frc.robot.sequences.SequenceProcessor;
 import frc.robot.subsystems.Climber;
@@ -22,6 +23,8 @@ import frc.statebasedcontroller.sequence.fundamental.phase.ISequencePhase;
 import frc.statebasedcontroller.sequence.fundamental.sequence.BaseAutonSequence;
 
 import static frc.robot.Constants.*;
+
+import java.util.Arrays;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,7 +42,6 @@ public class Robot extends TimedRobot {
 	public static RobotContainer robotContainer;
 	public static Limelight limelight;
 	public static PneumaticsControlModule mainPCM;
-	public static boolean isAutonomous = false;
 	public static double designatedLoopPeriod = 20;
 	public static BaseAutonSequence<? extends ISequencePhase> chosenAuton;
 	public static PathPlannerFollower corner1OneBall1;
@@ -53,9 +55,9 @@ public class Robot extends TimedRobot {
 	private static long autonStartTime;
 	private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
 	private final Field2d m_field = new Field2d();
-	private int loopCnt = 0;
-	private int loopPeriod = 0;
-	private int logCounter = 0;
+	private int loopCnt, loopPeriod, logCounter;
+	private long prevLoopTime;
+	public static boolean isAutonomous;
 
 	@Override
 	public void robotInit() {
@@ -81,30 +83,7 @@ public class Robot extends TimedRobot {
 		intake = new Intake();
 		climber = new Climber();
 		sequenceProcessor = new SequenceProcessor();
-		corner1OneBall1 = new PathPlannerFollower("Corner 1 1 Ball 1",
-		                                          AUTO.kMaxSpeedMetersPerSecond,
-		                                          AUTO.kMaxAccelerationMetersPerSecondSquared);
-		corner1TwoBall1 = new PathPlannerFollower("Corner 1 2 Ball 1",
-		                                          AUTO.kMaxSpeedMetersPerSecond,
-		                                          AUTO.kMaxAccelerationMetersPerSecondSquared);
-		corner2OneBall1 = new PathPlannerFollower("Corner 2 1 Ball 1",
-		                                          AUTO.kMaxSpeedMetersPerSecond,
-		                                          AUTO.kMaxAccelerationMetersPerSecondSquared);
-		corner3OneBall1 = new PathPlannerFollower("Corner 3 1 Ball 1",
-		                                          AUTO.kMaxSpeedMetersPerSecond,
-		                                          AUTO.kMaxAccelerationMetersPerSecondSquared);
-		corner4FiveBallPre = new PathPlannerFollower("Corner 4 5 Ball Pre",
-		                                             AUTO.kMaxSpeedMetersPerSecond,
-		                                             AUTO.kMaxAccelerationMetersPerSecondSquared);
-		corner4FiveBall1 = new PathPlannerFollower("Corner 4 5 Ball 1",
-		                                           AUTO.kMaxSpeedMetersPerSecond,
-		                                           AUTO.kMaxAccelerationMetersPerSecondSquared);
-		corner4FiveBall2 = new PathPlannerFollower("Corner 4 5 Ball 2",
-		                                           AUTO.kMaxSpeedMetersPerSecond,
-		                                           AUTO.kMaxAccelerationMetersPerSecondSquared);
-		corner4FiveBall3 = new PathPlannerFollower("Corner 4 5 Ball 3",
-		                                           AUTO.kMaxSpeedMetersPerSecond,
-		                                           AUTO.kMaxAccelerationMetersPerSecondSquared);
+		Arrays.asList(Path.values()).stream().forEach(path -> path.loadPath());
 		SmartDashboard.putNumber("Auton Time Delay(ms)", 0.0);
 		sendableChooser.setDefaultOption("CORNER 4: 3 BALL", Auton.CORNER4_3BALL);
 		sendableChooser.addOption("CORNER 4: 5 BALL", Auton.CORNER4_5BALL);
@@ -119,6 +98,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotPeriodic() {
+		isAutonomous = this.isAutonomous();
 	}
 
 	@Override
@@ -131,19 +111,16 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		long prevLoopTime = 0;
-		while (this.isDisabled()) {
-			log();
-			long currentTime = System.currentTimeMillis();
-			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
-				loopPeriod = (int) (currentTime - prevLoopTime);
-				prevLoopTime = currentTime;
-				loopCnt++;
-				swerveDrive.neutral();
-				swerveDrive.process();
-			}
-			Timer.delay(0.001);
+		log();
+		long currentTime = System.currentTimeMillis();
+		if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+			loopPeriod = (int) (currentTime - prevLoopTime);
+			prevLoopTime = currentTime;
+			loopCnt++;
+			swerveDrive.neutral();
+			swerveDrive.process();
 		}
+		Timer.delay(0.001);
 	}
 
 	@Override
@@ -155,27 +132,23 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousPeriodic() {
-		isAutonomous = this.isAutonomous();
-		long prevLoopTime = 0;
-		while (this.isAutonomous() && this.isEnabled()) {
-			log();
-			long currentTime = System.currentTimeMillis();
-			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
-				loopPeriod = (int) (currentTime - prevLoopTime);
-				prevLoopTime = currentTime;
-				loopCnt++;
-				if (currentTime - autonStartTime > SmartDashboard.getNumber("Auton Time Delay(ms)", 0.0)) {
-					chosenAuton.process();
-				}
-				// run processes
-				/** Run subsystem process methods here */
-				swerveDrive.process();
-				shooter.process();
-				intake.process();
-				// climber.process();
+		log();
+		long currentTime = System.currentTimeMillis();
+		if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+			loopPeriod = (int) (currentTime - prevLoopTime);
+			prevLoopTime = currentTime;
+			loopCnt++;
+			if (currentTime - autonStartTime > SmartDashboard.getNumber("Auton Time Delay(ms)", 0.0)) {
+				chosenAuton.process();
 			}
-			Timer.delay(0.001);
+			// run processes
+			/** Run subsystem process methods here */
+			swerveDrive.process();
+			shooter.process();
+			intake.process();
+			// climber.process();
 		}
+		Timer.delay(0.001);
 	}
 
 	@Override
@@ -188,25 +161,21 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		isAutonomous = this.isAutonomous();
-		long prevLoopTime = 0;
-		while (this.isTeleop() && this.isEnabled()) {
-			log();
-			long currentTime = System.currentTimeMillis();
-			if (currentTime - prevLoopTime >= designatedLoopPeriod) {
-				loopPeriod = (int) (currentTime - prevLoopTime);
-				prevLoopTime = currentTime;
-				loopCnt++;
-				sequenceProcessor.process();
-				// run processes
-				/** Run subsystem process methods here */
-				swerveDrive.process();
-				shooter.process();
-				intake.process();
-				climber.process();
-			}
-			Timer.delay(0.001);
+		log();
+		long currentTime = System.currentTimeMillis();
+		if (currentTime - prevLoopTime >= designatedLoopPeriod) {
+			loopPeriod = (int) (currentTime - prevLoopTime);
+			prevLoopTime = currentTime;
+			loopCnt++;
+			sequenceProcessor.process();
+			// run processes
+			/** Run subsystem process methods here */
+			swerveDrive.process();
+			shooter.process();
+			intake.process();
+			climber.process();
 		}
+		Timer.delay(0.001);
 	}
 
 	@Override

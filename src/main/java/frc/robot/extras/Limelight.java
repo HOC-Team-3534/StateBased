@@ -4,8 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.Robot;
+import frc.wpiClasses.Vector2d;
 
 import java.util.function.Function;
 

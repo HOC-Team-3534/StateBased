@@ -31,11 +31,13 @@ public class SequenceProcessor {
 		intake = new IntakeSeq(IntakeSeqPhase.NEUTRAL, IntakeSeqPhase.EXTEND);
 		extake = new Extake(ExtakePhase.NEUTRAL, ExtakePhase.EXTAKE);
 		rollIn = new RollIn(RollInPhase.NEUTRAL, RollInPhase.ROLLIN);
-		climbPrep = new ClimbPrep(ClimbPrepPhase.NEUTRAL, ClimbPrepPhase.PREPCLAW);
+		climbPrep = new ClimbPrep(	ClimbPrepPhase.NEUTRAL,
+									ClimbPrepPhase.PREPCLAW);
 		climb = new Climb(ClimbPhase.NEUTRAL, ClimbPhase.GRIPMIDBAR);
 		climbPrepReset = new ClimbPrepReset(ClimbPrepResetPhase.NEUTRAL,
-		                                    ClimbPrepResetPhase.RESETARM);
-		climbReset = new ClimbReset(ClimbResetPhase.NEUTRAL, ClimbResetPhase.MOVEARMMANUALLY);
+											ClimbPrepResetPhase.RESETARM);
+		climbReset = new ClimbReset(ClimbResetPhase.NEUTRAL,
+									ClimbResetPhase.MOVEARMMANUALLY);
 		gyroReset = new GyroReset(GyroResetPhase.NEUTRAL, GyroResetPhase.RESET);
 	}
 
@@ -47,7 +49,7 @@ public class SequenceProcessor {
 			drive.start(Robot.swerveDrive);
 		}
 		if ((Buttons.RAMPSHOOTER.getButton() || Buttons.SHOOT.getButton())
-		    && !Buttons.MoveClimbArmManually.getButton()) {
+			&& !Buttons.MoveClimbArmManually.getButton()) {
 			shoot.start(Robot.swerveDrive);
 		}
 		if (Buttons.Burp.getButton()) {
@@ -59,16 +61,17 @@ public class SequenceProcessor {
 		if (Buttons.Extake.getButton()) {
 			extake.start();
 		}
-		if (Buttons.RollIn.getButton() && !Buttons.MoveClimbArmManually.getButton()) {
+		if (Buttons.RollIn.getButton()
+			&& !Buttons.MoveClimbArmManually.getButton()) {
 			rollIn.start();
 		}
 		if (Buttons.ClimbPrep.getButton()) { // TODO: in last 35 seconds of
-		                                     // match logic
+												// match logic
 			climbPrep.start();
 		}
 		if (Buttons.Climb.getButton()
-		    && Robot.climber.getSequenceRequiring().getPhase().equals(ClimbPrepPhase.PREPPEDFORCLIMB)
-		    && (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
+			&& Robot.climber.getSequenceRequiring().getPhase().equals(ClimbPrepPhase.PREPPEDFORCLIMB)
+			&& (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
 			climb.start(Robot.climber, Robot.swerveDrive);
 		}
 		if (Buttons.ClimbPrepReset.getButton() && !climbPrep.isNeutral()) {

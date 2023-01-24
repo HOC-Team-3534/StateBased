@@ -14,26 +14,8 @@
       "Talon FX[10]/Integrated Sensor": {
         "name": "Back Right Drive"
       },
-      "Talon FX[1]/Fwd Limit": {
-        "header": {
-          "open": true
-        }
-      },
       "Talon FX[1]/Integrated Sensor": {
-        "header": {
-          "open": true
-        },
         "name": "Front Left Drive"
-      },
-      "Talon FX[1]/Rev Limit": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[3]": {
-        "header": {
-          "open": true
-        }
       },
       "Talon FX[4]/Integrated Sensor": {
         "name": "Front Right Drive"

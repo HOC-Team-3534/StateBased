@@ -10,14 +10,11 @@ import frc.statebasedcontroller.subsystem.fundamental.state.ISubsystemState;
 import static frc.robot.sequences.ClimbPrepPhase.PREPPEDFORCLIMB;
 import static frc.robot.sequences.ClimbPrepPhase.SWINGARM;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
-
 enum ClimbPrepPhase implements ISequencePhase {
 	NEUTRAL,
 	PREPCLAW(ClimberState.PREPCLAW),
 	SWINGARM(ClimberState.SWINGARM),
-	PREPPEDFORCLIMB(ClimberState.SWINGARM); // stays in swing arm, just using
-	                                        // state change as indicator
+	PREPPEDFORCLIMB(ClimberState.SWINGARM); // stays in swing arm, just using state change as indicator
 
 	SequencePhase phase;
 
@@ -46,8 +43,8 @@ public class ClimbPrep extends BaseSequence<ClimbPrepPhase> {
 				break;
 
 			case SWINGARM:
-				if (getTimeSinceStartOfPhase() > 500
-				    && (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
+				if (getTimeSinceStartOfPhase()	> 500
+					&& (!Climber.l1Switch.get() || !Climber.h2Switch.get())) {
 					setNextPhase(PREPPEDFORCLIMB);
 				}
 				break;

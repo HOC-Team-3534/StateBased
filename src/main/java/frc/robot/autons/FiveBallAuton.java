@@ -12,23 +12,22 @@ import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem
 
 import static frc.robot.autons.FiveBallAutonPhase.*;
 
-import frc.pathplanner.PathPlannerFollower;
-
 enum FiveBallAutonPhase implements ISequencePhase {
 	NEUTRAL,
-	DRIVE1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, ShooterState.AUTONPREUPTOSPEED),
+	DRIVE1(	0, SwerveDriveState.DRIVE_AUTONOMOUSLY,
+			ShooterState.AUTONPREUPTOSPEED),
 	SHOOTBALL1(ShooterState.UPTOSPEED),
 	PUNCH1(ShooterState.PUNCH),
 	RESETPUNCH1(ShooterState.RESETPUNCH),
 	PICKUPBALL1(1, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.KICKOUT,
-	            ShooterState.AUTONPREUPTOSPEED),
+				ShooterState.AUTONPREUPTOSPEED),
 	SHOOTBALL2(ShooterState.UPTOSPEED, IntakeState.HOLDPOSITION),
 	PUNCH2(ShooterState.PUNCH, IntakeState.RETRACT),
 	RESETPUNCH2(ShooterState.RESETPUNCH),
 	PICKUPBALL2(2, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.KICKOUT),
 	WAITFORINTAKE(IntakeState.HOLDPOSITION),
-	PICKUPBALL3(3, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.HOLDPOSITION,
-	            ShooterState.AUTONPREUPTOSPEED),
+	PICKUPBALL3(3, SwerveDriveState.DRIVE_AUTONOMOUSLY,
+				IntakeState.HOLDPOSITION, ShooterState.AUTONPREUPTOSPEED),
 	SHOOTBALL3(ShooterState.UPTOSPEED, IntakeState.HOLDPOSITION),
 	PUNCH3(ShooterState.PUNCH, IntakeState.RETRACT),
 	RESETPUNCH3(ShooterState.RESETPUNCH);
@@ -52,8 +51,9 @@ enum FiveBallAutonPhase implements ISequencePhase {
 public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
 	int ballsShot = 0;
 
-	public FiveBallAuton(FiveBallAutonPhase neutralState, FiveBallAutonPhase startState,
-	                     BaseDriveSubsystem driveSubsystem) {
+	public FiveBallAuton(	FiveBallAutonPhase neutralState,
+							FiveBallAutonPhase startState,
+							BaseDriveSubsystem driveSubsystem) {
 		super(neutralState, startState, driveSubsystem);
 	}
 
@@ -68,8 +68,8 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
 
 			case SHOOTBALL1:
 				ballsShot = 0;
-				if (Robot.shooter.getShooterClosedLoopError() < 100
-				    && getTimeSinceStartOfPhase() > 500) {
+				if (Robot.shooter.getShooterClosedLoopError()	< 100
+					&& getTimeSinceStartOfPhase() > 500) {
 					setNextPhase(PUNCH1);
 				}
 				break;
@@ -94,8 +94,10 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
 				break;
 
 			case SHOOTBALL2:
-				if ((ballsShot == 1 || (ballsShot == 2 && this.getTimeSinceStartOfPhase() > 500))
-				    && Robot.shooter.getShooterClosedLoopError() < 100) {
+				if ((ballsShot	== 1
+						|| (ballsShot	== 2
+							&& this.getTimeSinceStartOfPhase() > 500))
+					&& Robot.shooter.getShooterClosedLoopError() < 100) {
 					setNextPhase(PUNCH2);
 				}
 				break;
@@ -132,8 +134,10 @@ public class FiveBallAuton extends BaseAutonSequence<FiveBallAutonPhase> {
 				break;
 
 			case SHOOTBALL3:
-				if ((ballsShot == 3 || (ballsShot == 4 && this.getTimeSinceStartOfPhase() > 500))
-				    && Robot.shooter.getShooterClosedLoopError() < 100) {
+				if ((ballsShot	== 3
+						|| (ballsShot	== 4
+							&& this.getTimeSinceStartOfPhase() > 500))
+					&& Robot.shooter.getShooterClosedLoopError() < 100) {
 					setNextPhase(PUNCH3);
 				}
 				break;

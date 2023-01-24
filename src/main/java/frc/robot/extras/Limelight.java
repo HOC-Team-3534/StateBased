@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Robot;
-import frc.wpiClasses.Vector2d;
 
 import java.util.function.Function;
 
@@ -20,12 +19,14 @@ public class Limelight {
 	long lastTimeTableSet = 0;
 	LimelightShootProjection limelightShootProjection;
 
-	public Limelight(Function<Double, Double> distanceFunction,
-	                 Function<Double, Double> distanceToAverageVelocityFunction,
-	                 Function<Double, Double> averageShootVelocityToDistanceFunction) {
+	public Limelight(	Function<Double, Double> distanceFunction,
+						Function<Double, Double> distanceToAverageVelocityFunction,
+						Function<Double, Double> averageShootVelocityToDistanceFunction) {
 		this.distanceFunction = distanceFunction;
-		this.distanceToAverageShootVelocityFunction = distanceToAverageVelocityFunction;
-		this.averageShootVelocityToDistanceFunction = averageShootVelocityToDistanceFunction;
+		this.distanceToAverageShootVelocityFunction
+						= distanceToAverageVelocityFunction;
+		this.averageShootVelocityToDistanceFunction
+						= averageShootVelocityToDistanceFunction;
 		getTable();
 	}
 
@@ -101,27 +102,38 @@ public class Limelight {
 		// Known Variables
 		double straightLineDistance = getDistance();
 		Rotation2d offset = getHorizontalAngleOffset();
-		Translation2d targetLocation = new Translation2d(straightLineDistance, offset);
-		Vector2d targetMotion = Robot.swerveDrive.getTargetOrientedVelocity();
+		Translation2d targetLocation
+						= new Translation2d(straightLineDistance, offset);
+		Translation2d targetMotion
+						= Robot.swerveDrive.getTargetOrientedVelocity();
 		/*
-		 * - Find the vector of the average velocity of the game piece, if shot straight
-		 * towards target, no motion, aligned. - Combine the motion of the average
-		 * velocity of the game piece with the relative motion of the target - Back
-		 * calculate the distance for that overall average velocity
+		 * - Find the vector of the average velocity of the game piece, if shot
+		 * straight towards target, no motion, aligned. - Combine the motion of
+		 * the average velocity of the game piece with the relative motion of
+		 * the target - Back calculate the distance for that overall average
+		 * velocity
 		 */
-		Vector2d baseAvgVel = Utils.createVector2d(distanceToAverageShootVelocityFunction.apply(straightLineDistance), offset);
-		Vector2d desiredAverageVelocity = Utils.getCombinedMotion(baseAvgVel, targetMotion);
-		double projectedDistance = averageShootVelocityToDistanceFunction.apply(desiredAverageVelocity.magnitude());
+		Translation2d baseAvgVel
+						= new Translation2d(distanceToAverageShootVelocityFunction.apply(straightLineDistance),
+											offset);
+		Translation2d desiredAverageVelocity
+						= Utils.getCombinedMotion(baseAvgVel, targetMotion);
+		double projectedDistance
+						= averageShootVelocityToDistanceFunction.apply(desiredAverageVelocity.getNorm());
 		/*
-		 * - Find the time elapsed during the shot - Find the projection location of the
-		 * target using its current position and the integral of velocity using the
-		 * calculated total time elapsed during flight - Generate the offset angle from
-		 * the "imaginary" location
+		 * - Find the time elapsed during the shot - Find the projection
+		 * location of the target using its current position and the integral of
+		 * velocity using the calculated total time elapsed during flight -
+		 * Generate the offset angle from the "imaginary" location
 		 */
-		double totalTime = projectedDistance / desiredAverageVelocity.magnitude();
-		Translation2d projectedLocation = Utils.getPositionAfterMotion(targetLocation, targetMotion, totalTime);
-		Rotation2d projectedOffset = new Rotation2d(Math.atan(projectedLocation.getY() / projectedLocation.getX()));
-		limelightShootProjection = new LimelightShootProjection(projectedDistance, projectedOffset);
+		double totalTime = projectedDistance / desiredAverageVelocity.getNorm();
+		Translation2d projectedLocation
+						= Utils.getPositionAfterMotion(targetLocation, targetMotion, totalTime);
+		Rotation2d projectedOffset
+						= new Rotation2d(Math.atan(projectedLocation.getY() / projectedLocation.getX()));
+		limelightShootProjection
+						= new LimelightShootProjection(	projectedDistance,
+														projectedOffset);
 	}
 }
 

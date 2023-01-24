@@ -26,7 +26,8 @@ enum ClimbResetPhase implements ISequencePhase {
 }
 
 public class ClimbReset extends BaseSequence<ClimbResetPhase> {
-	public ClimbReset(ClimbResetPhase neutralState, ClimbResetPhase startState) {
+	public ClimbReset(	ClimbResetPhase neutralState,
+						ClimbResetPhase startState) {
 		super(neutralState, startState);
 	}
 

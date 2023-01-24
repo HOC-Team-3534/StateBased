@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import static frc.robot.Constants.INTAKE.*;
+import static frc.robot.Constants.Intake.*;
 
 import frc.robot.Robot;
 import frc.statebasedcontroller.subsystem.fundamental.subsystem.BaseSubsystem;

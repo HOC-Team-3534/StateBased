@@ -22,13 +22,15 @@ import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem
 
 enum ThreeBallAutonPhase implements ISequencePhase {
 	NEUTRAL,
-	DRIVE1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, ShooterState.AUTONPREUPTOSPEED),
+	DRIVE1(	0, SwerveDriveState.DRIVE_AUTONOMOUSLY,
+			ShooterState.AUTONPREUPTOSPEED),
 	SHOOTBALL1(ShooterState.UPTOSPEED),
 	PUNCH1(ShooterState.PUNCH),
 	RESETPUNCH1(ShooterState.RESETPUNCH),
 	PICKUPBALL1(1, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.KICKOUT,
-	            ShooterState.AUTONPREUPTOSPEED),
-	SHOOTBALL2(SwerveDriveState.AIM, ShooterState.UPTOSPEED, IntakeState.HOLDPOSITION),
+				ShooterState.AUTONPREUPTOSPEED),
+	SHOOTBALL2(	SwerveDriveState.AIM, ShooterState.UPTOSPEED,
+				IntakeState.HOLDPOSITION),
 	PUNCH2(ShooterState.PUNCH, IntakeState.RETRACT),
 	RESETPUNCH2(ShooterState.RESETPUNCH),
 	BOOT1(ShooterState.BOOT);
@@ -52,8 +54,9 @@ enum ThreeBallAutonPhase implements ISequencePhase {
 public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonPhase> {
 	int ballsShot = 0;
 
-	public ThreeBallAuton(ThreeBallAutonPhase neutralState, ThreeBallAutonPhase startState,
-	                      BaseDriveSubsystem driveSubsystem) {
+	public ThreeBallAuton(	ThreeBallAutonPhase neutralState,
+							ThreeBallAutonPhase startState,
+							BaseDriveSubsystem driveSubsystem) {
 		super(neutralState, startState, driveSubsystem);
 	}
 
@@ -75,8 +78,8 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonPhase> {
 				// POSITION
 				ballsShot = 0;
 				// setInitialPoseFromCurrentPath();
-				if (Robot.shooter.getShooterClosedLoopError() < 100
-				    && getTimeSinceStartOfPhase() > 500) {
+				if (Robot.shooter.getShooterClosedLoopError()	< 100
+					&& getTimeSinceStartOfPhase() > 500) {
 					setNextPhase(PUNCH1);
 				}
 				break;
@@ -105,11 +108,12 @@ public class ThreeBallAuton extends BaseAutonSequence<ThreeBallAutonPhase> {
 				if (Robot.limelight.isValid()) {
 					Robot.limelight.setTargetAcquired();
 				}
-				if ((ballsShot == 1
-				     || (ballsShot == 2 && this.getTimeSinceStartOfPhase() > 500
-				         && Robot.limelight.isTargetAcquired()
-				         && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0))
-				    && Robot.shooter.getShooterClosedLoopError() < 100) {
+				if ((ballsShot	== 1
+						|| (ballsShot	== 2
+							&& this.getTimeSinceStartOfPhase() > 500
+							&& Robot.limelight.isTargetAcquired()
+							&& Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0))
+					&& Robot.shooter.getShooterClosedLoopError() < 100) {
 					setNextPhase(PUNCH2);
 				}
 				break;

@@ -45,13 +45,15 @@ public class Shoot extends BaseSequence<ShootPhase> {
 				if (Robot.limelight.isValid()) {
 					Robot.limelight.setTargetAcquired();
 				}
-				if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()) {
+				if (!Buttons.RAMPSHOOTER.getButton()
+					&& !Buttons.SHOOT.getButton()) {
 					setNextPhase(RESETPUNCH);
 				}
-				if (this.getTimeSinceStartOfPhase() > 500 && Buttons.SHOOT.getButton()
-				    && Robot.shooter.getCalculatedRPMError() < 35
-				    && Robot.limelight.isTargetAcquired()
-				    && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
+				if (this.getTimeSinceStartOfPhase() > 500
+					&& Buttons.SHOOT.getButton()
+					&& Robot.shooter.getCalculatedRPMError() < 35
+					&& Robot.limelight.isTargetAcquired()
+					&& Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0) {
 					System.out.println("In state");
 					setNextPhase(PUNCH);
 				}
@@ -65,8 +67,9 @@ public class Shoot extends BaseSequence<ShootPhase> {
 				break;
 
 			case RESETPUNCH:
-				if (!Buttons.RAMPSHOOTER.getButton() && !Buttons.SHOOT.getButton()
-				    && this.getTimeSinceStartOfPhase() > 250) {
+				if (!Buttons.RAMPSHOOTER.getButton()
+					&& !Buttons.SHOOT.getButton()
+					&& this.getTimeSinceStartOfPhase() > 250) {
 					this.setNextPhase(NEUTRAL);
 				} else if (this.getTimeSinceStartOfPhase() > 350) {
 					// System.out.println("resetting");

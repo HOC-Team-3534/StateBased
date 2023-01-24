@@ -22,7 +22,8 @@ public class RobotContainer {
 	final static XboxPlusPOV xbox2 = new XboxPlusPOV(1);
 
 	/**
-	 * The container for the robot. Contains subsystems, OI devices, and commands.
+	 * The container for the robot. Contains subsystems, OI devices, and
+	 * commands.
 	 */
 	public RobotContainer() {
 	}

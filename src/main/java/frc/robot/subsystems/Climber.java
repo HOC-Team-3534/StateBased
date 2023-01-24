@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.CLIMBER.*;
+import static frc.robot.Constants.Climber.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -140,15 +140,16 @@ public class Climber extends BaseSubsystem<ClimberState> {
 		if (this.getStateFirstRunThrough()) {
 			setH4(Value.kForward);
 			setClimbArmDegree(getClimbArmDegree());
-			System.out.println("Grip High Bar Climb Degree: " + getClimbArmDegree());
+			System.out.println("Grip High Bar Climb Degree: "
+								+ getClimbArmDegree());
 		}
 	}
 
 	protected void retryHighBar() {
 		if (this.getStateFirstRunThrough()) {
 			setH4(Value.kReverse);
-			double angle = (getClimbArmDegree() < MIDHIGHBAR_SLOWDOWN_ANGLE) ? MIDHIGHBAR_SLOWDOWN_ANGLE
-			                                                                 : getClimbArmDegree() - 15.0;
+			double angle = (getClimbArmDegree() < MIDHIGHBAR_SLOWDOWN_ANGLE)	? MIDHIGHBAR_SLOWDOWN_ANGLE
+																				: getClimbArmDegree() - 15.0;
 			setClimbArmDegree(angle);
 		}
 	}
@@ -193,7 +194,8 @@ public class Climber extends BaseSubsystem<ClimberState> {
 		if (this.getStateFirstRunThrough()) {
 			setH2(Value.kForward);
 			setClimbArmDegree(getClimbArmDegree());
-			System.out.println("Grip Traversal Bar Climb Degree: " + getClimbArmDegree());
+			System.out.println("Grip Traversal Bar Climb Degree: "
+								+ getClimbArmDegree());
 		}
 	}
 
@@ -201,7 +203,7 @@ public class Climber extends BaseSubsystem<ClimberState> {
 		if (this.getStateFirstRunThrough()) {
 			setH2(Value.kReverse);
 			double angle = (getClimbArmDegree() < HIGHTRAVERSAL_SLOWDOWN_ANGLE) ? HIGHTRAVERSAL_SLOWDOWN_ANGLE
-			                                                                    : getClimbArmDegree() - 15.0;
+																				: getClimbArmDegree() - 15.0;
 			setClimbArmDegree(angle);
 		}
 	}

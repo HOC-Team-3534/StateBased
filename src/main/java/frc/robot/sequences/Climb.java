@@ -1,6 +1,6 @@
 package frc.robot.sequences;
 
-import static frc.robot.Constants.CLIMBER.*;
+import static frc.robot.Constants.Climber.*;
 import frc.robot.Robot;
 import frc.robot.RobotContainer.Buttons;
 import frc.robot.subsystems.Climber;
@@ -21,13 +21,17 @@ enum ClimbPhase implements ISequencePhase {
 	SWINGMIDHIGH2(ClimberState.SWINGMIDHIGH2, SwerveDriveState.NEUTRAL),
 	GRIPHIGHBAR(ClimberState.GRIPHIGHBAR, SwerveDriveState.NEUTRAL),
 	RETRYHIGHBAR(ClimberState.RETRYHIGHBAR, SwerveDriveState.NEUTRAL),
-	RECENTERMIDHIGHBAR(ClimberState.RECENTERMIDHIGHBAR, SwerveDriveState.NEUTRAL),
+	RECENTERMIDHIGHBAR(	ClimberState.RECENTERMIDHIGHBAR,
+						SwerveDriveState.NEUTRAL),
 	RELEASEMIDBAR(ClimberState.RELEASEMIDBAR, SwerveDriveState.NEUTRAL),
-	SWINGHIGHTRAVERSAL1(ClimberState.SWINGHIGHTRAVERSAL1, SwerveDriveState.NEUTRAL),
-	SWINGHIGHTRAVERSAL2(ClimberState.SWINGHIGHTRAVERSAL2, SwerveDriveState.NEUTRAL),
+	SWINGHIGHTRAVERSAL1(ClimberState.SWINGHIGHTRAVERSAL1,
+						SwerveDriveState.NEUTRAL),
+	SWINGHIGHTRAVERSAL2(ClimberState.SWINGHIGHTRAVERSAL2,
+						SwerveDriveState.NEUTRAL),
 	GRIPTRAVERSALBAR(ClimberState.GRIPTRAVERSALBAR, SwerveDriveState.NEUTRAL),
 	RETRYTRAVERSALBAR(ClimberState.RETRYTRAVERSALBAR, SwerveDriveState.NEUTRAL),
-	RECENTERHIGHTRAVERSALBAR(ClimberState.RECENTERHIGHTRAVERSALBAR, SwerveDriveState.NEUTRAL),
+	RECENTERHIGHTRAVERSALBAR(	ClimberState.RECENTERHIGHTRAVERSALBAR,
+								SwerveDriveState.NEUTRAL),
 	RELEASEHIGHBAR(ClimberState.RELEASEHIGHBAR, SwerveDriveState.NEUTRAL),
 	SWINGTOREST(ClimberState.SWINGTOREST, SwerveDriveState.NEUTRAL);
 
@@ -81,8 +85,8 @@ public class Climb extends BaseSequence<ClimbPhase> {
 				break;
 
 			case GRIPHIGHBAR:
-				if (getTimeSinceStartOfPhase() > 500
-				    && (!Climber.l3Switch.get() || !Climber.h4Switch.get())) {
+				if (getTimeSinceStartOfPhase()	> 500
+					&& (!Climber.l3Switch.get() || !Climber.h4Switch.get())) {
 					setNextPhase(RECENTERMIDHIGHBAR);
 				} else if ((Climber.l3Switch.get() && Climber.h4Switch.get())) {
 					limitSwitchLoopCounter++;
@@ -146,8 +150,8 @@ public class Climb extends BaseSequence<ClimbPhase> {
 				break;
 
 			case GRIPTRAVERSALBAR:
-				if (getTimeSinceStartOfPhase() > 500
-				    && (!Climber.h2Switch.get() || !Climber.l1Switch.get())) {
+				if (getTimeSinceStartOfPhase()	> 500
+					&& (!Climber.h2Switch.get() || !Climber.l1Switch.get())) {
 					setNextPhase(RECENTERHIGHTRAVERSALBAR);
 				} else if ((Climber.h2Switch.get() && Climber.l1Switch.get())) {
 					limitSwitchLoopCounter++;

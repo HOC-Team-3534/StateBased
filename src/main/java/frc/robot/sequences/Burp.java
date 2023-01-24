@@ -43,7 +43,7 @@ public class Burp extends BaseSequence<BurpPhase> {
 					setNextPhase(RESETPUNCH);
 				}
 				if (this.getTimeSinceStartOfPhase() > 500
-				    && Robot.shooter.getShooterClosedLoopError() < 250) {
+					&& Robot.shooter.getShooterClosedLoopError() < 250) {
 					System.out.println("In state");
 					setNextPhase(PUNCH);
 				}
@@ -56,7 +56,8 @@ public class Burp extends BaseSequence<BurpPhase> {
 				break;
 
 			case RESETPUNCH:
-				if (!Buttons.Burp.getButton() && this.getTimeSinceStartOfPhase() > 250) {
+				if (!Buttons.Burp.getButton()
+					&& this.getTimeSinceStartOfPhase() > 250) {
 					setNextPhase(NEUTRAL);
 				} else if (this.getTimeSinceStartOfPhase() > 250) {
 					setNextPhase(BOOT);

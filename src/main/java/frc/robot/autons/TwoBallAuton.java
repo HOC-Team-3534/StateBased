@@ -12,13 +12,12 @@ import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem
 
 import static frc.robot.autons.TwoBallAutonPhase.*;
 
-import frc.pathplanner.PathPlannerFollower;
-
 enum TwoBallAutonPhase implements ISequencePhase {
 	NEUTRAL,
 	PICKUPBALL1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, IntakeState.KICKOUT,
-	            ShooterState.AUTONPREUPTOSPEED),
-	SHOOTBALL1(ShooterState.UPTOSPEED, IntakeState.HOLDPOSITION, SwerveDriveState.AIM),
+				ShooterState.AUTONPREUPTOSPEED),
+	SHOOTBALL1(	ShooterState.UPTOSPEED, IntakeState.HOLDPOSITION,
+				SwerveDriveState.AIM),
 	PUNCH1(ShooterState.PUNCH, IntakeState.HOLDPOSITION),
 	RESETPUNCH1(ShooterState.RESETPUNCH, IntakeState.RETRACT),
 	BOOT1(ShooterState.BOOT);
@@ -42,8 +41,9 @@ enum TwoBallAutonPhase implements ISequencePhase {
 public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonPhase> {
 	int ballsShot = 0;
 
-	public TwoBallAuton(TwoBallAutonPhase neutralState, TwoBallAutonPhase startState,
-	                    BaseDriveSubsystem driveSubsystem) {
+	public TwoBallAuton(TwoBallAutonPhase neutralState,
+						TwoBallAutonPhase startState,
+						BaseDriveSubsystem driveSubsystem) {
 		super(neutralState, startState, driveSubsystem);
 	}
 
@@ -63,10 +63,11 @@ public class TwoBallAuton extends BaseAutonSequence<TwoBallAutonPhase> {
 					Robot.limelight.setTargetAcquired();
 				}
 				if (((ballsShot == 0 && this.getTimeSinceStartOfPhase() > 2000)
-				     || (ballsShot >= 1 && this.getTimeSinceStartOfPhase() > 500))
-				    && Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0
-				    && Robot.shooter.getShooterClosedLoopError() < 100
-				    && Robot.limelight.isTargetAcquired()) {
+						|| (ballsShot	>= 1
+							&& this.getTimeSinceStartOfPhase() > 500))
+					&& Math.abs(Robot.swerveDrive.getTargetShootRotationAngleError().getDegrees()) < 3.0
+					&& Robot.shooter.getShooterClosedLoopError() < 100
+					&& Robot.limelight.isTargetAcquired()) {
 					setNextPhase(PUNCH1);
 				}
 				break;

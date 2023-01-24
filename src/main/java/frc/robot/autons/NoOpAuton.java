@@ -22,8 +22,8 @@ enum NoOpAutonPhase implements ISequencePhase {
 }
 
 public class NoOpAuton extends BaseAutonSequence<NoOpAutonPhase> {
-	public NoOpAuton(NoOpAutonPhase neutralState, NoOpAutonPhase startState,
-	                 BaseDriveSubsystem driveSubsystem) {
+	public NoOpAuton(	NoOpAutonPhase neutralState, NoOpAutonPhase startState,
+						BaseDriveSubsystem driveSubsystem) {
 		super(neutralState, startState, driveSubsystem);
 	}
 

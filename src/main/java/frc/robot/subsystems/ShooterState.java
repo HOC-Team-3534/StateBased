@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 public enum ShooterState implements ISubsystemState<Shooter> {
 	NEUTRAL((s) -> s.neutral()),
 	AUTONPREUPTOSPEED((s) -> {
-		if (Robot.swerveDrive.getPathPlannerFollower() != null
-		    && Robot.swerveDrive.getPathPlannerFollower().getRemainingTimeSeconds() < 2.0) {
+		if (Robot.swerveDrive.getPathPlannerFollower()	!= null
+			&& Robot.swerveDrive.getPathPlannerFollower().getRemainingTimeSeconds() < 2.0) {
 			s.upToSpeed(3000);
 		} else {
 			NEUTRAL.getState().process();

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.pathplanner.PathPlannerFollower;
-import frc.robot.Constants.AUTO;
+import frc.robot.Constants.Auto;
 import frc.robot.autons.Auton;
 import frc.robot.autons.Path;
 import frc.robot.extras.Limelight;
@@ -53,7 +53,8 @@ public class Robot extends TimedRobot {
 	public static PathPlannerFollower corner4FiveBall2;
 	public static PathPlannerFollower corner4FiveBall3;
 	private static long autonStartTime;
-	private final SendableChooser<Auton> sendableChooser = new SendableChooser<>();
+	private final SendableChooser<Auton> sendableChooser
+					= new SendableChooser<>();
 	private final Field2d m_field = new Field2d();
 	private int loopCnt, loopPeriod, logCounter;
 	private long prevLoopTime;
@@ -62,12 +63,12 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		if (ROBOTTYPE == RobotType.PBOT) {
-			limelight = new Limelight(ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56, d -> 3.0,
-			                          vel -> 3.0);
+			limelight = new Limelight(	ty -> .0059 * Math.pow(ty, 2) - .229 * ty + 5.56,
+										d -> 3.0, vel -> 3.0);
 		} else {
-			limelight = new Limelight(ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437,
-			                          d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8,
-			                          vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225 / 52);
+			limelight = new Limelight(	ty -> 0.0056 * Math.pow(ty, 2) - .11 * ty + 3.437,
+										d -> 0.52 * Math.pow(d, 2) - 4.5 * d + 12.8,
+										vel -> Math.sqrt(5200 * vel - 15935) / 52 + 225 / 52);
 		}
 		mainPCM = new PneumaticsControlModule(MAIN_PCM);
 		// PortForwarder.add(5800, "limelight.local", 5800);

@@ -1,7 +1,7 @@
 package frc.robot.autons;
 
 import frc.pathplanner.PathPlannerFollower;
-import frc.robot.Constants.AUTO;
+import frc.robot.Constants.Auto;
 
 public enum Path {
 	CORNER1_2BALL_1("Corner 1 2 Ball 1"),
@@ -25,8 +25,8 @@ public enum Path {
 	}
 
 	public void loadPath() {
-		path = new PathPlannerFollower(pathName, AUTO.kMaxSpeedMetersPerSecond,
-		                               AUTO.kMaxAccelerationMetersPerSecondSquared);
+		path = new PathPlannerFollower(	pathName, Auto.kMaxSpeedMetersPerSecond,
+										Auto.kMaxAccelerationMetersPerSecondSquared);
 	}
 
 	public PathPlannerFollower getPath() {

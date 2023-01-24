@@ -11,11 +11,10 @@ import frc.statebasedcontroller.subsystem.general.swervedrive.BaseDriveSubsystem
 
 import static frc.robot.autons.OneBallAutonPhase.*;
 
-import frc.pathplanner.PathPlannerFollower;
-
 enum OneBallAutonPhase implements ISequencePhase {
 	NEUTRAL,
-	DRIVE1(0, SwerveDriveState.DRIVE_AUTONOMOUSLY, ShooterState.AUTONPREUPTOSPEED),
+	DRIVE1(	0, SwerveDriveState.DRIVE_AUTONOMOUSLY,
+			ShooterState.AUTONPREUPTOSPEED),
 	SHOOTBALL1(ShooterState.UPTOSPEED),
 	PUNCH1(ShooterState.PUNCH),
 	RESETPUNCH1(ShooterState.RESETPUNCH);
@@ -37,8 +36,9 @@ enum OneBallAutonPhase implements ISequencePhase {
 }
 
 public class OneBallAuton extends BaseAutonSequence<OneBallAutonPhase> {
-	public OneBallAuton(OneBallAutonPhase neutralState, OneBallAutonPhase startState,
-	                    BaseDriveSubsystem driveSubsystem) {
+	public OneBallAuton(OneBallAutonPhase neutralState,
+						OneBallAutonPhase startState,
+						BaseDriveSubsystem driveSubsystem) {
 		super(neutralState, startState, driveSubsystem);
 	}
 
@@ -53,7 +53,7 @@ public class OneBallAuton extends BaseAutonSequence<OneBallAutonPhase> {
 
 			case SHOOTBALL1:
 				if ((this.getTimeSinceStartOfPhase() > 1000)
-				    && Robot.shooter.getShooterClosedLoopError() < 100) {
+					&& Robot.shooter.getShooterClosedLoopError() < 100) {
 					setNextPhase(PUNCH1);
 				}
 				break;

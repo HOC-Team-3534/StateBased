@@ -13,6 +13,7 @@ public class SwerveHelper {
                                                         SDSModuleConfiguration.SDSMK4(SDSModuleConfiguration.driveGearRatios.SDSMK4_L2),
                                                         0.1, 1, 1, 1, 10.0,
                                                         10.0, 1, 1, 0.25, 0.25);
+        SwerveConstants.createSwerveConstants();
         return true;
     }
 }
